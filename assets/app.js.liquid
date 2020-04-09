@@ -524,7 +524,7 @@ $(function() {
 
         if(item.properties) {
           $.each(item.properties, function(title, value) {
-            if (value) {
+            if (value && !title.startsWith('_') ) {
               cart_items_html += '<div class="line-item">' + title +': ' + value + ' </div>';
             }
           });
@@ -587,9 +587,14 @@ $(function() {
           cart_items_html += discountMessage;
         }
 
+        var limit = '';
+        if ( item.properties && typeof item.properties._limit !== undefined ) {
+            limit = 'data-limit="' + parseInt( item.properties._limit ) + '"';
+        }
+
         cart_items_html += '<div class="left product-quantity-box">';
         cart_items_html += '<span class="ss-icon product-minus js-change-quantity" data-func="minus"><span class="icon-minus"></span></span>';
-        cart_items_html += '<input type="number" min="0" class="quantity" name="updates[]" id="updates_' + item.id + '" value="' + item.quantity + '" data-cart-quantity-input="mini-cart" />';
+        cart_items_html += '<input type="number" data-prev="' + item.quantity + '" '+ limit +' min="0" class="quantity" name="updates[]" id="updates_' + item.id + '" value="' + item.quantity + '" data-cart-quantity-input="mini-cart" />';
         cart_items_html += '<span class="ss-icon product-plus js-change-quantity" data-func="plus"><span class="icon-plus"></span></span>';
         cart_items_html += '</div></div></div>';
         cart_items_html += '<a href="/cart/change?line=' + line_id + '&amp;quantity=0" class="js-cart-remove-btn cart__remove-btn" data-line-id="' + line_id + '" data-remove-item="mini-cart"><span class="remove-icon"></span></a>';
@@ -629,6 +634,18 @@ $(function() {
   }
 
   $('body').on('change', '[data-cart-quantity-input]', function() {
+
+    var $input = $(this);
+    var limit = $input.data('limit');
+
+    // If it wants to go beyond the limit, we just roll back.
+    if ( limit && $input.val() > limit ) {
+      $input.val( $input.data('prev') );
+      return false;
+    }
+
+    $input.data('prev', $input.val() );
+
     var cartItem = {
       lineID: $(this).parents('[data-cart-item]').data('line-id'),
       variantID: $(this).parents('[data-cart-item]').data('variant-id'),
@@ -1176,3 +1193,21 @@ $(document)
       $('a.mega-menu-parent[data-dropdown-rel="' + megaMenuParent + '"]').parents('header').removeClass('editor-hover--true');
     }
 });
+
+
+(function($) {
+    $(document).ready( function () {
+        $('#quantity').on('change', function ( event ) {
+            var $input = $(this);
+            var limit = $input.data('limit');
+
+            // If it wants to go beyond the limit, we just roll back.
+            if ( limit && $input.val() > limit ) {
+                $input.val( $input.data('prev') );
+                return false;
+            }
+
+            $input.data('prev', $input.val() );
+        });
+    });
+}(jQuery));

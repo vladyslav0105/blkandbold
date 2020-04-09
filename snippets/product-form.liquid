@@ -6,6 +6,16 @@
   {% assign show_payment_button = false %}
 {% endif %}
 
+{%- if product.metafields.product.limit -%}
+    {% assign limit = product.metafields.product.limit %}
+
+    {%- for item in cart.items -%}
+        {%- if item.product.id == product.id -%}
+            {% assign limit = limit | minus: item.quantity %}
+        {%- endif -%}
+    {%- endfor -%}
+{%- endif -%}
+
 {% assign variant = product.selected_or_first_available_variant %}
 
 <div class="clearfix product_form init smart-payment-button--{{ show_payment_button }} {% if product.variants.size > 1 or product.options.size > 1 %}product_form_options{% endif %} product_form--{{ settings.product_form_style }}"
@@ -23,6 +33,10 @@
       data-product-id="{{ product.id }}"
       >
   {% form 'product', product, data-productid: product.id %}
+  {%- if limit != blank -%}
+      {% comment %}We print the real limit because it is what we need to limit qties in cart {% endcomment %}
+      <input type="hidden" name="properties[_limit]" value="{{ limit }}">
+  {%- endif -%}
 <!-- Begin ReCharge code -->
 {% if product.available %}{% include 'subscription-product' %}{% endif %}
 <!-- End ReCharge code -->
@@ -81,7 +95,13 @@
       <div class="purchase-details__quantity product-quantity-box">
         <label for="quantity">{{ 'products.product.quantity' | t }}</label>
         <span class="ss-icon product-minus js-change-quantity" data-func="minus"><span class="icon-minus"></span></span>
-        <input type="number" min="1" size="2" class="quantity" name="quantity" id="quantity" value="1" {% if settings.limit_quantity and variant.inventory_management != blank and variant.inventory_policy == "deny" %}max="{{ variant.inventory_quantity }}"{% endif %} />
+        <input
+            type="number"
+            {%- if limit != blank -%}
+                data-limit="{{ limit }}"
+            {%- endif -%}
+            data-prev="1"
+            min="1" size="2" class="quantity" name="quantity" id="quantity" value="1" {% if settings.limit_quantity and variant.inventory_management != blank and variant.inventory_policy == "deny" %}max="{{ variant.inventory_quantity }}"{% endif %} />
         <span class="ss-icon product-plus js-change-quantity" data-func="plus"><span class="icon-plus"></span></span>
       </div>
     {% endif %}

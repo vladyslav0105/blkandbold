@@ -230,7 +230,8 @@
                               {% endunless %}
                               {% if item.properties %}
                                 {% for p in item.properties %}
-                                  {% if p.last != blank and p.first != "subscription_id" and p.first != "shipping_interval_frequency" and p.first != "shipping_interval_unit_type" %}
+                                  {% assign startsWith = p.first | slice: 0 %}
+                                  {% if p.last != blank and p.first != "subscription_id" and p.first != "shipping_interval_frequency" and p.first != "shipping_interval_unit_type" and startsWith != '_' %}
                                     <div class="line-item">
                                       {{ p.first }}: {{ p.last }}
                                     </div>
@@ -266,7 +267,10 @@
 
                         <div class="left product-quantity-box">
                           <span class="ss-icon product-minus js-change-quantity" data-func="minus"><span class="icon-minus"></span></span>
-                          <input type="number" min="0" size="2" class="quantity" name="updates[]" id="updates_{{ item.id }}" value="{{ item.quantity }}" data-cart-quantity-input="mini-cart" {% if settings.limit_quantity and item.variant.inventory_management != blank and item.variant.inventory_quantity > 0 and item.variant.inventory_policy == "deny" %}max="{{ item.variant.inventory_quantity }}"{% endif %}/>
+                          <input type="number"
+                            data-prev="{{ item.quantity }}"
+                            {% if item.product.metafields.product.limit %}data-limit="{{ item.product.metafields.product.limit }}"{% endif %}
+                            min="0" size="2" class="quantity" name="updates[]" id="updates_{{ item.id }}" value="{{ item.quantity }}" data-cart-quantity-input="mini-cart" {% if settings.limit_quantity and item.variant.inventory_management != blank and item.variant.inventory_quantity > 0 and item.variant.inventory_policy == "deny" %}max="{{ item.variant.inventory_quantity }}"{% endif %}/>
                           <span class="ss-icon product-plus js-change-quantity" data-func="plus"><span class="icon-plus"></span></span>
                         </div>
 
