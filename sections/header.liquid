@@ -302,6 +302,15 @@
                     <span>{{ 'layout.general.subtotal' | t }}</span>
                   </li>
 
+                  {%- if customer -%}
+                      <li class="points_balance">
+                          <span class="right">
+                              <span class="sweettooth-points-balance"></span>
+                          </span>
+                          <span>Your Points Balance:</span>
+                      </li>
+                  {%- endif -%}
+
                   <li class="cart_savings sale js-cart_savings">
                     {% if settings.display_savings and total_saving > 0 or settings.display_savings and cart.total_discount > 0 %}
                       <span class="right">
