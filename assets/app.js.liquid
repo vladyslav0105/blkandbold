@@ -512,7 +512,7 @@ $(function() {
         }
         var line_id = index + 1;
 
-        cart_items_html += '<li class="mini-cart__item clearfix" data-cart-item data-line-id="' + line_id + '" data-variant-id="' + item.id + '">' +
+        cart_items_html += '<li class="mini-cart__item clearfix" data-cart-item data-product-id="'+ item.product_id +'" data-line-id="' + line_id + '" data-variant-id="' + item.id + '">' +
           '<a href="' + item.url +'">';
         if (item.image) {
           cart_items_html += '<div class="cart_image">' +
@@ -636,11 +636,24 @@ $(function() {
   $('body').on('change', '[data-cart-quantity-input]', function() {
 
     var $input = $(this);
+    var $cart = $(this).closest('[data-cart-form]');
     var limit = $input.data('limit');
+    var product_id = $input.closest('[data-cart-item]').data('product-id');
+    $('.quantity-limit').remove();
+
+    var added = 0;
+    $cart.find('[data-cart-item]').each( function() {
+        var itemProductId = $(this).data('product-id');
+        if ( product_id == itemProductId ) {
+            added += parseInt($(this).find('.quantity').val() );
+        }
+    });
 
     // If it wants to go beyond the limit, we just roll back.
-    if ( limit && $input.val() > limit ) {
+    if ( limit !== null && added > limit ) {
       $input.val( $input.data('prev') );
+      $input.closest('.product-quantity-box')
+        .after('<p class="quantity-limit">You can add up to '+ limit +' items to your cart</p>');
       return false;
     }
 
@@ -1200,14 +1213,55 @@ $(document)
         $('#quantity').on('change', function ( event ) {
             var $input = $(this);
             var limit = $input.data('limit');
+            var initialLimit = $input.data('initial-limit');
+            var inCart = $input.data('in-cart');
+
+            $('p.quantity-limit').remove();
 
             // If it wants to go beyond the limit, we just roll back.
-            if ( limit && $input.val() > limit ) {
+            if ( limit !== null && $input.val() > limit ) {
                 $input.val( $input.data('prev') );
+
+                var inCartInfo = '';
+                if (inCart > 0) {
+                    var inCartInfo = 'You\'ve already added '+ inCart +' items to your cart.';
+                }
+
+                $input.closest('.purchase-details')
+                    .after('<p class="quantity-limit">You can add up to '+ initialLimit +' items to your cart. '+ inCartInfo + '</p>');
                 return false;
             }
 
             $input.data('prev', $input.val() );
         });
+    });
+
+
+    var formSubmitted = false;
+    $('.shopify-product-form').on('submit', function (event) {
+
+        if ( formSubmitted ) return false;
+
+        var $form = $(this);
+        var $quantity = $form.find('#quantity');
+        var limit = $quantity.data('limit');
+        var quantity = $quantity.val();
+        var initialLimit = $quantity.data('initial-limit');
+        var inCart = $quantity.data('in-cart');
+
+        if ( limit !== null && quantity > limit ) {
+            $('p.quantity-limit').remove();
+            var inCartInfo = '';
+            if (inCart > 0) {
+                var inCartInfo = 'You\'ve already added '+ inCart +' items to your cart.';
+            }
+            $form.find('.purchase-details')
+                .after('<p class="quantity-limit">You can add up to '+ initialLimit +' items to your cart. '+ inCartInfo + '</p>');
+            return false;
+        }
+
+        formSubmitted = true;
+        $(this).find('button[type=submit]').prop('disabled', true);
+        return;
     });
 }(jQuery));

@@ -207,7 +207,7 @@
                       {% assign total_saving = saving | plus: total_saving %}
                     {% endif %}
 
-                    <li class="mini-cart__item clearfix" data-cart-item data-line-id="{{ forloop.index }}" data-variant-id="{{ item.id }}">
+                    <li class="mini-cart__item clearfix" data-cart-item data-product-id="{{ item.product.id }}" data-line-id="{{ forloop.index }}" data-variant-id="{{ item.id }}">
 
                       <a href="{{ item.url }}">
                         {% if item.image %}

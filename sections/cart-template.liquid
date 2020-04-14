@@ -45,7 +45,7 @@
             {% assign total_saving = saving | plus: total_saving %}
           {% endif %}
 
-          <div class="section clearfix cart__item" data-cart-item data-line-id="{{ forloop.index }}" data-variant-id="{{ item.id }}">
+          <div class="section clearfix cart__item" data-cart-item data-product-id="{{ item.product.id }}" data-line-id="{{ forloop.index }}" data-variant-id="{{ item.id }}">
             <div class="five columns small-down--one-fifth alpha cart__item--image">
               <a href="{{ item.url }}" title="{{ item.title | escape }}" class="cart_page_image">
                 {% include 'image-element', image: item, alt: item.title, object_fit: settings.align_height, max_height: settings.collection_height %}
