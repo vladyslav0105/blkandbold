@@ -1,0 +1,34 @@
+<div class="container product-specs">
+    {%- for variant in product.variants -%}
+        <div class="sixteen columns alpha omega product-specs__variant {% if variant.id == product.selected_or_first_available_variant.id %}active{% endif %}" data-variant-id="{{ variant.id }}">
+            {%- if variant.metafields['Nutrition Facts'].size > 0 -%}
+                <div class="eight columns medium-down--one-whole">
+                    <h4>Nutrition Facts:</h4>
+                    <table class="product-specs__table">
+                        <tbody>
+                            {%- for metafield in variant.metafields['Nutrition Facts'] -%}
+                            <tr>
+                                <td>{{ metafield.first }}</td><td class="text-right">{{ metafield.last }}</td>
+                            </tr>
+                            {%- endfor -%}
+                        </tbody>
+                    </table>
+                </div>
+            {%- endif -%}
+
+
+                <div class="eight columns medium-down--one-whole">
+                    <h4 class="product-specs__title">Product Specifications:</h4>
+                    <table class="product-specs__table">
+                        <tbody>
+                            {%- for metafield in variant.metafields['Product Specs'] -%}
+                            <tr>
+                                <td><strong>{{ metafield.first }}</strong></td><td class="text-right">{{ metafield.last }}</td>
+                            </tr>
+                            {%- endfor -%}
+                        </tbody>
+                    </table>
+                </div>
+        </div>
+    {%- endfor -%}
+</div>

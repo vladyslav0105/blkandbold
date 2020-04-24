@@ -11674,3 +11674,39 @@ $delay: 0;
     margin-top: 5px;
     clear: both;
 }
+
+.product-specs__title {
+    margin-bottom: 5px;
+    padding: 0;
+}
+
+.product-specs__variant {
+    display: none;
+
+    &.active {
+        display: block;
+    }
+}
+
+.product-specs__table {
+
+    tr {
+        border-top: none;
+        border-bottom: 1px solid #dedede;
+
+        &:first-child {
+            border-top: 3px solid #dedede;
+        }
+    }
+
+    td {
+        font-size: 14px;
+        padding: 5px;
+        border: none;
+        width: 50%;
+
+        &:first-child {
+            border-left: none;
+        }
+    }
+}
