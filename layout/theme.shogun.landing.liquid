@@ -6,9 +6,9 @@ This file can be re-written at any time.
 {% capture content %}
 <!DOCTYPE html>
 <html lang="{{ shop.locale }}">
-  
+
 <head>
-  
+
     <meta charset="utf-8">
     <meta http-equiv="cleartype" content="on">
     <meta name="robots" content="index,follow">
@@ -85,7 +85,7 @@ This file can be re-written at any time.
     {% include 'social-meta-info' %}
     {% if collection.previous_product %}<link rel="prev" href="{{ collection.previous_product }}">{% endif %}
     {% if collection.next_product %}<link rel="next" href="{{ collection.next_product }}">{% endif %}
-  
+
   {% include 'shogun-head' %}
 
 <!-- Start of Littledata - Fix Google Analytics Script-->
@@ -141,13 +141,13 @@ This file can be re-written at any time.
     </style>
   </noscript>
 
-  
+
 <body class="{% if template == '404' %}error-404{% else %}{{ template | replace: '.', '-' | handle }}{% endif %}"
     data-money-format="{{ shop.money_format }}" data-shop-url="{{ shop.url }}">
-  
-  
+
+
   {{ content_for_layout }}
-  
+
   <script id="dsq-count-scr" src="//{{ settings.disqus_shortname }}.disqus.com/count.js" async></script>
 <script src="{{ 'jquery.min.js' | asset_url }}"></script>
 <script src="{{ 'vendors.js' | asset_url }}"></script>
@@ -197,11 +197,11 @@ try { setTimeout(function(){StampedFn.reloadUGC();},1000); } catch (e){}
       background: white !important;
     }
   </style>
-  
+
+<script src="https://cdn.attn.tv/bestbullysticks/dtag.js"></script>  
 </body>
 
 </html>
 {% endcapture %}
 {% assign content = content | replace_first: '<!DOCTYPE', '!DOCTYPE' | split: ' <' %}
 {% for html in content %}{% assign htmlblock = html | strip | prepend: ' <' %}{{htmlblock | replace: ' </', '</'}}{% endfor %}
-
