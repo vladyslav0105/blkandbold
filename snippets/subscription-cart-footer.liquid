@@ -1,8 +1,8 @@
 <!-- Subscriptions Powered by ReCharge Payments: Begin Liquid Code -->
 <!--
 	Subscription Cart Footer
-	http://rechargepayments.com: v3.2.5
-	Updated: 2020/02/13
+	http://rechargepayments.com: v3.2.6
+	Updated: 2020/03/13
 -->
 {% comment %}Subscriptions Powered by ReCharge Payments: Meta Fields{% endcomment %}
 {% assign has_subscriptions = false %}
@@ -160,7 +160,7 @@
 			var uniqueNoteValues = note_values.filter(function(element, index, array) {
 				return array.indexOf(element) === index;
 			});
-			return uniqueNoteValues.join(', ');
+			return { note: uniqueNoteValues.join(', ') };
 		}
 		function getAttributes() {
 			// Find and return cart attributes
@@ -199,7 +199,7 @@
 				});
 			}
 			if (!Object.keys(attribute_data).length) return {};
-			return Object.assign({}, attribute_data);
+			return { attributes: Object.assign({}, attribute_data) };
 		}
 		function getUTMAttributes() {
 			// Retrieve UTMAttributes from Shopify cookie

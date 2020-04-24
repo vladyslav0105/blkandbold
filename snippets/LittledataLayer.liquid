@@ -6,10 +6,10 @@
 <script name="littledata-tracking-tag">
 (function(){
 	/* Data layer for Google Analytics by Littledata app */
-	/* Version v8.0.5 */
+	/* Version v8.1 */
 
 	LittledataLayer = {
-		version: 'v8.0.5',
+		version: 'v8.1',
 		transactionWatcherURL: 'https://transactions.littledata.io',
 		referralExclusion: /(paypal|visa|MasterCard|clicksafe|arcot\.com|geschuetzteinkaufen|checkout\.shopify\.com|checkout\.rechargeapps\.com|portal\.afterpay\.com|payfort)/,
 		googleSignals: true,
@@ -55,6 +55,7 @@
 			LittledataLayer.ecommerce.variants = [
 			{%- for variant in product.variants -%}
 				{
+					id: {{variant.id | json}},
 					sku: {{variant.sku | json}},
 					title: {{variant.title | json}}
 				},
