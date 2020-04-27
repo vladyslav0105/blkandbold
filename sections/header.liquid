@@ -303,11 +303,8 @@
                   </li>
 
                   {%- if customer -%}
-                      <li class="points_balance">
-                          <span class="right">
-                              <span class="sweettooth-points-balance"></span>
-                          </span>
-                          <span>Your Points Balance:</span>
+                      <li>
+                          {%- include 'points-balance' -%}
                       </li>
                   {%- endif -%}
 
