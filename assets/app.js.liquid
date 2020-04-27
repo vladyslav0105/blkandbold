@@ -1222,13 +1222,14 @@ $(document)
             if ( limit !== null && $input.val() > limit ) {
                 $input.val( $input.data('prev') );
 
-                var inCartInfo = '';
-                if (inCart > 0) {
-                    var inCartInfo = 'You\'ve already added '+ inCart +' items to your cart.';
-                }
+                var maxItemsInfo = '{{ 'purchase_limits.max_items' | t }}';
+                    maxItemsInfo = maxItemsInfo.replace('|items|', initialLimit );
+
+                var inCartInfo = (inCart > 0) ? '{{ 'purchase_limits.items_in_cart' | t }}' : '';
+                    inCartInfo = inCartInfo.replace('|items|', inCart );
 
                 $input.closest('.purchase-details')
-                    .after('<p class="quantity-limit">You can add up to '+ initialLimit +' items to your cart. '+ inCartInfo + '</p>');
+                    .after('<p class="quantity-limit">' + maxItemsInfo + ' ' + inCartInfo + '</p>');
                 return false;
             }
 
@@ -1239,7 +1240,6 @@ $(document)
 
     var formSubmitted = false;
     $('.shopify-product-form').on('submit', function (event) {
-
         if ( formSubmitted ) return false;
 
         var $form = $(this);
@@ -1251,12 +1251,15 @@ $(document)
 
         if ( limit !== null && quantity > limit ) {
             $('p.quantity-limit').remove();
-            var inCartInfo = '';
-            if (inCart > 0) {
-                var inCartInfo = 'You\'ve already added '+ inCart +' items to your cart.';
-            }
+
+            var maxItemsInfo = '{{ 'purchase_limits.max_items' | t }}';
+                maxItemsInfo = maxItemsInfo.replace('|items|', initialLimit );
+
+            var inCartInfo = (inCart > 0) ? '{{ 'purchase_limits.items_in_cart' | t }}' : '';
+                inCartInfo = inCartInfo.replace('|items|', inCart );
+
             $form.find('.purchase-details')
-                .after('<p class="quantity-limit">You can add up to '+ initialLimit +' items to your cart. '+ inCartInfo + '</p>');
+                .after('<p class="quantity-limit">' + maxItemsInfo + ' ' + inCartInfo + '</p>');
             return false;
         }
 
