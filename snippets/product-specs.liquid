@@ -22,9 +22,6 @@
 
 
     {%- if specs != '' or nutrition_facts != '' -%}
-        <div class="sixteen columns">
-            <h3>Nutrition</h3>
-        </div>
         <div class="sixteen columns alpha omega">
             {%- if nutrition_facts != '' -%}
                 <div class="eight columns medium-down--one-whole product-specs__module">
@@ -46,7 +43,7 @@
 
             {%- if specs != '' -%}
                 <div class="eight columns medium-down--one-whole product-specs__module">
-                    <h4>Product Specs:</h4>
+                    <h4>Product Specifications:</h4>
                     <table class="product-specs__table">
                         <tbody>
                             {% assign specs = specs | split: '|' %}
