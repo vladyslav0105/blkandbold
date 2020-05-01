@@ -433,5 +433,9 @@
     "adding_to_cart": "Adding...",
     "sold_out": "Sold Out",
     "description": "Description"
+  },
+  "purchase_limits": {
+      "max_items": "You can add up to |items| items to your cart.",
+      "items_in_cart": "You've already added |items| items to your cart."
   }
 }

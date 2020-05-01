@@ -160,12 +160,7 @@
             </p>
 
             {%- if customer -%}
-                <p class="points_balance">
-                    <span class="right">
-                        <span class="sweettooth-points-balance"></span>
-                    </span>
-                    <span>Your Points Balance:</span>
-                </p>
+                {%- include 'points-balance' -%}
             {%- endif -%}
 
             {% if section.settings.display_savings and total_saving > 0 or section.settings.display_savings and cart.total_discount > 0 %}
