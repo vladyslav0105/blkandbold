@@ -11691,3 +11691,102 @@ $delay: 0;
         margin-left: auto;
     }
 }
+
+
+.account__dogs {
+    display: flex;
+    margin: 80px 60px;
+    flex-direction: column;
+}
+
+.account__dog {
+    border: 1px solid #dedede;
+    padding: 30px;
+    display: flex;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.account__dog__image {
+
+    max-width: 120px;
+
+    img {
+        width: 100%;
+        border-radius: 9999px;
+    }
+}
+
+.account__dog__content {
+    margin-left: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.account__dog__name {
+    font-size: 18px;
+    font-weight: bold;
+    color: #666;
+    margin-bottom: 0;
+}
+
+.account__dog__info {
+    font-size: 15px;
+    font-weight: normal;
+    color: #999;
+    margin-bottom: 0;
+}
+
+.account__dog__birthday {
+    font-size: 15px;
+    font-weight: normal;
+    color: #999;
+}
+
+.account__dog__links {
+    margin-top: auto;
+    padding-bottom: 5px;
+    display: flex;
+    justify-content: space-between;
+
+    a {
+        font-size: 14px;
+        display: inline-block;
+    }
+}
+
+.account__dog__modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 1000;
+    display: none;
+}
+
+.account__dog__modal__inner {
+    background: #fff;
+    max-width: 600px;
+    width: calc(100% - 30px);
+    max-height: 80vh;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 30px;
+    overflow-y: auto;
+}
+
+.account__dog__modal__image {
+    text-align: center;
+    margin: 20px 0;
+
+    img {
+        width: 100px;
+        display: block;
+        margin: 0 auto;
+        border-radius: 9999px;
+    }
+}

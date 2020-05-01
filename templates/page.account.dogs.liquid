@@ -1,0 +1,15 @@
+<a name="pagecontent" id="pagecontent"></a>
+
+<div class="sixteen columns page clearfix">
+  <h1>Your Dogs</h1>
+
+  <div class="feature_divider"></div>
+
+  <div>
+      <div class="account__dogs">
+          {%- for dog in customer.metafields.bestbully.information.dogs -%}
+              {%- include 'account-dog' with dog: dog -%}
+          {%- endfor -%}
+      </div>
+  </div>
+</div>

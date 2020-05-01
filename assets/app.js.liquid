@@ -1268,3 +1268,29 @@ $(document)
         return;
     });
 }(jQuery));
+
+
+/**
+ * Dogs editor scripts
+ * @param  {[type]} $ [description]
+ * @return {[type]}   [description]
+ */
+(function ($) {
+    $(document).ready( function () {
+        $('[data-dog-edit]').on('click', function ( event ) {
+            event.preventDefault();
+            $(this).closest('.account__dog')
+                .find('.account__dog__modal').fadeIn();
+        });
+
+        $('[data-dog-modal-close]').on('click', function (event) {
+            event.preventDefault();
+            $('[data-dog-modal]').fadeOut();
+        });
+
+        // To prevent clicking within the modal to close it. 
+        $('.account__dog__modal__inner').on('click', function (event) {
+            event.stopPropagation();
+        });
+    });
+}(jQuery));
