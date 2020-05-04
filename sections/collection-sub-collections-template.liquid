@@ -5,7 +5,12 @@
 {% endcomment %}
 
 {% if section.settings.featured_collection_image %}
-  <header class="banner center page_banner dark-overlay-{{ section.settings.image_darken }}">
+  {% if section.settings.wide_display == false %}
+  <div class="container">
+    <div class="sixteen columns">
+  {% endif %}
+
+  <header class="banner center page-banner dark-overlay-{{ section.settings.image_darken }} full-width--{{ section.settings.wide_display }}">
     {%- if collection.image -%}
       {% assign collection_image = collection.image %}
       {% assign collection_image_alt = collection.image.alt %}
@@ -25,6 +30,11 @@
       </div>
     {% endif %}
   </header>
+
+  {% if section.settings.wide_display == false %}
+    </div>
+  </div>
+  {% endif %}
 {% endif %}
 
 <a name="pagecontent" id="pagecontent"></a>
@@ -203,21 +213,27 @@
     },
     {
       "type": "checkbox",
-      "id": "featured_collection_image",
-      "label": "Show image",
-      "info": "[Learn more](https://help.outofthesandbox.com/hc/en-us/articles/115009455768-How-to-add-a-Collection-Banner)"
+      "id": "wide_display",
+      "label": "Wide display",
+      "default": true
     },
     {
-      "type": "image_picker",
-      "id": "image",
-      "label": "Image",
-      "info": "1800 x 1000px recommended"
+      "type": "checkbox",
+      "id": "featured_collection_image",
+      "label": "Show banner",
+      "info": "[Learn more](https://help.outofthesandbox.com/hc/en-us/articles/115009455768-How-to-add-a-Collection-Banner)"
     },
     {
       "type": "checkbox",
       "id": "image_darken",
       "label": "Darken image",
       "default": false
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image",
+      "info": "1800 x 1000px recommended"
     },
     {
       "type": "header",

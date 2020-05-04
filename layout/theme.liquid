@@ -27,7 +27,7 @@
     {% endif %}
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.6/jquery.fancybox.css">
-    <!-- Stylesheets for Turbo "5.0.3" -->
+    <!-- Stylesheets for Turbo "6.0.1" -->
     {{ 'styles.scss.css' | asset_url | stylesheet_tag }}
 
     <script>
@@ -133,11 +133,14 @@
   </noscript>
 
   <body class="{% if template == '404' %}error-404{% else %}{{ template | replace: '.', '-' | handle }}{% endif %}"
-    data-money-format="{{ shop.money_format }}" data-shop-url="{{ shop.url }}">
-{% capture the_snippet_content %}{% render 'socialshopwave-helper' %}{% endcapture %}
-            {% unless the_snippet_content contains 'Liquid error' %}
-              {{ the_snippet_content }}
-            {% endunless %}
+        data-money-format="
+        {%- if settings.show_multiple_currencies == true and settings.currency_format == 'money_with_currency_format' -%}
+          {{ shop.money_with_currency_format | strip_html }}
+        {%- else -%}
+          {{ shop.money_format | strip_html }}
+        {%- endif -%}"
+        data-shop-currency="{{ shop.currency }}"
+        data-shop-url="{{ shop.url }}">
 
     {% section 'header' %}
 
@@ -193,14 +196,15 @@
     {% endif %}
 
     <script src="{{ 'jquery.min.js' | asset_url }}"></script>
+    {% if settings.show_multiple_currencies or settings.show_shipping_calculator %}
+      <script type="text/javascript" src="/services/javascripts/currencies.js" data-no-instant></script>
+      <script type="text/javascript" src="{{ "jquery.currencies.min.js" | asset_url }}" data-no-instant></script>
+    {% endif %}
     <script src="{{ 'vendors.js' | asset_url }}"></script>
     <script src="{{ 'sections.js' | asset_url }}"></script>
     <script src="{{ 'utilities.js' | asset_url }}"></script>
     <script src="{{ 'app.js' | asset_url }}"></script>
 
-    {% if settings.show_multiple_currencies %}
-      {% include 'currencies' %}
-    {% endif %}
     {% if settings.show_shipping_calculator and template contains "cart" %}
       {% include 'cart-shipping-scripts' %}
     {% endif %}

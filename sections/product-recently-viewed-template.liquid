@@ -4,19 +4,29 @@
 
 <div class="js-recently-viewed-product clearfix">
   <div class="product-wrap">
-      <div class="relative product_image swap-{{ settings.collection_secondary_image }}">
+      <div class="relative product_image">
         <a href="{{ product.url | within: collection }}">
           <div class="image__container">
-            {% include 'image-element', image: product.featured_image, alt: product.featured_image.alt, stretch_width: true %}
+            {% include 'image-element', image: product.featured_media.preview_image, alt: product.featured_image.alt, stretch_width: true %}
+            {% if settings.collection_secondary_image != blank and product.media[1] != blank %}
+              {% assign youtube_video = product.media | where: "media_type", "external_video" %}
+              {% assign html5_video = product.media | where: "media_type", "video" %}
+
+              {% if youtube_video.first %}
+                <div class="external-video__container lazyload lazypreload secondary-media-hidden video-on-hover">
+                  <div class="youtube-wrapper" data-youtube-video>
+                    {{ youtube_video.first | external_video_tag }}
+                  </div>
+                </div>
+              {% elsif html5_video.first %}
+                <div class="video__container lazyload lazypreload secondary-media-hidden video-on-hover" data-html5-video>
+                  {{ html5_video.first | video_tag: controls: false }}
+                </div>
+              {% else %}
+                {% include 'image-element', image: product.media[1].preview_image, alt: alt_text, additional_classes: 'secondary lazypreload secondary-media-hidden' %}
+              {% endif %}
+            {% endif %}
           </div>
-          {% if settings.collection_secondary_image != blank %}
-            <div class="image__container" style="max-width: {% if product.images[1] != blank %}{{- product.images[1].width -}}px{% else %}{{- product.featured_image.width -}}px{% endif %}; ">
-              <img src="{% if product.images[1] != blank %}{{ product.images[1] | product_img_url: '800x' }}{% else %}{{ product.featured_image | product_img_url: '800x' }}{% endif %}"
-              class="secondary lazyload"
-              alt="{{ alt_text | escape }}"
-              />
-            </div>
-          {% endif %}
           </a>
         {% include "product-details" %}
       </div>

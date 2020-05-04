@@ -166,7 +166,8 @@
       "items_left_count": {
         "one": "库存剩下",
         "other": "库存剩下"
-      }
+      },
+      "view_in_your_space": "在您的空间中查看"
     },
     "notify_form": {
       "email": "请输入您的电邮地址",
@@ -978,11 +979,5 @@
       "reset_password_html": "此信箱已被注册，如果这是您的信箱，您可以 <a href=\"\/account\/login#recover\">更新密码<\/a>",
       "verify_email": "我们已经寄出一封邮件至"
     }
-  },
-  "socialshopwave": {
-    "add_to_cart": "Add To Cart",
-    "adding_to_cart": "Adding...",
-    "sold_out": "Sold Out",
-    "description": "Description"
   }
 }

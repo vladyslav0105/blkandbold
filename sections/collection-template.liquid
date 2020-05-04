@@ -5,7 +5,12 @@
 {% endcomment %}
 
 {% if section.settings.featured_collection_image %}
-  <header class="banner center page_banner dark-overlay-{{ section.settings.image_darken }}">
+  {% if section.settings.wide_display == false %}
+  <div class="container">
+    <div class="sixteen columns">
+  {% endif %}
+
+  <header class="banner center page-banner dark-overlay-{{ section.settings.image_darken }} full-width--{{ section.settings.wide_display }}">
       {% if collection.image %}
         {% assign image = collection.image %}
       {%- elsif section.settings.image -%}
@@ -22,6 +27,11 @@
         </div>
       {% endif %}
   </header>
+
+  {% if section.settings.wide_display == false %}
+    </div>
+  </div>
+  {% endif %}
 {% endif %}
 
 <a name="pagecontent" id="pagecontent"></a>
@@ -178,12 +188,51 @@
 
 </div>
 
+{% comment %} Shopify-XR {% endcomment %}
+<script>
+  window.ShopifyXR=window.ShopifyXR||function(){(ShopifyXR.q=ShopifyXR.q||[]).push(arguments)}
+    {% assign models = product.media | where: 'media_type', 'model' | json %}
+    ShopifyXR('addModels', {{ models }});
+</script>
+<script defer src="https://cdn.shopify.com/shopifycloud/shopify-xr-js/assets/v1.0/shopify-xr.en.js"></script>
+<script defer src="https://cdn.shopify.com/shopifycloud/model-viewer-ui/assets/v1.0/model-viewer-ui.en.js"></script>
+
+
 {% schema %}
 
 {
   "name": "Collection",
   "class": "collection-template-section",
   "settings": [
+    {
+      "type": "header",
+      "content": "Banner"
+    },
+    {
+      "type": "checkbox",
+      "id": "wide_display",
+      "label": "Wide display",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "featured_collection_image",
+      "label": "Show banner",
+      "info": "[Learn more](https://help.outofthesandbox.com/hc/en-us/articles/115009455768-How-to-add-a-Collection-Banner)",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "image_darken",
+      "label": "Darken image",
+      "default": false
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image",
+      "info": "1800 x 1000px recommended"
+    },
     {
       "type": "checkbox",
       "id": "display_collection_title",
@@ -204,28 +253,6 @@
       "type": "checkbox",
       "id": "collection_sort",
       "label": "Enable collection sorting"
-    },
-    {
-      "type": "header",
-      "content": "Banner image"
-    },
-    {
-      "type": "checkbox",
-      "id": "featured_collection_image",
-      "label": "Show image",
-      "info": "[Learn more](https://help.outofthesandbox.com/hc/en-us/articles/115009455768-How-to-add-a-Collection-Banner)"
-    },
-    {
-      "type": "image_picker",
-      "id": "image",
-      "label": "Image",
-      "info": "1800 x 1000px recommended"
-    },
-    {
-      "type": "checkbox",
-      "id": "image_darken",
-      "label": "Darken image",
-      "default": false
     },
     {
       "type": "header",

@@ -5,15 +5,9 @@
                   eight
                   columns
                   gallery-wrap
-                  js-gallery-wrap
-                  {% if settings.quick_shop_product_thumbs %}
-                    {{ settings.quick_shop_thumbnail_position }}
-                  {% endif %}
-                  gallery-arrows--{{ settings.quick_shop_gallery_arrows }}
-                  {% if section.settings.product_thumbs %}
-                    {{ section.settings.thumbnail_position }}
-                  {% endif %}
-                  {% if settings.quick_shop_product_images_position == 'right' %}
+                  gallery-arrows--{{ settings.gallery_arrows }}
+                  gallery-thumbnails--{{ settings.thumbnail_position }}
+                  {% if settings.product_images_position == 'right' %}
                     align-gallery-right
                   {% endif %}
                   ">
@@ -22,12 +16,21 @@
                     js-gallery-modal
                     product-{{ product.id }}-gallery
                     transparentBackground--{{ settings.slideshow_button_style }}
-                    slideshow_animation--{{ settings.quick_shop_slideshow_animation }}
-                    "
-            data-zoom="{{ settings.quick_shop_zoom }}">
+                    slideshow_animation--{{ settings.slideshow_animation }}
+                    show-gallery-arrows--{{ settings.gallery_arrows }}"
+                  data-thumbnails-enabled="{{ settings.product_thumbs }}"
+                  data-gallery-arrows-enabled="{{ settings.gallery_arrows }}"
+                  data-slideshow-speed="{{ settings.slideshow_speed }}"
+                  data-slideshow-animation="{{ settings.slideshow_animation }}"
+                  data-thumbnails-position="{{ settings.thumbnail_position }}"
+                  data-thumbnails-slider-enabled="{{ settings.enable_thumbnail_slider }}"
+                  data-zoom="{{ settings.activate_zoom }}"
+                  data-video-loop="{{ settings.video_looping }}"
+                  data-product-id="{{ product.id }}"
+                  >
         </div>
-        {% if settings.quick_shop_product_thumbs %}
-          <div class="gallery product_gallery_nav js-gallery-carousel product_gallery_nav--{{ settings.quick_shop_thumbnail_position }}">
+        {% if settings.product_thumbs %}
+          <div class="gallery product_gallery_nav js-gallery-carousel product_gallery_nav--{{ settings.thumbnail_position }}">
           </div>
         {% endif %}
       </div>

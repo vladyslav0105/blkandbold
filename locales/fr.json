@@ -169,7 +169,8 @@
       "items_left_count": {
         "one": "produit en stock",
         "other": "produits en stock"
-      }
+      },
+      "view_in_your_space": "Voir dans votre espace"
     },
     "notify_form": {
       "email": "Saisissez votre adresse e-mail...",

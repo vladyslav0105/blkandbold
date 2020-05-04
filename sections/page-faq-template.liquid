@@ -16,7 +16,7 @@
           "name": "{{ block.settings.title | escape }}",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "{{ block.settings.subtitle | strip_html }}"
+            "text": "{{ block.settings.subtitle | strip_html | escape }}"
           }
         }{% unless forloop.last %},{% endunless %}
       {% endunless %}
@@ -25,9 +25,13 @@
 }
 </script>
 
-{% if section.settings.show_banner %}
+{% if section.settings.wide_display == false %}
+<div class="container">
+  <div class="sixteen columns">
+{% endif %}
 
-  <section id="banner-{{section.id}}" class="banner page_banner">
+{% if section.settings.image != nil %}
+  <section id="banner-{{ section.id }}" class="banner page-banner full-width--{{ section.settings.wide_display }}">
     {% if section.settings.image != nil %}
       {% include 'image-element', image: section.settings.image, alt: section.settings.image.alt, stretch_width: true %}
     {% else %}
@@ -77,14 +81,18 @@
       </div>
     {% endunless %}
   </section>
+{% endif %}
 
+{% if section.settings.wide_display == false %}
+  </div>
+</div>
 {% endif %}
 
 <a name="pagecontent" id="pagecontent"></a>
 
 <div class="container main content">
   <div class="sixteen columns page clearfix">
-    {% unless section.settings.show_banner %}
+    {% unless section.settings.image != nil %}
       <h1>
         {{ page.title }}
       </h1>
@@ -116,7 +124,7 @@
 </div>
 
 <style>
-  {% if section.settings.show_banner %}
+  {% if section.settings.image != nil %}
     .mobile_nav-fixed--true #pagecontent, .mobile_nav-fixed--false #pagecontent {
       padding: 0;
     }
@@ -136,8 +144,8 @@
   "settings": [
     {
       "type": "checkbox",
-      "id": "show_banner",
-      "label": "Show banner",
+      "id": "wide_display",
+      "label": "Wide display",
       "default": true
     },
     {

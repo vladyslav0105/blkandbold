@@ -84,7 +84,7 @@
     {% endif %}
   {% endunless %}
   {% unless pretext == blank and title == blank and subtitle == blank and button1 == blank and button2 == blank %}
-    <div class="position-{{ text_position }} caption js-caption mobile-text-below--{{ mobile_text_below_image }}">
+    <div class="position-{{ text_position }} caption js-caption caption--below-{{ mobile_text_below_image }}">
       <div class="caption-content caption-background-{{ caption_background }} caption-transparency-{{ caption_background_transparency }} align-{{ text_align }}">
         {% if pretext != blank %}
           <div class="pretext">

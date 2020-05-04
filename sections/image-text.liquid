@@ -3,6 +3,7 @@
 - Draggable section
 - Uses blocks
 {% endcomment %}
+
 {% if section.settings.frontpage_grid_style == false %}
   <div class="container">
     <div class="sixteen columns">
@@ -52,6 +53,10 @@
   </div>
 {% endif %}
 
+
+{% comment %} Is the color set to transparent? {% endcomment %}
+{% assign bg_alpha = block.settings.bg_color | color_extract: 'alpha' %}
+
 <style>
 
   {% for block in section.blocks %}
@@ -68,6 +73,12 @@
       color: {{ block.settings.text_color }};
       border-color: {{ block.settings.text_color }};
     }
+
+    .block--{{ block.id }} a.button:hover {
+      color: {% if bg_alpha != 0 %}{{ block.settings.bg_color }}{% else %}{{ settings.shop_bg_color }}{% endif %};
+      border-color: {{ block.settings.text_color }};
+      background-color: {{ block.settings.text_color }};
+    }
   {% endfor %}
 
   {% if section.settings.frontpage_grid_style == false and section.settings.featured_links_per_row == '1' %}
@@ -83,6 +94,7 @@
       #shopify-section-{{ section.id }} .featured-link--half {
         width: 45%;
       }
+
       #shopify-section-{{ section.id }} .featured-link--margin {
         {% if section.settings.frontpage_image_position == 'right' %}
           margin-left: 3%;
@@ -91,6 +103,7 @@
           margin-right: 3%;
         {% endif %}
       }
+
       #shopify-section-{{ section.id }} .featured-link--section:nth-child(even) .featured-link--margin {
         {% if section.settings.frontpage_image_position == 'right' %}
           margin-left: 0;

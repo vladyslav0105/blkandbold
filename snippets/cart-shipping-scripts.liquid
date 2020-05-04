@@ -8,6 +8,6 @@
       submitButton: {{ 'cart.shipping_calculator.submit_button_label' | t | json }},
       submitButtonDisabled: {{ 'cart.shipping_calculator.submit_button_label_disabled' | t | json }},
       {% if customer and customer.default_address.country %}customerIsLoggedIn: true,{% endif %}
-      moneyFormat: {{ shop.money_with_currency_format | json }}
+      moneyFormat: {{ shop.money_with_currency_format | strip_html | json }}
     });
 </script>

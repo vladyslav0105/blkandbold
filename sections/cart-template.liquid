@@ -45,10 +45,9 @@
             {% assign total_saving = saving | plus: total_saving %}
           {% endif %}
 
-          <div class="section clearfix cart__item" data-cart-item data-product-id="{{ item.product.id }}" data-line-id="{{ forloop.index }}" data-variant-id="{{ item.id }}">
-            <div class="five columns small-down--one-fifth alpha cart__item--image">
+                <div class="section clearfix cart__item" data-cart-item data-product-id="{{ item.product.id }}" data-line-id="{{ forloop.index }}" data-variant-id="{{ item.id }}">
               <a href="{{ item.url }}" title="{{ item.title | escape }}" class="cart_page_image">
-                {% include 'image-element', image: item, alt: item.title, object_fit: settings.align_height, max_height: settings.collection_height %}
+                {% include 'image-element', image: item.product.featured_media.preview_image, alt: item.title, object_fit: settings.align_height, max_height: settings.collection_height %}
               </a>
             </div>
 
@@ -211,7 +210,7 @@
 
             {% if content_for_additional_checkout_buttons %}
               <div class="additional-checkout-buttons additional-checkout-buttons--vertical">
-                <span class="additional-checkout-buttons">{{ content_for_additional_checkout_buttons }}</span>
+                {{ content_for_additional_checkout_buttons }}
               </div>
             {% endif %}
 
