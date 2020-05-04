@@ -169,7 +169,8 @@
       "items_left_count": {
         "one": "artículo queda",
         "other": "artículos quedan"
-      }
+      },
+      "view_in_your_space": "Ver en tu espacio"
     },
     "notify_form": {
       "email": "Introduce tu dirección de correo electrónico...",

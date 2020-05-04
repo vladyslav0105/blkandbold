@@ -47,25 +47,32 @@
     },
     {
       "type": "checkbox",
+      "id": "mute_video",
+      "label": "Mute video",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_controls",
+      "label": "Show video controls",
+      "default": true
+    },
+    {
+      "type": "checkbox",
       "id": "video_dark_overlay",
       "label": "Darken video"
     },
     {
       "type": "video_url",
-      "id": "video",
+      "id": "iframe_video",
       "label": "Video link",
       "accept": ["youtube", "vimeo"],
       "default": "https://www.youtube.com/watch?v=_9VUPq3SxOc"
     },
     {
       "type": "text",
-      "id": "mp4",
-      "label": "HTML5 MP4 File URL"
-    },
-    {
-      "type": "text",
-      "id": "ogv",
-      "label": "HTML5 OGV File URL (optional)"
+      "id": "html5_video",
+      "label": "HTML5 MP4/OGV File URL"
     },
     {
       "type": "header",
@@ -198,7 +205,7 @@
     "name": "Video",
     "category": "Video",
     "settings": {
-      "video": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
+      "iframe_video": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
       "button1_label": "Play Video"
     }
   }]

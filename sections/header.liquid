@@ -103,7 +103,7 @@
       <ul class="menu" id="mobile_menu">
         {% include 'mobile-menu' with section.settings.main_linklist %}
         {% include 'mobile-menu' with section.settings.main_linklist2 %}
-        {% include 'mobile-menu' with section.settings.top_bar_menu %}
+        {% include 'mobile-menu' with section.settings.top_bar_menu, context: 'top_bar_menu' %}
         {% if section.settings.phone_number != blank %}
           <li><a href="tel:{{ section.settings.phone_number | replace: ' ', '' | replace: '+', '' | replace: '-', '' }}">{{ section.settings.phone_number }}</a></li>
         {% endif %}
@@ -195,7 +195,14 @@
               <div class="js-empty-cart__message {% if cart.item_count > 0 %}hidden{% endif %}">
                 <p class="empty_cart">{{ 'layout.general.empty_cart' | t }}</p>
               </div>
-              <form action="/checkout" method="post" data-total-discount="{{ cart.total_discount }}" data-money-format="{{ shop.money_format }}" data-shop-currency="{{ shop.currency }}" data-shop-name="{{ shop.name | escape }}" class="{% if cart.item_count == 0 %}hidden{% endif %}" data-cart-form="mini-cart">
+              <form action="/checkout" 
+                    method="post" 
+                    class="{% if cart.item_count == 0 %}hidden{% endif %}"
+                    data-total-discount="{{ cart.total_discount }}" 
+                    data-money-format="{{ shop.money_format | strip_html }}" 
+                    data-shop-currency="{{ shop.currency }}" 
+                    data-shop-name="{{ shop.name | escape }}" 
+                    data-cart-form="mini-cart">
                 <a class="cart_content__continue-shopping secondary_button">
                   {{ 'cart.general.continue_shopping_link_html' | t }}
                 </a>
@@ -458,7 +465,8 @@
 </header>
 
 <style>
-  .main_nav div.logo {
+  .main_nav div.logo,
+  .sticky_nav .main_nav div.logo {
     padding-top: {{ section.settings.logo_top_padding }}px;
     padding-bottom: {{ section.settings.logo_top_padding }}px;
   }
@@ -485,8 +493,7 @@
     padding-bottom: {{ section.settings.menu_top_padding }}px;
   }
 
-  .sticky_nav ul.menu,
-  .sticky_nav .main_nav div.logo {
+  .sticky_nav ul.menu {
     padding-top: {{ section.settings.menu_top_padding | divided_by: 2 }}px;
     padding-bottom: {{ section.settings.menu_top_padding | divided_by: 2 }}px;
   }

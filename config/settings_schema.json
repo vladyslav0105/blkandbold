@@ -3,7 +3,7 @@
     "name": "theme_info",
     "theme_name": "Turbo",
     "theme_author": "Out of the Sandbox",
-    "theme_version": "5.0.3",
+    "theme_version": "6.0.1",
     "theme_documentation_url": "https:\/\/help.outofthesandbox.com\/",
     "theme_support_url": "https:\/\/help.outofthesandbox.com\/hc\/en-us\/requests\/new"
   },
@@ -1214,6 +1214,25 @@
     "name": "Product grid",
     "settings": [
       {
+        "type": "header",
+        "content": "Collections and search results"
+      },
+      {
+        "type": "checkbox",
+        "id": "align_height",
+        "label": "Align height of product media"
+      },
+      {
+        "type": "range",
+        "id": "collection_height",
+        "label": "Product media height",
+        "min": 150,
+        "max": 400,
+        "step": 10,
+        "default": 200,
+        "unit": "px"
+      },
+      {
         "type": "checkbox",
         "id": "thumbnail_hover_enabled",
         "label": "Show product information on hover"
@@ -1226,7 +1245,7 @@
       {
         "type": "checkbox",
         "id": "collection_secondary_image",
-        "label": "Show secondary product image",
+        "label": "Show secondary product media on hover",
         "info": "Desktop only"
       },
       {
@@ -1274,25 +1293,6 @@
             "label": "Infinite scroll"
           }
         ]
-      },
-      {
-        "type": "header",
-        "content": "Images"
-      },
-      {
-        "type": "checkbox",
-        "id": "align_height",
-        "label": "Align height of product images"
-      },
-      {
-        "type": "range",
-        "id": "collection_height",
-        "label": "Product image height",
-        "min": 150,
-        "max": 400,
-        "step": 10,
-        "default": 200,
-        "unit": "px"
       },
       {
         "type": "header",
@@ -1423,32 +1423,88 @@
         "default": "popup"
       },
       {
+        "type": "header",
+        "content": "Product gallery"
+      },
+      {
         "type": "checkbox",
-        "id": "show_payment_button",
-        "label": "Show dynamic checkout button",
-        "default": true,
-        "info": "Each customer will see their preferred payment method from those available on your store, such as PayPal or Apple Pay. [Learn more](https:\/\/help.shopify.com\/manual\/using-themes\/change-the-layout\/dynamic-checkout)"
+        "id": "product_thumbs",
+        "label": "Show thumbnails",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "gallery_arrows",
+        "label": "Show arrows",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "activate_zoom",
+        "label": "Magnify product images on hover",
+        "default": false
+      },
+      {
+        "type": "range",
+        "id": "slideshow_speed",
+        "label": "Gallery speed",
+        "min": 0,
+        "max": 6,
+        "unit": "sec",
+        "default": 0,
+        "info": "Set to 0 to disable autoplay."
+      },
+      {
+        "type": "select",
+        "id": "slideshow_animation",
+        "label": "Gallery transition",
+        "default": "slide",
+        "options": [
+          {
+            "value": "slide",
+            "label": "Slide"
+          },
+          {
+            "value": "fade",
+            "label": "Fade"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "thumbnail_position",
+        "label": "Thumbnails",
+        "default": "bottom",
+        "options": [
+          {
+            "value": "bottom",
+            "label": "Bottom"
+          },
+          {
+            "value": "left",
+            "label": "Left"
+          },
+          {
+            "value": "right",
+            "label": "Right"
+          }
+        ]
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_thumbnail_slider",
+        "label": "Enable thumbnail slider",
+        "default": true
       },
       {
         "type": "header",
-        "content": "Popup"
+        "content": "Product information"
       },
       {
         "type": "checkbox",
         "id": "quick_shop_display_vendor",
         "label": "Show vendor",
         "default": false
-      },
-      {
-        "type": "checkbox",
-        "id": "quick_shop_display_savings",
-        "label": "Show price savings",
-        "default": true
-      },
-      {
-        "type": "checkbox",
-        "id": "quick_shop_zoom",
-        "label": "Magnify product images on hover"
       },
       {
         "type": "checkbox",
@@ -1480,30 +1536,30 @@
       },
       {
         "type": "checkbox",
-        "id": "quick_shop_gallery_arrows",
-        "label": "Show arrows on product gallery",
+        "id": "quick_shop_display_savings",
+        "label": "Show price savings",
         "default": true
       },
       {
-        "type": "select",
-        "id": "quick_shop_slideshow_animation",
-        "label": "Gallery transition",
-        "options": [
-          {
-            "value": "slide",
-            "label": "Slide"
-          },
-          {
-            "value": "fade",
-            "label": "Fade"
-          }
-        ],
-        "default": "slide"
+        "type": "header",
+        "content": "Dynamic checkout button"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_payment_button",
+        "label": "Show dynamic checkout button",
+        "default": true,
+        "info": "Each customer will see their preferred payment method from those available on your store, such as PayPal or Apple Pay. [Learn more](https:\/\/help.shopify.com\/manual\/using-themes\/change-the-layout\/dynamic-checkout)"
+      },
+      {
+        "type": "header",
+        "content": "Media",
+        "info": "Learn more about [media types](https:\/\/help.shopify.com\/en\/manual\/products\/product-media)"
       },
       {
         "type": "radio",
-        "id": "quick_shop_product_images_position",
-        "label": "Gallery position",
+        "id": "product_images_position",
+        "label": "Media position",
         "options": [
           {
             "value": "left",
@@ -1517,33 +1573,9 @@
       },
       {
         "type": "checkbox",
-        "id": "quick_shop_product_thumbs",
-        "label": "Show product gallery thumbnails",
-        "default": true
-      },
-      {
-        "type": "select",
-        "id": "quick_shop_thumbnail_position",
-        "label": "Thumbnail position",
-        "default": "bottom-thumbnails",
-        "options": [
-          {
-            "value": "bottom-thumbnails",
-            "label": "Bottom (grid)"
-          },
-          {
-            "value": "bottom-slider",
-            "label": "Bottom (slider)"
-          },
-          {
-            "value": "left-thumbnails",
-            "label": "Left"
-          },
-          {
-            "value": "right-thumbnails",
-            "label": "Right"
-          }
-        ]
+        "id": "video_looping",
+        "label": "Enable video looping",
+        "default": false
       }
     ]
   },
@@ -1649,10 +1681,6 @@
         "default": false
       },
       {
-        "type": "paragraph",
-        "content": "If native multi-currencies is configured on your store, the theme currency converter settings below will be disabled. [Learn more](https:\/\/help.shopify.com\/en\/manual\/payments\/shopify-payments\/multi-currency\/setup)"
-      },
-      {
         "type": "select",
         "id": "currency_format",
         "label": "Format",
@@ -1667,6 +1695,10 @@
           }
         ],
         "default": "money_with_currency_format"
+      },
+      {
+        "type": "paragraph",
+        "content": "If native multi-currencies is configured on your store, the theme currency converter settings below will be disabled. [Learn more](https:\/\/help.shopify.com\/en\/manual\/payments\/shopify-payments\/multi-currency\/setup)"
       },
       {
         "type": "text",

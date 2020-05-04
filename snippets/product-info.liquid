@@ -4,7 +4,11 @@
     <span class="brand">{{ product.vendor }}</span>
   {% endif %}
  <span class=" stamped-product-reviews-badge" data-product-sku="{{ product.handle }}" data-id="{{ product.id }}" data-product-title="{{product.title}}" data-product-type="{{product.type}}" style="display:block;">{{ product.metafields.stamped.badge }}</span>
-
+ {% if settings.enable_shopify_collection_badges %}
+   <div class="shopify-reviews reviewsVisibility--{{settings.enable_shopify_review_comments}}">
+     <span class="shopify-product-reviews-badge" data-id="{{ product.id }}"></span>
+   </div>
+ {% endif %}
   {% if collection_handles contains 'coming-soon' %}
     <span class="coming-soon">{{ 'collections.general.coming_soon' | t }}</span>
   {% else %}

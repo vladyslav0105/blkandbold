@@ -170,7 +170,8 @@
       "items_left_count": {
         "one": "item left",
         "other": "items left"
-      }
+      },
+      "view_in_your_space": "View in your space"
     },
     "notify_form": {
       "email": "Enter your email address...",

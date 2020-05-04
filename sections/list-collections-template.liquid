@@ -6,7 +6,7 @@
 {% endcomment %}
 
 {% if section.settings.image %}
-  <header class="banner center page_banner dark-overlay-{{ section.settings.image_darken }}">
+  <header class="banner center page-banner dark-overlay-{{ section.settings.image_darken }}">
     {% include 'image-element', image: section.settings.image, alt: section.settings.image.alt, stretch_width: true, progressive: true %}
       {% if section.settings.display_collection_title %}
         <div class="caption">

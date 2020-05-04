@@ -43,7 +43,7 @@
         <div class="section product_section clearfix js-product_section {% if section.settings.product_images_position == 'right' %}align_right--images{% endif %}" data-rv-handle="{{ product.handle }}">
 
           <div class="nine columns medium-down--one-whole {% if section.settings.product_images_position == 'left' %}alpha{% else %}omega{% endif %}">
-            {% include 'product-images' %}
+            {% include 'product-images', video_looping: section.settings.video_looping, set_product_height: section.settings.set_product_height %}
           </div>
 
           <div class="seven columns medium-down--one-whole {% if section.settings.product_images_position == 'left' %}omega{% else %}alpha{% endif %}">
@@ -354,6 +354,26 @@
 </div>
 </div>
 
+{% if section.settings.set_product_height %}
+  {% style %}
+    .gallery-wrap model-viewer {
+      min-height: {{ section.settings.product_height }}px;
+    }
+
+    .gallery-wrap .product_gallery img,
+    .gallery-wrap .product_gallery .plyr--html5 video,
+    .gallery-wrap .product_gallery .plyr--youtube {
+      max-height: {{ section.settings.product_height }}px;
+    }
+  {% endstyle %}
+{% endif %}
+
+{% comment %} Shopify-XR {% endcomment %}
+<script>
+  window.ShopifyXR=window.ShopifyXR||function(){(ShopifyXR.q=ShopifyXR.q||[]).push(arguments)}
+    {% assign models = product.media | where: 'media_type', 'model' | json %}
+    ShopifyXR('addModels', {{ models }});
+</script>
 {% schema %}
 
 {
@@ -362,9 +382,87 @@
   "max_blocks": 20,
   "settings": [
     {
+      "type": "header",
+      "content": "Product gallery"
+    },
+    {
       "type": "checkbox",
-      "id": "product_breadcrumb",
-      "label": "Show breadcrumbs"
+      "id": "product_thumbs",
+      "label": "Show thumbnails",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "gallery_arrows",
+      "label": "Show arrows",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_product_lightbox",
+      "label": "Enable lightbox",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "activate_zoom",
+      "label": "Magnify product images on hover"
+    },
+    {
+      "type": "range",
+      "id": "slideshow_speed",
+      "label": "Gallery speed",
+      "min": 0,
+      "max": 6,
+      "unit": "sec",
+      "default": 0,
+      "info": "Set to 0 to disable autoplay."
+    },
+    {
+      "type": "select",
+      "id": "slideshow_animation",
+      "label": "Gallery transition",
+      "options": [
+        {
+          "value": "slide",
+          "label": "Slide"
+        },
+        {
+          "value": "fade",
+          "label": "Fade"
+        }
+      ],
+      "default": "slide"
+    },
+    {
+      "type": "select",
+      "id": "thumbnail_position",
+      "label": "Thumbnails",
+      "default": "bottom",
+      "options": [
+        {
+          "value": "bottom",
+          "label": "Bottom"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_thumbnail_slider",
+      "label": "Enable thumbnail slider",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Product information"
     },
     {
       "type": "checkbox",
@@ -373,14 +471,13 @@
     },
     {
       "type": "checkbox",
-      "id": "display_sku",
-      "label": "Show SKU"
+      "id": "product_breadcrumb",
+      "label": "Show breadcrumb links"
     },
     {
       "type": "checkbox",
-      "id": "display_savings",
-      "label": "Show price savings",
-      "default": true
+      "id": "display_sku",
+      "label": "Show SKU"
     },
     {
       "type": "checkbox",
@@ -419,51 +516,31 @@
       ]
     },
     {
+      "type": "checkbox",
+      "id": "display_savings",
+      "label": "Show price savings",
+      "default": true
+    },
+    {
       "type": "header",
-      "content": "Product gallery"
+      "content": "Dynamic checkout button"
     },
     {
       "type": "checkbox",
-      "id": "gallery_arrows",
-      "label": "Show arrows on product gallery",
-      "default": true
+      "id": "show_payment_button",
+      "label": "Show dynamic checkout button",
+      "default": true,
+      "info": "Each customer will see their preferred payment method from those available on your store, such as PayPal or Apple Pay. [Learn more](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)"
     },
     {
-      "type": "checkbox",
-      "id": "activate_zoom",
-      "label": "Magnify product images on hover"
-    },
-    {
-      "type": "checkbox",
-      "id": "enable_product_lightbox",
-      "label": "Enable product gallery popup",
-      "default": true
-    },
-    {
-      "type": "checkbox",
-      "id": "activate_autoplay",
-      "label": "Enable product gallery slideshow"
-    },
-    {
-      "type": "select",
-      "id": "slideshow_animation",
-      "label": "Gallery transition",
-      "options": [
-        {
-          "value": "slide",
-          "label": "Slide"
-        },
-        {
-          "value": "fade",
-          "label": "Fade"
-        }
-      ],
-      "default": "slide"
+      "type": "header",
+      "content": "Media",
+      "info": "Learn more about [media types](https://help.shopify.com/en/manual/products/product-media)"
     },
     {
       "type": "radio",
       "id": "product_images_position",
-      "label": "Gallery position",
+      "label": "Media position",
       "options": [
         {
           "value": "left",
@@ -477,33 +554,25 @@
     },
     {
       "type": "checkbox",
-      "id": "product_thumbs",
-      "label": "Show product gallery thumbnails",
-      "default": true
+      "id": "set_product_height",
+      "label": "Set height of product media",
+      "default": false
     },
     {
-      "type": "select",
-      "id": "thumbnail_position",
-      "label": "Thumbnail position",
-      "default": "bottom-slider",
-      "options": [
-        {
-          "value": "bottom-thumbnails",
-          "label": "Bottom (grid)"
-        },
-        {
-          "value": "bottom-slider",
-          "label": "Bottom (slider)"
-        },
-        {
-          "value": "left-thumbnails",
-          "label": "Left"
-        },
-        {
-          "value": "right-thumbnails",
-          "label": "Right"
-        }
-      ]
+      "type": "range",
+      "id": "product_height",
+      "label": "Product media height",
+      "min": 200,
+      "max": 800,
+      "step": 10,
+      "default": 500,
+      "unit": "px"
+    },
+    {
+      "type": "checkbox",
+      "id": "video_looping",
+      "label": "Enable video looping",
+      "default": false
     },
     {
       "type": "header",
@@ -524,20 +593,6 @@
       "id": "enable_reviews_in_description",
       "label": "Show reviews in product description area",
       "default": false
-    },
-    {
-      "type": "header",
-      "content": "Dynamic checkout button"
-    },
-    {
-      "type": "paragraph",
-      "content": "Lets customers check out directly using a familiar payment method. [Learn more](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_payment_button",
-      "label": "Show dynamic checkout button",
-      "default": true
     }
   ],
   "blocks": [
@@ -763,6 +818,12 @@
       "type": "image_gallery",
       "name": "Image gallery",
       "settings": [
+        {
+          "type": "checkbox",
+          "id": "wide_display",
+          "label": "Wide display",
+          "default": true
+        },
         {
           "type": "image_picker",
           "id": "detail_image_1",
@@ -1276,7 +1337,7 @@
         {
           "type": "url",
           "id": "button_link",
-          "label": "link"
+          "label": "Button link"
         }
       ]
     },
@@ -1321,19 +1382,25 @@
         },
         {
           "type": "checkbox",
+          "id": "mute_video",
+          "label": "Mute video",
+          "default": false
+        },
+        {
+          "type": "checkbox",
           "id": "video_dark_overlay",
           "label": "Darken video"
         },
         {
           "type": "video_url",
-          "id": "video",
+          "id": "iframe_video",
           "label": "Video link",
           "accept": ["youtube", "vimeo"],
           "default": "https://www.youtube.com/watch?v=_9VUPq3SxOc"
         },
         {
           "type": "text",
-          "id": "mp4",
+          "id": "html5_video",
           "label": "HTML5 MP4 File URL"
         },
         {
@@ -1425,7 +1492,8 @@
         {
           "type": "text",
           "id": "button1_label",
-          "label": "First button label"
+          "label": "First button label",
+          "default": "Play Video"
         },
         {
           "type": "url",

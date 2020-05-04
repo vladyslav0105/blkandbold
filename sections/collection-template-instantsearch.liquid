@@ -1,40 +1,27 @@
 {% comment %}
-** Sub-collections - custom view  **
+** Collections - default view **
 - Collection template
 - Uses blocks
 {% endcomment %}
 
 {% if section.settings.featured_collection_image %}
-  {% if section.settings.wide_display == false %}
-  <div class="container">
-    <div class="sixteen columns">
-  {% endif %}
+  <header class="banner center page_banner dark-overlay-{{ section.settings.image_darken }}">
+      {% if collection.image %}
+        {% assign image = collection.image %}
+      {%- elsif section.settings.image -%}
+        {% assign image = section.settings.image %}
+      {%- else %}
+        {% assign image = collection.products.first.featured_image %}
+      {% endif %}
 
-  <header class="banner center page-banner dark-overlay-{{ section.settings.image_darken }} full-width--{{ section.settings.wide_display }}">
-    {%- if collection.image -%}
-      {% assign collection_image = collection.image %}
-      {% assign collection_image_alt = collection.image.alt %}
-    {%- elsif section.settings.image -%}
-      {% assign collection_image = section.settings.image %}
-      {% assign collection_image_alt = section.settings.image.alt %}
-    {%- else %}
-      {% assign collection_image = collection.products.first.featured_image %}
-      {% assign collection_image_alt = collection.products.first.featured_image.alt %}
-    {% endif %}
+      {% include 'image-element', image: image, alt: collection.title, stretch_width: true, progressive: true %}
 
-    {% include 'image-element', image: collection_image.src, alt: collection_image_alt, stretch_width: true, progressive: true %}
-
-    {% if section.settings.display_collection_title %}
-      <div class="caption captionOverlay--true">
-        <h1 class="headline">{{ collection.title }}</h1>
-      </div>
-    {% endif %}
+      {% if section.settings.display_collection_title %}
+        <div class="caption captionOverlay--true">
+          <h1 class="headline">{{ collection.title }}</h1>
+        </div>
+      {% endif %}
   </header>
-
-  {% if section.settings.wide_display == false %}
-    </div>
-  </div>
-  {% endif %}
 {% endif %}
 
 <a name="pagecontent" id="pagecontent"></a>
@@ -93,6 +80,7 @@
           </a>
           {% if current_tags %}
             {% for tag in current_tags %}
+
               {% unless tag contains 'meta-' %}
                 <span class="breadcrumb-divider">/</span>
                 <a href="{{ routes.collections_url }}/{% if collection.handle != blank %}{{ collection.handle }}{% else %}all{% endif %}/{{ tag | handleize }}" title="{{ tag | escape }}">
@@ -114,7 +102,7 @@
           <h1>{{ collection.title }}</h1>
         </div>
       {% endif %}
-        <div class="eight columns section_select medium-down--one-whole">
+      <div class="eight columns section_select medium-down--one-whole">
         {% if collection.handle != blank and collection.products_count > 0 %}
           {% if section.settings.collection_tags %}
             {% for tag in collection.all_tags %}
@@ -133,7 +121,7 @@
             {% endfor %}
           {% endif %}
 
-         {% if section.settings.collection_sort %}
+          {% if section.settings.collection_sort %}
             <select class="sort_by" id="sort-by" data-default-sort="{{ collection.sort_by | default: collection.default_sort_by  }}">
               <option value="manual">{{ 'collections.sorting.featured' | t }}</option>
               <option value="best-selling">{{ 'collections.sorting.best_selling' | t }}</option>
@@ -152,9 +140,8 @@
       <div class="feature_divider"></div>
     </div>
 
-
     {% comment %}Check to see if sidebar should be enabled{% endcomment %}
-    {% if section.blocks.size > 0 %}
+    {% if section.blocks.size > 0 and collection.handle != 'types' and collection.handle != 'vendors' %}
       {% assign sidebar = true %}
     {% else %}
       {% assign sidebar = false %}
@@ -162,9 +149,9 @@
 
     {% if sidebar %}
       {% include 'sidebar' %}
-      <div class="twelve columns list-collection-wrapper medium-down--one-whole">
+      <div class="twelve columns medium-down--one-whole">
     {% else %}
-      <div class="sixteen columns list-collection-wrapper">
+      <div class="sixteen columns">
     {% endif %}
 
       {% if collection.description != blank %}
@@ -173,82 +160,29 @@
         </div>
       {% endif %}
 
-      {% assign linklist = linklists[collection.handle] %}
-      {% if linklist != empty %}
-        {% assign collections_per_row = section.settings.collections_per_row %}
-        {% include 'collection-loop', sidebar: sidebar %}
-      {% endif %}
-
-      {% if collection.products.size > 0 %}
-        {% assign products_per_row = section.settings.products_per_row %}
-        {% include 'product-loop', sidebar: sidebar %}
-      {% endif %}
-
-    {% if settings.pagination_type == 'basic_pagination' %}
-      {% include 'pagination' with sidebar %}
-    {% endif %}
+      <div id="isp_search_result_page"></div><script src="https://shopify.instantsearchplus.com/js/search_result_loading_page.js?smart_navigation=1&isp_platform=shopify&UUID=1ec31736-92e3-4421-96ee-a31be608ac44&store_id=30224384137"></script>
 
     </div>
   {% endpaginate %}
 
 </div>
 
-{% if section.settings.align_height == true %}
-  <style>
-    .list-collections .thumbnail img {
-      max-height: {{ section.settings.collection_height }}px;
-    }
-  </style>
-{% endif %}
-
 {% schema %}
 
 {
-  "name": "Sub-collection",
-  "class": "collection-template-section sub-collections-template-section",
+  "name": "Collection",
+  "class": "collection-template-section",
   "settings": [
     {
-      "type": "header",
-      "content": "Banner"
-    },
-    {
       "type": "checkbox",
-      "id": "wide_display",
-      "label": "Wide display",
-      "default": true
-    },
-    {
-      "type": "checkbox",
-      "id": "featured_collection_image",
-      "label": "Show banner",
-      "info": "[Learn more](https://help.outofthesandbox.com/hc/en-us/articles/115009455768-How-to-add-a-Collection-Banner)"
-    },
-    {
-      "type": "checkbox",
-      "id": "image_darken",
-      "label": "Darken image",
-      "default": false
-    },
-    {
-      "type": "image_picker",
-      "id": "image",
-      "label": "Image",
-      "info": "1800 x 1000px recommended"
-    },
-    {
-      "type": "header",
-      "content": "Layout"
+      "id": "display_collection_title",
+      "label": "Show collection title"
     },
     {
       "type": "checkbox",
       "id": "collection_breadcrumb",
       "label": "Show breadcrumb links",
       "default": true
-    },
-    {
-      "type": "checkbox",
-      "id": "display_collection_title",
-      "label": "Show collection title"
     },
     {
       "type": "checkbox",
@@ -261,32 +195,26 @@
       "label": "Enable collection sorting"
     },
     {
-      "type": "checkbox",
-      "id": "align_height",
-      "label": "Align height of collection images"
-    },
-    {
-      "type": "range",
-      "id": "collection_height",
-      "label": "Collection image height",
-      "min": 150,
-      "max": 400,
-      "step": 10,
-      "default": 200,
-      "unit": "px"
-    },
-    {
       "type": "header",
-      "content": "Collections"
+      "content": "Banner image"
     },
     {
-      "type": "range",
-      "id": "collections_per_row",
-      "label": "Collections per row",
-      "min": 2,
-      "max": 4,
-      "step": 1,
-      "default": 3
+      "type": "checkbox",
+      "id": "featured_collection_image",
+      "label": "Show image",
+      "info": "[Learn more](https://help.outofthesandbox.com/hc/en-us/articles/115009455768-How-to-add-a-Collection-Banner)"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image",
+      "info": "1800 x 1000px recommended"
+    },
+    {
+      "type": "checkbox",
+      "id": "image_darken",
+      "label": "Darken image",
+      "default": false
     },
     {
       "type": "header",

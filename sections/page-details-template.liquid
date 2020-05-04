@@ -367,6 +367,12 @@
       "name": "Image gallery",
       "settings": [
         {
+          "type": "checkbox",
+          "id": "wide_display",
+          "label": "Wide display",
+          "default": true
+        },
+        {
           "type": "image_picker",
           "id": "detail_image_1",
           "label": "Image 1",
@@ -913,19 +919,25 @@
         },
         {
           "type": "checkbox",
+          "id": "mute_video",
+          "label": "Mute video",
+          "default": false
+        },
+        {
+          "type": "checkbox",
           "id": "video_dark_overlay",
           "label": "Darken video"
         },
         {
           "type": "video_url",
-          "id": "video",
+          "id": "iframe_video",
           "label": "Video link",
           "accept": ["youtube", "vimeo"],
           "default": "https://www.youtube.com/watch?v=_9VUPq3SxOc"
         },
         {
           "type": "text",
-          "id": "mp4",
+          "id": "html5_video",
           "label": "HTML5 MP4 File URL"
         },
         {
@@ -1111,7 +1123,7 @@
         "type": "featured_video",
         "settings": {
           "autoplay": false,
-          "video": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
+          "iframe_video": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
           "title": "Video Section",
           "button1_label": "Play Video"
         }
