@@ -159,12 +159,6 @@
             {% endif %}
           {% endif %}
 
-          {% if section.settings.review_position == "next_to_gallery" %}
-            <div class="shopify-reviews reviewsVisibility--{{settings.enable_shopify_review_comments}}">
-              <div id="shopify-product-reviews" data-id="{{product.id}}">{{ product.metafields.spr.reviews }}</div>
-            </div>
-          {% endif %}
-
           {% if section.settings.display_collections or section.settings.display_tags or section.settings.display_type %}
             <div class="product_links">
               {% if section.settings.display_collections %}
@@ -220,7 +214,7 @@
         </div>
       {% endif %}
 
-     
+
     </div>
 
 <div id="stamped-main-widget" class="stamped-main-widget" data-product-id="{{ product.id }}" data-name="{{ product.title | escape }}" data-url="{{ shop.url }}{{ product.url }}" data-image-url="{{ product.featured_image | product_img_url: "large" |replace: " ? ", " % 3F" | replace: "& "," % 26"}}" data-description="{{ product.description | escape }}" data-product-sku="{{product.handle}}" data-product-type="{{product.type}}"> {{ product.metafields.stamped.reviews }} </div>
