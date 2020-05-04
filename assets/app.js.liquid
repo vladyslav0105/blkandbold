@@ -1273,14 +1273,46 @@ $(document)
                 .find('.account__dog__modal').fadeIn();
         });
 
+        $('[data-dog-add]').on('click', function (event) {
+            event.preventDefault();
+            $(this).next('.account__dog__modal').fadeIn();
+        });
+
         $('[data-dog-modal-close]').on('click', function (event) {
             event.preventDefault();
             $('[data-dog-modal]').fadeOut();
         });
 
-        // To prevent clicking within the modal to close it. 
+        // To prevent clicking within the modal to close it.
         $('.account__dog__modal__inner').on('click', function (event) {
             event.stopPropagation();
+        });
+
+
+        $('.acount__dog__modal__form').on('submit', function(event) {
+            event.preventDefault();
+            var $form = $(this);
+            var id = $(this).find('[name=id]').val();
+
+            // It's an update.
+            if (typeof id !== 'undefined')  {
+
+            // It's a creation.
+        } else {a
+                $.ajax({
+                    url: window.customer_auth.base_uri + 'dogs',
+                    type: 'POST',
+                    data: $form.serialize(),
+                    headers: {
+                        'customer-id': window.customer_auth.customer_id,
+                        'customer-hash': window.customer_auth.hash
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+                        window.location.reload();
+                    }
+                });
+            }
         });
     });
 }(jQuery));

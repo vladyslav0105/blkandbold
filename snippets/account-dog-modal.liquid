@@ -1,0 +1,44 @@
+<div class="account__dog__modal" data-dog-modal data-dog-modal-close>
+    <div class="account__dog__modal__inner">
+        <form action="#" method="POST" class="acount__dog__modal__form">
+            {%- if dog.id -%}
+                <input type="hidden" name="id" value="{{ dog.id }}">
+            {%- endif -%}
+            {% comment %}
+            <div class="account__dog__modal__image">
+                <img src="{{ dog.picture }}">
+                <input type="file">
+            </div>
+            {% endcomment %}
+            <div class="account__dog__modal__content">
+                <div>
+                    <label for="">Name</label>
+                    <input type="text" name="name" value="{{ dog.name }}">
+                </div>
+                <div>
+                    <label for="">Bread</label>
+                    <input type="text" name="bread" value="{{ dog.bread }}">
+                </div>
+                <div>
+                    <label for="">Size</label>
+                    <select name="size" id="">
+                        {%- unless dog.size -%}
+                            <option value="">-- Select Size --</option>
+                        {%- endunless -%}
+                        <option value="small" {% if dog.size == 'small' %}selected{% endif %}>Small</option>
+                        <option value="medium"{% if dog.size == 'medium' %}selected{% endif %}>Medium</option>
+                        <option value="large" {% if dog.size == 'large' %}selected{% endif %}>Large</option>
+                        <option value="extra large" {% if dog.size == 'extra-large' %}selected{% endif %}>Extra Large</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="">Birthday</label>
+                    <input type="text" name="birthday" value="{{ dog.birthday }}">
+                </div>
+
+                <button type="submit" class="action_button">{% if dog %}Update Dog{% else %}Add Dog{% endif %}</button>
+            </div>
+        </form>
+    </div>
+</div>
