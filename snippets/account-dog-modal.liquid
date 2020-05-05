@@ -2,7 +2,12 @@
     <div class="account__dog__modal__inner">
         <form action="#" method="POST" class="acount__dog__modal__form">
             {%- if dog.id -%}
+                {% comment %}
+                If the dog id is present, then the form will attempt to update
+                the existing dog.
+                {% endcomment %}
                 <input type="hidden" name="id" value="{{ dog.id }}">
+                <input type="hidden" name="_method" value="PUT">
             {%- endif -%}
             {% comment %}
             <div class="account__dog__modal__image">
@@ -34,7 +39,7 @@
 
                 <div>
                     <label for="">Birthday</label>
-                    <input type="text" name="birthday" value="{{ dog.birthday }}">
+                    <input type="text" name="birthday" value="{{ dog.birthday | date: '%d/%m/%Y' }}">
                 </div>
 
                 <button type="submit" class="action_button">{% if dog %}Update Dog{% else %}Add Dog{% endif %}</button>

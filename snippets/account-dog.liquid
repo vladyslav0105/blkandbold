@@ -5,11 +5,11 @@
     <div class="account__dog__content">
         <p class="account__dog__name">{{ dog.name }}</p>
         <p class="account__dog__info">{{ dog.bread }} - {{ dog.size | capitalize }}</p>
-        <p class="account__dog__birthday"><strong>Birth date:</strong> {{ dog.birthday }}</p>
+        <p class="account__dog__birthday"><strong>Birth date:</strong> {{ dog.birthday | date: '%d/%m/%Y' }}</p>
 
         <div class="account__dog__links">
             <a href="#" data-dog-edit>Edit</a>
-            <a href="#" data-dog-remove>Remove</a>
+            <a href="#" data-dog-remove data-dog-id="{{ dog.id }}">Remove</a>
         </div>
     </div>
 

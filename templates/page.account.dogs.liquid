@@ -24,7 +24,9 @@
 
       <div class="feature_divider"></div>
 
-      <a href="#" data-dog-add>Add a New Dog</a>
-      {%- include 'account-dog-modal'-%}
+      {%- if customer.metafields.bestbullysticks.dogs.size < 6 -%}
+        <a href="#" data-dog-add>Add a New Dog</a>
+        {%- include 'account-dog-modal'-%}
+      {%- endif -%}
   </div>
 </div>

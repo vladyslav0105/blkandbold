@@ -1296,13 +1296,46 @@ $(document)
 
             // It's an update.
             if (typeof id !== 'undefined')  {
+                $.ajax({
+                    url: window.customer_auth.base_uri + 'dogs/' + id,
+                    type: 'POST',
+                    data: $form.serialize(),
+                    headers: {
+                        'customer-id': window.customer_auth.customer_id,
+                        'customer-hash': window.customer_auth.hash
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+                        window.location.reload();
+                    }
+                });
 
             // It's a creation.
-        } else {a
+            } else {
                 $.ajax({
                     url: window.customer_auth.base_uri + 'dogs',
                     type: 'POST',
                     data: $form.serialize(),
+                    headers: {
+                        'customer-id': window.customer_auth.customer_id,
+                        'customer-hash': window.customer_auth.hash
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+                        window.location.reload();
+                    }
+                });
+            }
+        });
+
+        $('[data-dog-remove]').on('click', function ( event ) {
+            event.preventDefault();
+
+            if ( window.confirm('are you sure?') ) {
+                $.ajax({
+                    url: window.customer_auth.base_uri + 'dogs/' + $(this).data('dog-id'),
+                    type: 'POST',
+                    data: {'_method': 'DELETE'},
                     headers: {
                         'customer-id': window.customer_auth.customer_id,
                         'customer-hash': window.customer_auth.hash
