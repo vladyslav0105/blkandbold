@@ -213,9 +213,25 @@
           </div>
         </div>
       {% endif %}
-
-
     </div>
+
+<div class="product-tabs">
+    <div class="product-tabs_-tabs__tabs__container">
+        <ul class="product-tabs__tabs">
+            <li data-tab="description" class="active">Description</li>
+            <li data-tab="nutrition">Nutrition</li>
+            <!-- <li data-tab="safety">Safety Information</li> -->
+        </ul>
+    </div>
+    <div class="product-tabs__tab active" data-tab="description">
+        <p>{{ product.description | strip_html }}</p>
+    </div>
+    <div class="product-tabs__tab" data-tab="nutrition">
+        {% include 'product-specs' %}
+    </div>
+    <!-- <div class="product-tabs__tab" data-tab="safety"></div> -->
+</div>
+
 
 <div id="stamped-main-widget" class="stamped-main-widget" data-product-id="{{ product.id }}" data-name="{{ product.title | escape }}" data-url="{{ shop.url }}{{ product.url }}" data-image-url="{{ product.featured_image | product_img_url: "large" |replace: " ? ", " % 3F" | replace: "& "," % 26"}}" data-description="{{ product.description | escape }}" data-product-sku="{{product.handle}}" data-product-type="{{product.type}}"> {{ product.metafields.stamped.reviews }} </div>
 

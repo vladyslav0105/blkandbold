@@ -1,0 +1,63 @@
+<div class="container product-specs">
+    {% assign spec_labels = '' %}
+    {% assign specs = '' %}
+    {% assign nutrition_labels = '' %}
+    {% assign nutrition_facts = '' %}
+    {%- for variant in product.variants -%}
+        {%- if variant.metafields['Product Specs'].size > 0 -%}
+            {%- for metafield in variant.metafields['Product Specs'] -%}
+                {%- unless spec_labels contains metafield.first -%}
+                    {% assign spec_labels = spec_labels | append: metafield.first | append: '|' %}
+                    {% assign specs = specs | append: metafield.first | append: '---' | append: metafield.last | append: '|' %}
+                {%- endunless -%}
+            {%- endfor -%}
+
+            {%- for metafield in variant.metafields['Nutrition Facts'] -%}
+                {%- unless nutrition_labels contains metafield.first -%}
+                    {% assign nutrition_labels = nutrition_labels | append: metafield.first | append: '|' %}
+                    {% assign nutrition_facts = nutrition_facts | append: metafield.first | append: '---' | append: metafield.last | append: '|' %}
+                {%- endunless -%}
+            {%- endfor -%}
+        {%- endif -%}
+    {%- endfor -%}
+
+
+    {%- if specs != '' or nutrition_facts != '' -%}
+        <div class="sixteen columns alpha omega">
+            {%- if nutrition_facts != '' -%}
+                <div class="eight columns medium-down--one-whole product-specs__module">
+                    <h4>Nutrition Facts:</h4>
+                    <table class="product-specs__table">
+                        <tbody>
+                            {% assign nutrition_facts = nutrition_facts | split: '|' %}
+                            {%- for fact in nutrition_facts -%}
+                                {% assign f = fact | split: '---' %}
+                                <tr>
+                                    <td>{{ f.first | strip }}</td><td class="text-right">{{ f.last | strip }}</td>
+                                </tr>
+                            {%- endfor -%}
+                        </tbody>
+                    </table>
+                </div>
+            {%- endif -%}
+
+
+            {%- if specs != '' -%}
+                <div class="eight columns medium-down--one-whole product-specs__module">
+                    <h4>Product Specifications:</h4>
+                    <table class="product-specs__table">
+                        <tbody>
+                            {% assign specs = specs | split: '|' %}
+                            {%- for spec in specs -%}
+                                {% assign f = spec | split: '---' %}
+                                <tr>
+                                    <td>{{ f.first | strip }}</td><td class="text-right">{{ f.last | strip }}</td>
+                                </tr>
+                            {%- endfor -%}
+                        </tbody>
+                    </table>
+                </div>
+            {%- endif -%}
+        </div>
+    {%- endif -%}
+</div>
