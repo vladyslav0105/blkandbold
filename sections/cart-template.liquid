@@ -44,92 +44,91 @@
             {% assign saving = item.variant.compare_at_price | minus: item.variant.price | times: item.quantity %}
             {% assign total_saving = saving | plus: total_saving %}
           {% endif %}
+            <div class="section clearfix cart__item" data-cart-item data-product-id="{{ item.product.id }}" data-line-id="{{ forloop.index }}" data-variant-id="{{ item.id }}">
+                <div class="five columns small-down--one-fifth alpha cart__item--image">
+                    <a href="{{ item.url }}" title="{{ item.title | escape }}" class="cart_page_image">
+                      {% include 'image-element', image: item.product.featured_media.preview_image, alt: item.title, object_fit: settings.align_height, max_height: settings.collection_height %}
+                    </a>
+                </div>
+                <div class="eleven columns small-down--four-fifths omega cart_content_info cart__item--content">
+                  <h3 class="cart__item--title">
+                    <a href="{{ item.url }}">{{ item.product.title }}</a>
+                  </h3>
 
-                <div class="section clearfix cart__item" data-cart-item data-product-id="{{ item.product.id }}" data-line-id="{{ forloop.index }}" data-variant-id="{{ item.id }}">
-              <a href="{{ item.url }}" title="{{ item.title | escape }}" class="cart_page_image">
-                {% include 'image-element', image: item.product.featured_media.preview_image, alt: item.title, object_fit: settings.align_height, max_height: settings.collection_height %}
-              </a>
-            </div>
+                  {% unless item.product.has_only_default_variant or item.variant.title contains "Title" %}
+                    <p class="meta">
+                      {% for option in item.product.options %}
+                        <span class="label">{{ option }}:</span> <span>{{ item.variant.options[forloop.index0] }}</span><br />
+                      {% endfor %}
+                    </p>
+                  {% endunless %}
 
-            <div class="eleven columns small-down--four-fifths omega cart_content_info cart__item--content">
-              <h3 class="cart__item--title">
-                <a href="{{ item.url }}">{{ item.product.title }}</a>
-              </h3>
-
-              {% unless item.product.has_only_default_variant or item.variant.title contains "Title" %}
-                <p class="meta">
-                  {% for option in item.product.options %}
-                    <span class="label">{{ option }}:</span> <span>{{ item.variant.options[forloop.index0] }}</span><br />
-                  {% endfor %}
-                </p>
-              {% endunless %}
-
-              {% if item.properties %}
-                <p>
-                  {% for p in item.properties %}
-                    {% assign startsWith = p.first | slice: 0 %}
-                    {% unless p.last == blank or p.first == "subscription_id" or p.first == "shipping_interval_frequency" or p.first == "shipping_interval_unit_type" or startsWith == '_' %}
-                      {% if p.last contains '/uploads/' %}
-                        <div>
-                          {{ p.first }}: <a class="lightbox" href="{{ p.last }}">{{ 'cart.general.uploaded_file' | t }}</a>
-                        </div>
-                      {% else %}
-                        <div>
-                          {{ p.first }}: {{ p.last }}
-                        </div>
-                      {% endif %}
-                    {% endunless %}
-                  {% endfor %}
-                </p>
-              {% endif %}
-
-              <p class="modal_price">
-                {% if item.price > 0 %}
-                  <span class="money {% if item.price < item.variant.compare_at_price or item.line_level_discount_allocations.size > 0 %}sale{% endif %}">
-                    {{ item.final_price | money }}
-                  </span>
-                  {% if item.price < item.variant.compare_at_price or item.line_level_discount_allocations.size > 0 %}
-                    <span class="money was_price">
-                      {{ item.variant.compare_at_price | money }}
-                    </span>
+                  {% if item.properties %}
+                    <p>
+                      {% for p in item.properties %}
+                        {% assign startsWith = p.first | slice: 0 %}
+                        {% unless p.last == blank or p.first == "subscription_id" or p.first == "shipping_interval_frequency" or p.first == "shipping_interval_unit_type" or startsWith == '_' %}
+                          {% if p.last contains '/uploads/' %}
+                            <div>
+                              {{ p.first }}: <a class="lightbox" href="{{ p.last }}">{{ 'cart.general.uploaded_file' | t }}</a>
+                            </div>
+                          {% else %}
+                            <div>
+                              {{ p.first }}: {{ p.last }}
+                            </div>
+                          {% endif %}
+                        {% endunless %}
+                      {% endfor %}
+                    </p>
                   {% endif %}
-                {% else %}
-                    {{ settings.free_price_text }}
-                {% endif %}
-              </p>
 
-              {% if item.line_level_discount_allocations.size > 0 %}
-                {% for discount_allocation in item.line_level_discount_allocations %}
-                  <p class="meta cart__item--discount">
-                    <span class="label">{{ 'cart.general.discount' | t }}:</span>
-                    {{ discount_allocation.discount_application.title }} (-<span class="money">{{ discount_allocation.amount | money }}</span>)
+                  <p class="modal_price">
+                    {% if item.price > 0 %}
+                      <span class="money {% if item.price < item.variant.compare_at_price or item.line_level_discount_allocations.size > 0 %}sale{% endif %}">
+                        {{ item.final_price | money }}
+                      </span>
+                      {% if item.price < item.variant.compare_at_price or item.line_level_discount_allocations.size > 0 %}
+                        <span class="money was_price">
+                          {{ item.variant.compare_at_price | money }}
+                        </span>
+                      {% endif %}
+                    {% else %}
+                        {{ settings.free_price_text }}
+                    {% endif %}
                   </p>
-                {% endfor %}
-              {% endif %}
 
-              <div class="product-quantity-box left">
-                <span class="ss-icon product-minus js-change-quantity" data-func="minus"><span class="icon-minus"></span></span>
-                <input type="number" data-prev="{{ item.quantity }}"
-                 {% if item.product.metafields.product.limit %}data-limit="{{ item.product.metafields.product.limit }}"{% endif %}
-                 min="0" size="2" class="quantity" name="updates[]" id="updates_{{ item.id }}" value="{{ item.quantity }}" data-cart-quantity-input="cart-template" {% if settings.limit_quantity and item.variant.inventory_management != blank and item.variant.inventory_quantity > 0 and item.variant.inventory_policy == "deny" %}max="{{ item.variant.inventory_quantity }}"{% endif %} />
-                <span class="ss-icon product-plus js-change-quantity" data-func="plus"><span class="icon-plus"></span></span>
-              </div>
+                  {% if item.line_level_discount_allocations.size > 0 %}
+                    {% for discount_allocation in item.line_level_discount_allocations %}
+                      <p class="meta cart__item--discount">
+                        <span class="label">{{ 'cart.general.discount' | t }}:</span>
+                        {{ discount_allocation.discount_application.title }} (-<span class="money">{{ discount_allocation.amount | money }}</span>)
+                      </p>
+                    {% endfor %}
+                  {% endif %}
 
-              <p class="price_total">
-                <strong>{{ 'cart.general.total' | t }}:</strong>
-                {% if item.line_level_discount_allocations.size > 0 %}
-                  <span class="money">
-                    {{ item.final_line_price | money }}
-                  </span>
-                {% endif %}
-                <span class="money {% if item.line_level_discount_allocations.size > 0 %}was_price{% endif %}">
-                  {{ item.original_line_price | money }}
-                </span>
-              </p>
+                  <div class="product-quantity-box left">
+                    <span class="ss-icon product-minus js-change-quantity" data-func="minus"><span class="icon-minus"></span></span>
+                    <input type="number" data-prev="{{ item.quantity }}"
+                     {% if item.product.metafields.product.limit %}data-limit="{{ item.product.metafields.product.limit }}"{% endif %}
+                     min="0" size="2" class="quantity" name="updates[]" id="updates_{{ item.id }}" value="{{ item.quantity }}" data-cart-quantity-input="cart-template" {% if settings.limit_quantity and item.variant.inventory_management != blank and item.variant.inventory_quantity > 0 and item.variant.inventory_policy == "deny" %}max="{{ item.variant.inventory_quantity }}"{% endif %} />
+                    <span class="ss-icon product-plus js-change-quantity" data-func="plus"><span class="icon-plus"></span></span>
+                  </div>
 
-              <a href="{{ routes.cart_change_url }}?line={{ forloop.index }}&amp;quantity=0" class="cart__remove-btn" data-line-id="{{ forloop.index }}" data-remove-item="cart-template"><span class="remove-text">{{ 'cart.general.remove' | t }}</span> <span class="remove-icon"></span></a>
+                  <p class="price_total">
+                    <strong>{{ 'cart.general.total' | t }}:</strong>
+                    {% if item.line_level_discount_allocations.size > 0 %}
+                      <span class="money">
+                        {{ item.final_line_price | money }}
+                      </span>
+                    {% endif %}
+                    <span class="money {% if item.line_level_discount_allocations.size > 0 %}was_price{% endif %}">
+                      {{ item.original_line_price | money }}
+                    </span>
+                  </p>
 
-            </div>
+                  <a href="{{ routes.cart_change_url }}?line={{ forloop.index }}&amp;quantity=0" class="cart__remove-btn" data-line-id="{{ forloop.index }}" data-remove-item="cart-template"><span class="remove-text">{{ 'cart.general.remove' | t }}</span> <span class="remove-icon"></span></a>
+
+                </div>
           </div>
         {% endfor %}
       </div>
