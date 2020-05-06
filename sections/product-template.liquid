@@ -220,6 +220,7 @@
         <ul class="product-tabs__tabs">
             <li data-tab="description" class="active">Description</li>
             <li data-tab="nutrition">Nutrition</li>
+            <li data-tab="safety">{{ section.settings.bbs_safety_information_title | strip }}</li>
             <!-- <li data-tab="safety">Safety Information</li> -->
         </ul>
     </div>
@@ -230,6 +231,13 @@
         {% include 'product-specs' %}
     </div>
     <!-- <div class="product-tabs__tab" data-tab="safety"></div> -->
+    <div class="product-tabs__tab" data-tab="safety">
+        {%- if product.metafields.bestbullysticks.safety_information != blank -%}
+            {{ product.metafields.bestbullysticks.safety_information }}
+        {%- else -%}
+            {{ section.settings.bbs_safety_information }}
+        {%- endif -%}
+    </div>
 </div>
 
 
@@ -575,7 +583,24 @@
       "id": "toggle",
       "label": "Toggle sidebar content",
       "default": false
-    }
+  },
+  {
+      "type": "header",
+      "content": "Safety Information"
+  },
+  {
+      "type": "text",
+      "id": "bbs_safety_information_title",
+      "label": "Tab Title",
+      "default": "Safety Information"
+  },
+  {
+      "type": "richtext",
+      "id": "bbs_safety_information",
+      "label": "Safety Information",
+      "info": "Default Safety Information to display in product tags. You can override this on a product basis by using the metafield bestbullysticks.safety_information.",
+      "default": "<p>Your safety information goes here</p>"
+  }
   ],
   "blocks": [
     {
