@@ -2037,6 +2037,13 @@ li > a.url-deadlink {
   }
 }
 
+// Centering the content in the main nav.
+.main_nav {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
 .main_nav,
 .dropdown {
   @include background-opacity({{ settings.header_bg_color }}, {% if settings.transparent_header %}0.9{% else %}1{% endif %});
@@ -2126,10 +2133,38 @@ li > a.url-deadlink {
   transition: opacity 0s;
 }
 
+// These rules override any customizations made into the theme. to prevent
+// unwanted issues.
+.sticky_nav ul.menu {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    flex: 1;
+}
+
 .sticky_nav ul.menu,
 .sticky_nav .mini_cart {
   font-size: {{ settings.nav_font_size }}px;
   padding-bottom: 0 !important;
+}
+
+.sticky_nav .main_nav .nav {
+    display: flex;
+    align-items: center;
+}
+
+.sticky_nav .cart_container {
+    order: 2;
+
+    .mini_cart {
+        padding-top: 0;
+        align-items: center;
+
+        &:before {
+            padding-top: 0px;
+            margin: 0px;
+            margin-top: -4px;            
+        }
+    }
 }
 
 .menu.center,
@@ -2786,8 +2821,14 @@ input[type="submit"].guest_button, input[type="button"].guest_button {
   top: -1px;
 }
 
+.sticky_nav div.logo {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
 .sticky_nav div.logo img {
-  width: 60%;
+  width: 80px;
+  // width: 60%;
   margin: 0 auto;
 }
 
