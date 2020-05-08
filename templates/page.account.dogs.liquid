@@ -5,7 +5,7 @@
     window.customer_auth = {
         customer_id: {{ customer.id }},
         hash: '{{ customer.id | append: salt | md5 }}',
-        base_uri: 'https://bestbully-integration.test/api/'
+        base_uri: 'https://app.bestbullysticks.com/api/'
     }
 </script>
 
