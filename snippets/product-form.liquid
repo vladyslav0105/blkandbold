@@ -25,7 +25,7 @@
       id="product-form-{{ product.id }}"
       data-product-form
       data-options-size="{{ product.options.size }}"
-      data-money-format="{{ shop.money_format }}"
+      data-money-format="{{ shop.money_format | strip_html }}"
       data-shop-currency="{{ shop.currency }}"
       data-select-id="product-select-{{ product.id }}{{ product-form }}{{ section.id }}{{ block.id }}"
       data-enable-state="{% if template contains 'product' %}true{% else %}false{% endif %}"

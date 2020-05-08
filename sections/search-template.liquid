@@ -8,7 +8,7 @@
 {% paginate search.results by search_pagination %}
 
 {% if section.settings.image != blank %}
-  <header class="banner center page_banner dark-overlay-{{ section.settings.image_darken }}">
+  <header class="banner center page-banner dark-overlay-{{ section.settings.image_darken }}">
     {% include 'image-element', image: section.settings.image, alt: section.settings.image.alt, stretch_width: true %}
     <div class="caption captionOverlay--true">
       <h1 class="headline">{{ 'general.search.title' | t }}</h1>
@@ -112,11 +112,11 @@
           <div class="product_row clearfix">
             {% assign featured_image = false %}
 
-            {% if item.object_type == 'article' and item.image %}
+            {% if item.object_type == 'article' and item.featured_media.preview_image %}
               {% assign featured_image = true %}
               <div class="four columns alpha">
                 <a href="{{ item.url }}" title="{{ item.title | escape }}">
-                    {% include 'image-element', image: item.image, alt: item.title, object_fit: settings.align_height, max_height: settings.collection_height %}
+                    {% include 'image-element', image: item.featured_media.preview_image, alt: item.title, object_fit: settings.align_height, max_height: settings.collection_height %}
                 </a>
               </div>
             {% elsif item.featured_image %}

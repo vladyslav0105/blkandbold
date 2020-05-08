@@ -169,7 +169,8 @@
       "items_left_count": {
         "one": "item descartado",
         "other": "itens descartados"
-      }
+      },
+      "view_in_your_space": "Ver no seu espaço"
     },
     "notify_form": {
       "email": "Introduza o seu endereço de e-mail...",
@@ -425,11 +426,5 @@
         "other": "{{ count }} itens"
       }
     }
-  },
-  "socialshopwave": {
-    "add_to_cart": "Add To Cart",
-    "adding_to_cart": "Adding...",
-    "sold_out": "Sold Out",
-    "description": "Description"
   }
 }

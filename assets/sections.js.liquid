@@ -8,7 +8,6 @@
 #Cart
 #Product
 #Header
-#Social media
 #Map
 #FAQ
 
@@ -27,6 +26,22 @@ var featuredCollectionSection = {
           prevNext,
           wrapAround,
           initialIndex;
+
+      //Ensure product media libraries are present
+    window.Shopify.loadFeatures([
+      {
+        name: 'model-viewer',
+        version: '0.8'
+      },
+      {
+        name: 'shopify-xr',
+        version: '1.0',
+      },
+      {
+        name: 'model-viewer-ui',
+        version: '1.0',
+      }
+    ], productMedia.setupMedia)
 
       if (products_per_slide == "2" && products_available > products_per_slide && products_limit > products_per_slide || products_per_slide == "4" && products_available > products_per_slide && products_limit > products_per_slide || products_per_slide == "6" && products_available > products_per_slide && products_limit > products_per_slide){
         cellAlign = "left";
@@ -309,76 +324,78 @@ var gallery = {
 /*============================================================================
   Video
 ==============================================================================*/
-
-//check to see if HTML5 video is supported
-var supports_video = function(){
-  return !!document.createElement('video').canPlayType;
-}
-
 var videoSection = {
   init: function(){
 
+    var videoPlayerSection;
+
     //Loop through all video sections present.
-    $('.js-video.lazyframe').each(function(i, videoElement) {
-      if ($(videoElement).hasClass('showPosterImage--true')) {
-        var videoParentSection = $(videoElement).closest('.video-section').attr('id');
-        lazyframe('#'+ videoParentSection + ' .lazyframe.showPosterImage--true', {
-          initinview: false
-        });
-      } else {
-        var videoParentSection = $(videoElement).closest('.video-section').attr('id');
-        lazyframe('#' + videoParentSection + ' .lazyframe.showPosterImage--false', {
-          initinview: true,
-          onLoad: function(lazyframe) {
-            $(videoElement).find('iframe').slice(1).remove();
-          }
-        });
+    $('.js-video').each(function(i, videoElement) {
+      var videoAutoloop = $(videoElement).hasClass('video-autoloop--true');
+      var videoAutoplay = $(videoElement).hasClass('video-autoplay--true');
+      var videoMuted = $(videoElement).data('muted');
+
+      videoPlayerSection = new Plyr('[data-video-element]', {
+        controls: videoControls,
+        loop: {
+          active: videoAutoloop
+        },
+        fullscreen: {
+          enabled: true,
+          fallback: true,
+          iosNative: true
+        },
+        storage: {
+          enabled: false
+        }
+      });
+
+      // Moves players from video section into global array
+      if (globalVideoPlayers) {
+        globalVideoPlayers.push(videoPlayerSection);
       }
-    })
 
-    function hideTextElements(parent) {
-      parent.find('.caption').not('.display-mobile-text').hide();
-      parent.find('.caption').not('.display-mobile-text').find('.action_button').hide();
-    }
+      videoPlayerSection.muted = videoMuted;
 
-    if($('.js-video').hasClass('hide-text-on-video') && $('.js-video').hasClass('video-autoplay--true')){
-      var videoSection = $('.js-video.hide-text-on-video.video-autoplay--true');
-      hideTextElements(videoSection);
-    }
+      var showPoster = $(videoElement).hasClass('showPosterImage--true');
 
-    $(".video-section .lazyvideo.hide-text-on-video").on('click', function(){
-      var videoSection = $(this).parents('.js-video-section');
-      hideTextElements(videoSection);
-    })
+      // Display poster is setting enabled and autoplay is off
+      if(showPoster && videoAutoplay === false) {
+        var videoThumbnail = $(videoElement).data('thumbnail');
+        $(videoElement).css('background-image', 'url("'+videoThumbnail+'")');
+        $(videoElement).find('.plyr, .plyr__video-embed').hide();
+      }
 
-    $('[data-play-video-button], video.hide-text-on-video').on('click', function(){
-      //Target parent lazyframe
-      var videoSection = $(this).parents('.js-video-section');
-      var lazyElement = videoSection.find('.lazyframe');
-      var videoWrapper = videoSection.find('.js-video');
-      if(videoWrapper.data('mp4') || videoWrapper.data('ogv')) {
+      if(videoAutoplay === true) {
+        videoPlayerSection.autoplay = true;
+        hideTextElements($(videoElement).find('.js-video-section'));
+        var videoSection = $('.js-video.hide-text-on-video.video-autoplay--true');
+        hideTextElements(videoSection);
+      }
+
+      function hideTextElements(parent) {
+        parent.find('.js-video').css('background-image', 'none');
+        parent.find('.caption').not('.display-mobile-text').hide();
+        parent.find('.caption').not('.display-mobile-text').find('.action_button').hide();
+
+        //Hide poster on click
+        parent.find('.js-video').css('padding-top', '0%');
+        parent.find('.js-video').find('.plyr, .plyr__video-embed').show();
+      }
+
+      $(videoElement).parents('.js-video-section').find('[data-play-video-button], video.hide-text-on-video').on('click', function(){
+        $(this).off();
+        var videoSection = $(this).parents('.js-video-section');
+        videoPlayerSection.play();
         if(videoSection.find('.js-video.hide-text-on-video').length) {
           hideTextElements(videoSection);
         }
-      } else{
-        //create iframe and add settings
-        var lazyIframe = document.createElement('iframe');
-        iframeSrc = lazyElement.data('src');
-        cleanIframeSrc = iframeSrc.substring(0, iframeSrc.indexOf('?')) + '?&autoplay=1';
-        lazyIframe.src = cleanIframeSrc;
-        lazyIframe.setAttribute('allowfullscreen', true);
-        lazyIframe.setAttribute('frameborder', 0);
-        //Append iframe to lazyframe
-        lazyElement.append(lazyIframe);
-        if(videoSection.find('.js-video.hide-text-on-video').length) {
-          hideTextElements(videoSection);
-        }
-      }
+      });
+
     });
   },
   unload: function($target){
     $target.find('[data-play-video]').off('click');
-    $target.find('video.hide-text-on-video').off('click');
   }
 }
 
@@ -423,8 +440,11 @@ selectCallback = function(variant, selector) {
 
   var notifyUrl = $notifyFormInputs.data('url');
 
+  // Escape variant titles
+  var variantTitle = variant.title.replace(/"/g,'\&quot;');
+
   if (variant) {
-    var notifyMessage = Shopify.translation.notify_message_first+variant.title+Shopify.translation.notify_message_last+notifyUrl;
+    var notifyMessage = Shopify.translation.notify_message_first + variantTitle + Shopify.translation.notify_message_last + notifyUrl;
   }
 
   if ($notifyFormInputs.hasClass('customer--true')) {
@@ -442,7 +462,7 @@ selectCallback = function(variant, selector) {
       var $slider = $(this);
       var $sliderInstance = Flickity.data(this);
       if ($slider.is(":visible") && $sliderInstance != undefined ) {
-        var index = $('[data-image-id="' + variant.featured_image.id + '"]').data('index');
+        var index = $('[data-image-id="' + variant.featured_media.id + '"]').data('index');
         $sliderInstance.select( index, false, true );
       }
     });
@@ -469,7 +489,7 @@ selectCallback = function(variant, selector) {
         }
       }
     } else {
-      $(".notify_form_message", $product).attr("value", $(".notify_form_message", $product).data('body') + " - " + variant.title);
+      $(".notify_form_message", $product).attr("value", $(".notify_form_message", $product).data('body') + " - " + variantTitle);
     }
   }
 
@@ -572,77 +592,39 @@ selectCallback = function(variant, selector) {
   if (Shopify.theme_settings.show_multiple_currencies){
     convertCurrencies();
   }
+
 };
 
 var productPage = {
   init: function(){
 
-    var draggable = true;
-    var prevNextButtons = true;
-    var autoplay = $('.js-product-gallery').data('autoplay');
-
-    setTimeout(function(){
-     imageFunctions.linkGalleryAndCarousel($('.js-product-page-gallery .js-product-gallery'), $('.js-product-page-gallery .product_gallery_nav'));
-    }, 1000);
+    //Ensure product media libraries are present
+    window.Shopify.loadFeatures([
+      {
+        name: 'model-viewer',
+        version: '0.8'
+      },
+      {
+        name: 'shopify-xr',
+        version: '1.0',
+      },
+      {
+        name: 'model-viewer-ui',
+        version: '1.0',
+      }
+    ], productMedia.setupMedia)
 
     if($('.js-full-width-product-images').length){
       imageFunctions.fullWidth('.product-template .product .description img', '.js-full-width-product-images');
     }
 
-    if ($('.js-product-gallery').hasClass('single-image')){
-      draggable = false;
-      prevNextButtons = false;
-    }
-
     // Wrap product description if there is an iframe embedded
     $('.product_section .description').find('iframe').wrap('<div class="lazyframe" data-ratio="16:9"></div>');
 
-    if(is_touch_device() && $('.js-product-gallery').hasClass('popup-enabled--false')) {
-      imageFunctions.zoom('.js-product-gallery');
-      draggable = false;
-    } else {
-      imageFunctions.zoom('.js-product-gallery', false);
-    }
-
-    $('.js-product-gallery').flickity({
-      "adaptiveHeight": true,
-      "wrapAround": "true",
-      "cellAlign": "left",
-      "draggable": draggable,
-      "contain": true,
-      "imagesLoaded": true,
-      "lazyLoad": 2,
-      "pageDots": false,
-      "prevNextButtons": prevNextButtons,
-      "autoPlay": autoplay ? 6000 : false,
-      "dragThreshold": 10,
-      "arrowShape": arrowSize
-    });
-
-    var groupCells = true;
-    var navPrevNextButtons = false;
-    var navCellAlign = "center";
-    var navWrapAround = false;
-
-    if ($('.product_gallery_nav .gallery-cell').length >= 7) {
-      groupCells = false;
-      navPrevNextButtons = true;
-      navCellAlign = "left";
-      navWrapAround = true;
-    }
-
-    $('.product-template .product_gallery_nav.product_gallery_nav--bottom-slider').flickity({
-      "asNavFor": ".product_gallery",
-      "adaptiveHeight": false,
-      "wrapAround": navWrapAround,
-      "cellAlign": "center",
-      "draggable": true,
-      "groupCells": groupCells,
-      "prevNextButtons":  navPrevNextButtons,
-      "pageDots": false,
-      "lazyLoad": 2,
-      "dragThreshold": 10,
-      "arrowShape": arrowSize
+    // Call enable gallery function for product galleries
+    $('[data-product-gallery]').each(function(index, gallery) {
+      var $productGallery = $(this);
+      productPage.enableGallery($productGallery);
     });
 
     if (window.location.search === '?contact_posted=true') {
@@ -715,7 +697,7 @@ var productPage = {
       baseClass: "product-section__lightbox",
       clickContent: false,
       afterShow: function(instance, slide) {
-        const zoom = instance.$trigger.first().parents('.js-product-gallery').data('zoom');
+        var zoom = instance.$trigger.first().parents('.js-product-gallery').data('zoom');
         if (zoom){
           $('.fancybox-image')
               .wrap('<span class="zoom-wrap" style="display:inline-block"></span>')
@@ -728,10 +710,11 @@ var productPage = {
         }
       },
       afterClose: function(instance, slide) {
-        const $instanceGallery = instance.$trigger.first().parents('.js-product-gallery');
+        var $instanceGallery = instance.$trigger.first().parents('.js-product-gallery');
         $instanceGallery.hide();
         setTimeout(function(){
           $instanceGallery.fadeIn(100);
+          $('.js-product-gallery').find('.is-selected a').focus();
         }, 1);
       }
     })
@@ -750,6 +733,479 @@ var productPage = {
     if ($('.product-recommendations-container').length){
       productPage.loadProductRecommendations();
     }
+
+    this.initializeQuantityBox();
+  },
+  enableGallery: function(selector) {
+
+    // Variables
+    var $productGallery = $(selector);
+    var $slides = $productGallery.find('.gallery-cell');
+    var $thumbnailProductGallery = $productGallery.closest('.js-product_section').find('.product_gallery_nav');
+    var $thumbnails = $thumbnailProductGallery.find('.gallery-cell');
+    var draggable = true;
+    var prevNextButtons = true;
+    var zoom = $productGallery.data('zoom');
+    var productLightbox = $productGallery.data('product-lightbox');
+    var thumbnailsEnabled = $productGallery.data('thumbnails-enabled');
+    var thumbnailsSliderEnabled = $productGallery.data('thumbnails-slider-enabled');
+    var thumbnailsPosition = $productGallery.data('thumbnails-position');
+    var thumbnailsArrows = $productGallery.data('gallery-arrows-enabled');
+    var slideshowAnimation = $productGallery.data('slideshow-animation');
+    var slideshowSpeed = $productGallery.data('slideshow-speed');
+
+    // If zoom enabled
+    if (zoom === true) {
+      if(is_touch_device() && $(window).width() < 768) {
+        // Lightbox has a built-in zoom feature, so check if lightbox is disabled
+        if (productLightbox === 'false') {
+          imageFunctions.zoom($productGallery);
+          draggable = false;
+        }
+      } else {
+        imageFunctions.zoom($productGallery, false);
+      }
+    }
+
+    $productGallery.on('ready.flickity', function() {
+
+      $slides.each(function(index, slide) {
+
+        //Determine media type
+        var mediaType = $(slide).data('media-type') || $(slide).find('[data-media-type]').data('media-type');
+        var videoID;
+
+        switch(mediaType) {
+          case 'external_video':
+
+            videoID = $(slide).find('[data-plyr-video-id]').data('plyr-video-id');
+
+            if(videoPlayers) {
+              for (var i = 0; i < videoPlayers.length; i++) {
+                if (videoPlayers[i].id == videoID || videoPlayers[i].media.id == videoID) {
+
+                  if(!$(slide).hasClass('is-selected')) {
+                    videoPlayers[i].keyboard = {
+                      focused: false,
+                      global: false
+                    }
+                  }
+                }
+              }
+            }
+            break;
+          case 'video':
+
+            videoID = $(slide).find('[data-plyr-video-id]').data('plyr-video-id');
+
+            if(videoPlayers) {
+              for (var i = 0; i < videoPlayers.length; i++) {
+                if (videoPlayers[i].id == videoID || videoPlayers[i].media.id == videoID) {
+
+                  if(!$(slide).hasClass('is-selected')) {
+                    videoPlayers[i].keyboard = {
+                      focused: false,
+                      global: false
+                    }
+                  }
+                }
+              }
+            }
+            break;
+          case 'model':
+            if($(slide).hasClass('is-selected')) { //When active slide
+              if(mediaType == 'model' && isScreenSizeLarge()) {
+                $(slide).on('mouseenter', function() {
+                  $productGallery.flickity('unbindDrag');
+                })
+                $(slide).on('mouseleave', function() {
+                  $productGallery.flickity('bindDrag');
+                })
+              }
+            }
+            break;
+          default:
+            break;
+        }
+      });
+
+      // Video looping
+      var loopingEnabled = $productGallery.data('video-loop');
+
+      $.each(videoPlayers, function(index, player) {
+        player.loop = loopingEnabled;
+      })
+    });
+
+    $productGallery.on('change.flickity', function() {
+
+      $slides.each(function(index, slide) {
+
+        // Determine media type of current slide
+        var mediaType = $(slide).data('media-type') || $(slide).find('[data-media-type]').data('media-type');
+
+        if($(slide).hasClass('is-selected')) { //When active slide
+
+          switch(mediaType) {
+            case 'model':
+
+              /* On slide change, if active slide contains 3d model
+              * If on desktop, on hover, unbind flickity, after hover bind flickity
+              * On model play event, unbind flickity to ensure model can be interacted with
+              * On model pause event, bind flickity so that slide can be swiped
+              * Pause all model slides when hidden
+              */
+
+              if (isScreenSizeLarge()) {
+
+                // On mouseenter event, unbind flickity
+                $(slide).on('mouseenter', function() {
+                  $productGallery.flickity('unbindDrag');
+                });
+
+                // On mouseleave event, bind flickity
+                $(slide).on('mouseleave', function() {
+                  $productGallery.flickity('bindDrag');
+                });
+              }
+
+              // Listen for model pause/play events
+              $(slide).find('model-viewer').on('shopify_model_viewer_ui_toggle_play', function(){
+                $productGallery.flickity('unbindDrag');
+              })
+
+              $(slide).find('model-viewer').on('shopify_model_viewer_ui_toggle_pause', function(){
+                $productGallery.flickity('bindDrag');
+              })
+              break;
+            default:
+              $productGallery.flickity('bindDrag');
+              break;
+          }
+        } else { //When inactive slide
+
+          switch(mediaType) {
+            case 'external_video':
+              //Youtube video pausing
+              $.each(videoPlayers, function(index, player) {
+                player.pause();
+              });
+              break;
+            case 'video':
+              //HTML5 video pausing
+              $.each(videoPlayers, function(index, player) {
+                player.pause();
+              });
+              break;
+            case 'model':
+              $.each(productMedia.models, function(index, model) {
+                model.pause();
+              })
+          }
+        }
+      });
+
+      //Restore 3d model icons
+      productMedia.showModelIcon($productGallery);
+
+    });
+
+    $productGallery.flickity({
+      wrapAround: true,
+      adaptiveHeight: true,
+      dragThreshold: 10,
+      imagesLoaded: true,
+      pageDots: false,
+      prevNextButtons: $productGallery.data('media-count') > 1 || $slides.length > 1 ? true : false,
+      autoPlay: slideshowSpeed * 1000,
+      fade: slideshowAnimation === 'fade' ? true : false,
+      watchCSS: false,
+      arrowShape: arrowSize
+    });
+
+    // Adjust arrows height if controls are hidden/shown
+    $.each(videoPlayers, function(index, player) {
+      // When controls are hidden, height should be auto
+      player.on('controlshidden', function(event) {
+        $productGallery.find('.flickity-prev-next-button').css('height', 'auto');
+      })
+      // When controls are shown, height should account for controls bar
+      player.on('controlsshown', function(event) {
+        $productGallery.find('.flickity-prev-next-button').css('height', 'calc(100% - 64px)');
+      })
+    })
+
+    // Checks for videos and plays them if they are the featured media
+    // Autoplay logic only happens on desktop, autoplay set to off for mobile
+    var $sliderArrows = $productGallery.find('.flickity-prev-next-button');
+
+    if (($sliderArrows || $thumbnails) && isScreenSizeLarge()) {
+      $sliderArrows.on('click', function() {
+
+        var pId = $productGallery.data('product-id');
+
+        $productGallery.on( 'settle.flickity', function( event, index ) {
+          // Find out media type of featured media slide
+          var $selectedSlide = $productGallery.find('.gallery-cell.is-selected');
+          var mediaType = $selectedSlide.data('media-type') || $selectedSlide.find('[data-media-type]').data('media-type');
+
+          // Run video autoplay logic if featured media is a video
+          if (mediaType == 'video' || mediaType == 'external_video') {
+            checkForVideos();
+          }
+
+          // Autoplay model if featured media is a model
+          if (mediaType == 'model') {
+            // If model container has class is-selected then play the model
+            var sortedModels = [];
+            $.each(productMedia.models, function(index, model) {
+              if($(model.container).closest('.gallery-cell').data('product-id') == pId) {
+                sortedModels.push(model)
+              }
+            })
+
+            $.each(sortedModels, function(index, model) {
+              var $slide = $(model.container).closest('.gallery-cell');
+              if($slide.hasClass('is-selected')) {
+                model.play();
+              }
+            })
+          }
+          $productGallery.off('settle.flickity');
+        });
+
+        return false;
+      })
+
+      $thumbnails.on('click', function(event) {
+        var index = $( event.currentTarget ).index();
+        var pId = $productGallery.data('product-id');
+        $productGallery.flickity( 'select', index );
+
+        $productGallery.on( 'settle.flickity', function( event, index ) {
+          // Find out media type of featured media slide
+          var $selectedSlide = $productGallery.find('.gallery-cell.is-selected');
+          var mediaType = $selectedSlide.data('media-type') || $selectedSlide.find('[data-media-type]').data('media-type');
+
+          // Run video autoplay logic if featured media is a video
+          if (mediaType == 'video' || mediaType == 'external_video') {
+            checkForVideos();
+          }
+
+          // Autoplay model if featured media is a model
+          if (mediaType == 'model') {
+            // If model container has class is-selected then play the model
+            var sortedModels = [];
+            $.each(productMedia.models, function(index, model) {
+              if($(model.container).closest('.gallery-cell').data('product-id') == pId) {
+                sortedModels.push(model)
+              }
+            })
+
+            $.each(sortedModels, function(index, model) {
+              var $slide = $(model.container).closest('.gallery-cell');
+              if($slide.hasClass('is-selected')) {
+                model.play();
+              }
+            })
+          }
+          $productGallery.off('settle.flickity');
+        });
+        return false;
+      })
+
+      $thumbnails.keypress(function(event) {
+        var index = $( event.currentTarget ).index();
+        var pId = $productGallery.data('product-id');
+        if(event.which == 13) {
+
+          $productGallery.flickity( 'select', index );
+
+          var $selectedSlide = $productGallery.find('.gallery-cell.is-selected');
+
+          $productGallery.on( 'settle.flickity', function( event, index ) {
+            $selectedSlide.find('[data-youtube-video]').attr('tabindex', '0');
+            $selectedSlide.find('model-viewer, .plyr, a').focus();
+
+            $productGallery.off('settle.flickity');
+          });
+
+          // Find out media type of featured media slide
+          var mediaType = $selectedSlide.data('media-type') || $selectedSlide.find('[data-media-type]').data('media-type');
+
+          // Run video autoplay logic if featured media is a video
+          if (mediaType == 'video' || mediaType == 'external_video') {
+            checkForVideos();
+          }
+
+          // Autoplay model if featured media is a model
+          if (mediaType == 'model') {
+            // If model container has class is-selected then play the model
+            var sortedModels = [];
+            $.each(productMedia.models, function(index, model) {
+              if($(model.container).closest('.gallery-cell').data('product-id') == pId) {
+                sortedModels.push(model)
+              }
+            })
+
+            $.each(sortedModels, function(index, model) {
+              var $slide = $(model.container).closest('.gallery-cell');
+              if($slide.hasClass('is-selected')) {
+                model.play();
+              }
+            })
+          }
+
+          return false;
+        }
+      })
+    }
+
+    function checkForVideos() {
+      $slides.each(function(index, slide) {
+        // Variables
+        var $slide = $(slide);
+        var mediaType = $slide.data('media-type') || $slide.find('[data-media-type]').data('media-type');
+        var videoID = $slide.find('video').data('plyr-video-id');
+        var $iframeVideo = $slide.find('iframe');
+        var iframeID = $iframeVideo.attr('id');
+
+        if ($slide.hasClass('is-selected')) {
+          if (mediaType == 'video') {
+            videoID = $slide.find('video').data('plyr-video-id');
+            if (videoID) {
+              autoplayVideo(videoID, $slide);
+            }
+          } else if (mediaType == 'external_video' && iframeID) {
+            autoplayYoutubeVideo(iframeID, $slide);
+          }
+        }
+      })
+    }
+
+    function autoplayVideo(videoID, $slide) {
+      // Compare id to player object and only play that video
+      $.each(videoPlayers, function(index, player){
+
+        if (player.media.dataset.plyrVideoId == videoID) {
+          player.play();
+
+          // On fullscreen toggle, focus back on the slide itself
+          player.on('exitfullscreen', function(){
+            $slide.closest('.product-gallery').find('.product-gallery__thumbnails').focus();
+          })
+        }
+      })
+    }
+
+    function autoplayYoutubeVideo(iframeID, $slide) {
+      // compare id to player object and only play that video
+      $.each(videoPlayers, function(index, player){
+
+        if (player.playing) {
+          player.pause();
+        }
+
+        if (player.media.id == iframeID) {
+          player.play();
+
+          // On fullscreen toggle, focus back on the slide itself
+          player.on('exitfullscreen', function(){
+            $slide.closest('.product-gallery').find('.product-gallery__thumbnails').focus();
+          })
+        }
+      })
+    }
+
+    // Thumbnail gallery logic begins
+    if (thumbnailsEnabled == true && thumbnailsSliderEnabled == true && $slides.length > 1) {
+      // If desktop determine which slider we build
+      if ($(window).width() > 798) {
+        // If thumbnail position is left/right then vertical slider gets enabled
+        if (thumbnailsPosition == 'left' || thumbnailsPosition == 'right') {
+          $thumbnailProductGallery.css('max-height', $productGallery.closest('.product-gallery').outerHeight());
+          $thumbnailProductGallery.addClass('vertical-slider-enabled');
+
+          $thumbnails.on('click', function(event) {
+            var index = $(event.currentTarget).index();
+            $productGallery.flickity('select', index);
+          });
+
+          var navCellHeight = $thumbnails.height();
+          var navHeight = $thumbnailProductGallery.height();
+
+          $productGallery.on( 'select.flickity', function() {
+            // set selected nav cell
+            var flkty = $productGallery.data('flickity');
+            $thumbnailProductGallery.find('.is-nav-selected').removeClass('is-nav-selected');
+            var $selected = $thumbnails.eq( flkty.selectedIndex ).addClass('is-nav-selected');
+
+            // scroll nav
+            var scrollY = $selected.position().top + $thumbnailProductGallery.scrollTop() - ( navHeight + navCellHeight ) / 2;
+            $thumbnailProductGallery.animate({
+              scrollTop: scrollY
+            });
+          });
+        } else {
+            $thumbnailProductGallery.flickity({
+              cellAlign: 'center',
+              contain: true,
+              groupCells: '80%',
+              imagesLoaded: true,
+              pageDots: false,
+              prevNextButtons: $thumbnails.length > 5 ? thumbnailsArrows : false,
+              asNavFor: $productGallery[0],
+              arrowShape: arrowSize
+            });
+
+            // Ensures Flickity is not collapsed when loaded
+            setTimeout(function() {
+              $thumbnailProductGallery.flickity('resize');
+            }, 500);
+
+            $(window).on('load', function() {
+              $thumbnailProductGallery.flickity('resize');
+            });
+
+            // Once thumbnail is focused, move carousel to that cell
+            $.each($thumbnails, function(index, thumbnail) {
+              var $thumbnail = $(thumbnail);
+              if ($thumbnail.hasClass('is-selected')) {
+                $thumbnail.on('focus', function() {
+                  $thumbnailProductGallery.flickity('selectCell', index);
+                })
+              }
+            })
+        }
+      } else {
+        // If not on desktop, create standard thumbnail slider
+        $thumbnailProductGallery.flickity({
+          cellAlign: 'center',
+          contain: true,
+          groupCells: '80%',
+          imagesLoaded: true,
+          pageDots: false,
+          prevNextButtons: $thumbnails.length > 5 ? thumbnailsArrows : false,
+          asNavFor: $productGallery[0],
+          arrowShape: arrowSize
+        });
+      }
+    } else if (thumbnailsEnabled == true ) {
+      // If thumbnail slider is disabled, ensure thumbnails can still navigate product images
+      $thumbnailProductGallery.find('.product-gallery__thumbnail').on('click', function(){
+        var index = $(this).index();
+        $productGallery.flickity( 'selectCell', index );
+      })
+    }
+
+    $( window ).on( 'load', function() {
+      $productGallery.flickity('resize');
+    });
+
+    setTimeout(function() {
+      $productGallery.flickity('resize');
+    }, 500);
+
   },
   loadProductRecommendations: function() {
     var $metaProductRecommendationsSection = $('.meta-related-recommended-collection');
@@ -833,6 +1289,12 @@ var productPage = {
           // Hide entire recommendations if there are not recommended products
           if ($('[data-recommended-product-count]').data() === 0) {
             $('[data-product-recommendations-container]').hide();
+          }
+
+          videoFeature.setupRecommendedVideoPlayer();
+
+          if (Shopify.theme_settings.collection_secondary_image){
+            imageFunctions.showSecondaryImage();
           }
 
         }
@@ -984,7 +1446,6 @@ var productPage = {
     });
   },
   unload: function($target){
-
     var $slider = $target.find('.products-slider');
     $slider.flickity('destroy');
     $('body').off('click', '.js-change-quantity');
@@ -1024,8 +1485,10 @@ var header = {
         var $dropdown = $(this).parents('.main_nav').find('[data-dropdown="' + $(this).data('dropdown-rel') + '"]');
         var clickCount = $(this).attr('data-click-count');
 
+        $('.dropdown_container').hide();
         $('.active_link').removeClass('active_link');
         if(!$(this).hasClass('active_link')) {
+          $('.dropdown_container').hide();
           $(this).children('a').addClass('active_link');
           $('.is-absolute').parent().removeClass('feature_image');
         }
@@ -1111,8 +1574,7 @@ var header = {
         closeMiniCart();
       }
 
-      if (!$(event.target).closest('.dropdown_container').length && $('.dropdown').is(':visible')) {
-
+      if (!$(event.target).closest('.dropdown_container').length && $('.dropdown').is(':visible') && !$(event.target).hasClass('url-deadlink')) {
         closeDropdown();
       }
 
@@ -1256,8 +1718,7 @@ var header = {
             openMiniCart($cart_container);
             $('body').addClass('blocked-scroll');
           }
-
-          if (touch_device) {
+          if (is_touch_device() || $(window).width() <= 798) {
             e.preventDefault();
           }
         });
@@ -1271,7 +1732,7 @@ var header = {
     } else {
 
       $(".nav a, .logo a").not(".cart_content a").on("mouseenter", function() {
-        if(!$(this).hasClass("active_link") && $('.dropdown_link--vertical').length == 0) {
+        if(!$(this).hasClass("active_link")) {
           $('.dropdown_container').hide();
           $('.active_link').removeClass('active_link');
           $('.is-absolute').parent().addClass('feature_image');
@@ -1302,7 +1763,9 @@ var header = {
           $dropdown.show();
 
           if($(this).hasClass('mini_cart')) {
-            $(this).parent('.cart_container').addClass('active_link');
+            if(!$('body').hasClass('cart')) {
+              $(this).parent('.cart_container').addClass('active_link');
+            }
           } else {
             if ( $(window).width() > 798) {
               $(this).addClass('active_link');
@@ -1407,7 +1870,6 @@ var header = {
 
         $(this).addClass('active_link');
         $('.is-absolute').parent().removeClass('feature_image');
-
       }
     });
 
@@ -1452,99 +1914,6 @@ var header = {
     $('.main_nav_wrapper.sticky_nav').remove();
   }
 }
-
-/*============================================================================
-  Social media
-==============================================================================*/
-
-  var social = {
-    twitter: function(){
-      if ($('.twitter-timeline').length) {
-        if (!window.twttr) {
-          //Initialize twitter feed
-          window.twttr = (function (d,s,id) {
-          var t, js, fjs = d.getElementsByTagName(s)[0];
-          if (d.getElementById(id)) return; js=d.createElement(s); js.id=id;
-          js.src="https://platform.twitter.com/widgets.js";
-          fjs.parentNode.insertBefore(js, fjs);
-          return window.twttr || (t = { _e: [], ready: function(f){ t._e.push(f) } });
-          }(document, "script", "twitter-wjs"));
-        } else {
-          window.twttr.ready(function (twttr) {
-            twttr.widgets.load(
-              document.getElementById("twitter-timeline")
-            );
-          });
-        }
-      }
-    },
-    unload: function(){
-    }
-  }
-
-  var instagram = {
-    loadContent: function(s){
-      if(s.clientID) {
-        var url = 'https://api.instagram.com/v1/users/self/media/recent/?access_token='+s.clientID;
-
-        $.ajax({
-          type: 'GET',
-          url: url,
-          dataType: 'jsonp',
-          success: function(data) {
-
-            if(data.meta.code === 200 && data.data.length) {
-              var data = data.data;
-              var count = 0;
-              s.el.empty();
-
-              for(var i = 0; i < data.length; i++) {
-                var thisMedia = data[i], item;
-
-                var url = thisMedia.images.low_resolution.url;
-
-                if(!thisMedia.images.low_resolution.url.indexOf("null") > -1) {
-                  item = '<div class="il-photo__img instagram__bg" style="background-image:url('+url+')" data-filter="'+thisMedia.filter+'" /></div>';
-                  item = '<a href="'+thisMedia.link+'" target="_blank" class="instagram__link">'+item+'</a>';
-                }
-
-                if(thisMedia.videos) {
-                  item = '<div class="instagram__video instagram__bg" style="background-image:url('+url+')" data-filter="'+thisMedia.filter+'" /></div>';
-                  item = '<a href="'+thisMedia.link+'" target="_blank" class="instagram__link instagram__video-link">'+item+'</a>';
-                }
-
-                if(item) {
-                  item = '<div class="'+s.column+ ' columns instagram__item small-down--one-whole">'+item+'</div>';
-                }
-                if(item !== '') {
-                  s.el.append(item);
-                  count++;
-                }
-                if(count == s.limit) {
-                  break;
-                }
-              }
-            }
-          },
-          error: function() {
-          }
-        });
-      }
-    }
-  }
-
-  $('.social-feeds-wrap').each(function (index, value) {
-
-    social.twitter();
-
-    var $target = $(this).find(".js-instafeed");
-    instagram.loadContent({
-      el: $target,
-      clientID: $target.data('client-id'),
-      limit: $target.data('count'),
-      column: $target.data('column')
-    });
-  });
 
 /*============================================================================
   Map

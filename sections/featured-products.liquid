@@ -24,17 +24,16 @@
           {%- assign section_onboarding = false -%}
         {% endif %}
 
-        <div class="product-{{ product.id }} section clearfix product_section slideshow_animation--{{section.settings.slideshow_animation}}"
-            data-slideshow-animation="{{section.settings.slideshow_animation}}"
-            data-block-id="{{block.id}}"
-            {{ block.shopify_attributes }}>
+        <div class="product-{{ product.id }} section clearfix product_section"
+             data-block-id="{{block.id}}"
+             {{ block.shopify_attributes }}>
 
           <div class="product-images half">
             {% if section_onboarding %}
               {% capture i %}{% cycle "1", "2" %}{% endcapture %}
               {{ 'product-' | append: i | placeholder_svg_tag: 'placeholder-svg placeholder-svg--product' }}
             {% else %}
-              {% include 'product-images', image_width: 'full' %}
+              {% include 'product-images', video_looping: section.settings.video_looping, set_product_height: section.settings.set_product_height %}
             {% endif %}
           </div>
 
@@ -193,6 +192,29 @@
   </div>
 {% endif %}
 
+{% if section.settings.set_product_height %}
+  {% style %}
+    .gallery-wrap model-viewer {
+      min-height: {{ section.settings.product_height }}px;
+    }
+
+    .gallery-wrap .product_gallery img,
+    .gallery-wrap .product_gallery .plyr--html5 video,
+    .gallery-wrap .product_gallery .plyr--youtube {
+      max-height: {{ section.settings.product_height }}px;
+    }
+  {% endstyle %}
+{% endif %}
+
+{% comment %} Shopify-XR {% endcomment %}
+<script>
+  window.ShopifyXR=window.ShopifyXR||function(){(ShopifyXR.q=ShopifyXR.q||[]).push(arguments)}
+    {% assign models = product.media | where: 'media_type', 'model' | json %}
+    ShopifyXR('addModels', {{ models }});
+</script>
+<script defer src="https://cdn.shopify.com/shopifycloud/shopify-xr-js/assets/v1.0/shopify-xr.en.js"></script>
+<script defer src="https://cdn.shopify.com/shopifycloud/model-viewer-ui/assets/v1.0/model-viewer-ui.en.js"></script>
+
 {% schema %}
 {
   "name": "Featured products",
@@ -213,66 +235,93 @@
     },
     {
       "type": "header",
-      "content": "Product image"
+      "content": "Product Gallery"
     },
     {
       "type": "checkbox",
-      "id": "activate_autoplay",
-      "label": "Enable product gallery slideshow"
-    },
-    {
-      "type": "checkbox",
-      "id": "enable_product_lightbox",
-      "label": "Show product gallery popup",
+      "id": "product_thumbs",
+      "label": "Show thumbnails",
       "default": true
     },
     {
       "type": "checkbox",
       "id": "gallery_arrows",
-      "label": "Show arrows on product gallery"
+      "label": "Show arrows",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_product_lightbox",
+      "label": "Enable lightbox",
+      "default": true
     },
     {
       "type": "checkbox",
       "id": "activate_zoom",
-      "label": "Enable 'Hover to zoom'"
+      "label": "Magnify product images on hover",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "slideshow_speed",
+      "label": "Gallery speed",
+      "min": 0,
+      "max": 6,
+      "unit": "sec",
+      "default": 0,
+      "info": "Set to 0 to disable autoplay."
     },
     {
       "type": "select",
       "id": "slideshow_animation",
       "label": "Gallery transition",
+      "default": "slide",
       "options": [
-        {
-          "value": "fade",
-          "label": "Fade"
-        },
         {
           "value": "slide",
           "label": "Slide"
+        },
+        {
+          "value": "fade",
+          "label": "Fade"
         }
-      ],
-      "default": "slide"
+      ]
+    },
+    {
+      "type": "select",
+      "id": "thumbnail_position",
+      "label": "Thumbnails",
+      "default": "bottom",
+      "options": [
+        {
+          "value": "bottom",
+          "label": "Bottom"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_thumbnail_slider",
+      "label": "Enable thumbnail slider",
+      "default": true
     },
     {
       "type": "header",
-      "content": "Product info"
+      "content": "Product information"
     },
     {
       "type": "checkbox",
       "id": "display_vendor",
-      "label": "Show vendor"
-    },
-    {
-      "type": "checkbox",
-      "id": "enable_shopify_product_badges",
-      "label": "Display star rating on product",
-      "info": "Reviews app must be enabled. [Learn more](https://help.outofthesandbox.com/hc/en-us/articles/360008549274#section2)",
+      "label": "Show vendor",
       "default": false
-    },
-    {
-      "type": "checkbox",
-      "id": "display_savings",
-      "label": "Show price savings",
-      "default": true
     },
     {
       "type": "checkbox",
@@ -296,18 +345,62 @@
       ]
     },
     {
+      "type": "checkbox",
+      "id": "display_savings",
+      "label": "Show price savings",
+      "default": true
+    },
+    {
       "type": "header",
-      "content": "Dynamic checkout button"
+      "content": "Product reviews"
     },
     {
       "type": "paragraph",
-      "content": "Lets customers check out directly using a familiar payment method. [Learn more](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)"
+      "content": "Reviews app must be enabled. [Learn more](https://help.outofthesandbox.com/hc/en-us/articles/360008549274#section2)"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_shopify_product_badges",
+      "label": "Display star rating on product",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Dynamic checkout button"
     },
     {
       "type": "checkbox",
       "id": "show_payment_button",
       "label": "Show dynamic checkout button",
-      "default": true
+      "default": true,
+      "info": "Each customer will see their preferred payment method from those available on your store, such as PayPal or Apple Pay. [Learn more](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)"
+    },
+    {
+      "type": "header",
+      "content": "Media",
+      "info": "Learn more about [media types](https://help.shopify.com/en/manual/products/product-media)"
+    },
+    {
+      "type": "checkbox",
+      "id": "set_product_height",
+      "label": "Set height of product media",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "product_height",
+      "label": "Product media height",
+      "min": 200,
+      "max": 800,
+      "step": 10,
+      "default": 500,
+      "unit": "px"
+    },
+    {
+      "type": "checkbox",
+      "id": "video_looping",
+      "label": "Enable video looping",
+      "default": false
     }
   ],
   "blocks": [

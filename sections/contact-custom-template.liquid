@@ -4,7 +4,7 @@
 {% endcomment %}
 
 {% if section.settings.image != nil %}
-  <header class="banner center page_banner dark-overlay-{{ section.settings.image_darken }}">
+  <header class="banner center page-banner dark-overlay-{{ section.settings.image_darken }}">
     {% include 'image-element', image: section.settings.image, alt: section.settings.image.alt, stretch_width: true, progressive: true %}
     <div class="caption captionOverlay--true">
       <h1 class="headline">{{ section.settings.title }}</h1>

@@ -169,7 +169,8 @@
       "items_left_count": {
         "one": "Artikel verblieben",
         "other": "Artikel verblieben"
-      }
+      },
+      "view_in_your_space": "Sehen Sie in Ihrem Raum"
     },
     "notify_form": {
       "email": "Geben Sie Ihre E-Mail-Adresse ein...",

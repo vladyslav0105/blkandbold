@@ -4,8 +4,12 @@
 {% endcomment %}
 
 {% if section.settings.show_banner %}
+  {% if section.settings.wide_display == false %}
+  <div class="container">
+    <div class="sixteen columns">
+  {% endif %}
 
-  <section id="banner-{{section.id}}" class="banner page_banner">
+  <section id="banner-{{section.id}}" class="banner page-banner dark-overlay-{{ section.settings.image_darken }} full-width--{{ section.settings.wide_display }}">
     {% if section.settings.image != nil %}
       {% include 'image-element', image: section.settings.image, alt: section.settings.image.alt, stretch_width: true %}
     {% else %}
@@ -56,6 +60,10 @@
     {% endunless %}
   </section>
 
+  {% if section.settings.wide_display == false %}
+    </div>
+  </div>
+  {% endif %}
 {% endif %}
 
 <a name="pagecontent" id="pagecontent"></a>
@@ -94,10 +102,26 @@
   "class": "banner-template-section",
   "settings": [
     {
+      "type": "header",
+      "content": "Banner"
+    },
+    {
+      "type": "checkbox",
+      "id": "wide_display",
+      "label": "Wide display",
+      "default": true
+    },
+    {
       "type": "checkbox",
       "id": "show_banner",
       "label": "Show banner",
       "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "image_darken",
+      "label": "Darken image",
+      "default": false
     },
     {
       "type": "image_picker",

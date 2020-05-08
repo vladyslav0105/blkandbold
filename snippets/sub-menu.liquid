@@ -8,7 +8,7 @@
             <div class="dropdown_column">
               <ul class="{% if linklists[sublink.handle] != empty %}dropdown_title{% else %}dropdown_item{% endif %}">
                 <li>
-                  <a href="{{ sublink.url }}">{{ sublink.title }}</a>
+                  <a href="{{ sublink.url }}" class="{% if sublink.url == '#' %}url-deadlink{% endif %}">{{ sublink.title }}</a>
                 </li>
               </ul>
 
@@ -16,7 +16,7 @@
                 <ul>
                   {% for subsublink in linklists[sublink.handle].links %}
                     <li>
-                      <a href="{{ subsublink.url }}">{{ subsublink.title }}</a>
+                      <a href="{{ subsublink.url }}" class="{% if subsublink.url == '#' %}url-deadlink{% endif %}">{{ subsublink.title }}</a>
                     </li>
                   {% endfor %}
                 </ul>

@@ -5,6 +5,7 @@ Shopify = window.Shopify || {};
 {% comment %} /* # Theme settings
 ================================================== */ {% endcomment %}
 Shopify.theme_settings = {};
+Shopify.currency_settings = {};
 
 {% comment %} Cart {% endcomment %}
 Shopify.theme_settings.display_tos_checkbox = {{ settings.display_tos_checkbox | json }};
@@ -16,7 +17,14 @@ Shopify.theme_settings.collection_swatches = {{ settings.collection_swatches | j
 Shopify.theme_settings.collection_secondary_image = {{ settings.collection_secondary_image | json }};
 
 {% comment %} Currency {% endcomment %}
-Shopify.theme_settings.show_multiple_currencies = {% if shop.enabled_currencies.size > 1 %}false{% else %}{{ settings.show_multiple_currencies | json }}{% endif %};
+Shopify.theme_settings.show_multiple_currencies = {{ settings.show_multiple_currencies | json }};
+Shopify.theme_settings.currency_format = {% if settings.show_multiple_currencies == true %}{{ settings.currency_format | json }}{% else %}'money_format'{% endif %};
+
+Shopify.currency_settings.shopifyMultiCurrencyIsEnabled = {% if shop.enabled_currencies.size > 1 %}true{% else %}false{% endif %};
+Shopify.currency_settings.shop_currency = {{ shop.currency | json }};
+Shopify.currency_settings.default_currency = {{ settings.default_currency | json }};
+Shopify.currency_settings.money_with_currency_format = {{ shop.money_with_currency_format | strip_html | json }};
+Shopify.currency_settings.money_format = {{ shop.money_format | strip_html | json }};
 
 {% comment %} Inventory {% endcomment %}
 Shopify.theme_settings.display_inventory_left = {{ settings.display_inventory_left | json }};
@@ -46,6 +54,7 @@ Shopify.theme_settings.display_savings = {{ settings.display_savings | json }};
 Shopify.theme_settings.display_sold_out_price = {{ settings.display_price | json }};
 Shopify.theme_settings.sold_out_text = {{ settings.sold_out_text | json }};
 Shopify.theme_settings.free_text = {{ settings.free_price_text | json }};
+Shopify.theme_settings.video_looping = {{ settings.video_looping | json}};
 
 {% comment %} Search {% endcomment %}
 Shopify.theme_settings.search_option = {{ settings.search_option | json }};
