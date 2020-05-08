@@ -1276,6 +1276,9 @@ $(document)
         $('[data-dog-add]').on('click', function (event) {
             event.preventDefault();
             $(this).next('.account__dog__modal').fadeIn();
+            $(this).next('.account__dog__modal form').reset()
+            $(this).next('.account__dog__modal form')
+                .find('.account__dog__modal__form__error').remove();
         });
 
         $('[data-dog-modal-close]').on('click', function (event) {
@@ -1289,24 +1292,48 @@ $(document)
         });
 
 
+        $('input[name=avatar]').on('change', function () {
+
+            var input = this;
+            var reader = new FileReader();
+            var $img = $(this).closest('.account__dog__modal').find('.account__dog__modal__image img');
+
+            console.log ($img);
+
+            reader.onload = function (e) {
+               $img.attr('src', e.target.result);
+            }
+
+           reader.readAsDataURL(input.files[0]);
+        });
+
+
         $('.acount__dog__modal__form').on('submit', function(event) {
             event.preventDefault();
             var $form = $(this);
             var id = $(this).find('[name=id]').val();
+
+            var formData = new FormData( $form[0] );
+            $form.find('.account__dog__modal__form__error').remove();
 
             // It's an update.
             if (typeof id !== 'undefined')  {
                 $.ajax({
                     url: window.customer_auth.base_uri + 'dogs/' + id,
                     type: 'POST',
-                    data: $form.serialize(),
+                    data: formData,
                     headers: {
                         'customer-id': window.customer_auth.customer_id,
                         'customer-hash': window.customer_auth.hash
                     },
                     dataType: 'json',
+                    processData: false,
+                    contentType: false,
                     success: function (data) {
                         window.location.reload();
+                    },
+                    error: function(error) {
+                        console.log(error);
                     }
                 });
 
@@ -1315,14 +1342,24 @@ $(document)
                 $.ajax({
                     url: window.customer_auth.base_uri + 'dogs',
                     type: 'POST',
-                    data: $form.serialize(),
+                    data: formData,
                     headers: {
                         'customer-id': window.customer_auth.customer_id,
                         'customer-hash': window.customer_auth.hash
                     },
                     dataType: 'json',
+                    processData: false,
+                    contentType: false,
                     success: function (data) {
                         window.location.reload();
+                    },
+                    error: function(error) {
+                        if ( error.status == 422 ) {
+                            for (var name in error.responseJSON.errors ) {
+                                $form.find('[name='+ name +']').eq(0)
+                                    .after('<p class="account__dog__modal__form__error">'+ error.responseJSON.errors[name][0] +'</p>');
+                            }
+                        }
                     }
                 });
             }
@@ -1343,6 +1380,14 @@ $(document)
                     dataType: 'json',
                     success: function (data) {
                         window.location.reload();
+                    },
+                    error: function(error) {
+                        if ( error.status == 422 ) {
+                            for (var name in error.responseJSON.errors ) {
+                                $form.find('[name='+ name +']').eq(0)
+                                    .after('<p class="account__dog__modal__form__error">'+ error.responseJSON.errors[name][0] +'</p>');
+                            }
+                        }
                     }
                 });
             }

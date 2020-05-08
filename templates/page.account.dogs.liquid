@@ -1,3 +1,4 @@
+{%- if customer -%}
 {% assign salt = shop.metafields.bestbullysticks.shopify_auth_salt %}
 
 <script type="text/javascript">
@@ -10,23 +11,37 @@
 
 <a name="pagecontent" id="pagecontent"></a>
 
-<div class="sixteen columns page clearfix">
-  <h1>Your Dogs</h1>
+<header class="account-header clearfix">
+  <div class="eight columns account-header-title">
+    <h1>My Dogs</h1>
+  </div>
+  <div class="eight columns account-header-logout">
+      {%- if customer.metafields.bestbullysticks.dogs.size < 6 -%}
+        <a href="#" data-dog-add>Add a New Dog</a>
+        {%- include 'account-dog-modal'-%}
+      {%- endif -%}
+    <!-- <span><a href="{{ routes.account_logout_url }}" id="customer_logout_link">{{ 'layout.customer.log_out' | t }}</a></span> -->
+  </div>
+</header>
+<div class="feature_divider"></div>
 
-  <div class="feature_divider"></div>
 
-  <div>
+<div class="section clearfix">
+  {%- include 'account-sidebar' -%}
+  <main class="eleven columns account-main">
       <div class="account__dogs">
           {%- for dog in customer.metafields.bestbullysticks.dogs -%}
               {%- include 'account-dog' with dog: dog -%}
           {%- endfor -%}
       </div>
-
-      <div class="feature_divider"></div>
-
-      {%- if customer.metafields.bestbullysticks.dogs.size < 6 -%}
-        <a href="#" data-dog-add>Add a New Dog</a>
-        {%- include 'account-dog-modal'-%}
-      {%- endif -%}
-  </div>
+  </main>
 </div>
+
+{% comment %}
+If the customer is not logged in, let's just send him to the login page.
+{% endcomment %}
+{%- else -%}
+    <script>
+        window.location.href = '/account';
+    </script>
+{%- endif -%}

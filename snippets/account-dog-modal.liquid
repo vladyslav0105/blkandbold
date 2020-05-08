@@ -1,5 +1,12 @@
 <div class="account__dog__modal" data-dog-modal data-dog-modal-close>
     <div class="account__dog__modal__inner">
+        <a href="#" data-dog-modal-close class="account__dog__modal__close">&times;</a>
+        {%- if dog -%}
+            <h4 class="text-left">Update {{ dog.name }} Information</h4>
+        {% else %}
+            <h4 class="text-left">Add A New Dog</h4>
+        {%- endif -%}
+
         <form action="#" method="POST" class="acount__dog__modal__form">
             {%- if dog.id -%}
                 {% comment %}
@@ -9,13 +16,18 @@
                 <input type="hidden" name="id" value="{{ dog.id }}">
                 <input type="hidden" name="_method" value="PUT">
             {%- endif -%}
-            {% comment %}
-            <div class="account__dog__modal__image">
-                <img src="{{ dog.picture }}">
-                <input type="file">
-            </div>
-            {% endcomment %}
             <div class="account__dog__modal__content">
+                <div>
+                    <div class="account__dog__modal__image">
+                        {%- if dog.avatar_url -%}
+                            <img src="{{ dog.avatar_url }}">
+                        {% else %}
+                            <img src="https://i.pinimg.com/originals/ab/ea/27/abea2766ce27defecba1d0a87a554763.jpg">
+                        {%- endif -%}
+                    </div>
+                    <label for="">Dog Photo</label>
+                    <input type="file" name="avatar">
+                </div>
                 <div>
                     <label for="">Name</label>
                     <input type="text" name="name" value="{{ dog.name }}">
