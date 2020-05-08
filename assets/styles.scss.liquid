@@ -12109,6 +12109,7 @@ $delay: 0;
     // background: #f2f2f2;
     margin-bottom: 0;
     position: relative;
+    min-height: 70px;
 
     &:after {
         content: '';
@@ -12125,13 +12126,16 @@ $delay: 0;
     li {
         display: inline-block;
         background: #f2f2f2;
-        padding: 20px 30px;
+        padding: 0 30px;
         border-right: 1px solid #dedede;
         border-top: 3px solid #dedede;
         font-weight: bold;
         margin-bottom: 0;
         cursor: pointer;
         color: #999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
 
         &:first-child {
             border-left: 1px solid #dedede;
@@ -12141,9 +12145,15 @@ $delay: 0;
             background: #fff;
             border-top: 3px solid #0869af;
             position: relative;
-            height: calc(100% + 1px);
             color: #333;
             z-index: 2;
+        }
+
+        // 10px;
+        @media screen and (max-width: 767px) {
+            padding: 0 10px;
+            font-size: 15px;
+            line-height: 1.2em;
         }
     }
 }
@@ -12153,6 +12163,11 @@ $delay: 0;
     border-top: none;
     padding: 30px;
     display: none;
+
+    // 10px;
+    @media screen and (max-width: 767px) {
+        padding: 15px;
+    }
 
     &.active {
         display: block;
