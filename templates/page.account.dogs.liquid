@@ -16,7 +16,7 @@
     <h1>My Dogs</h1>
   </div>
   <div class="eight columns account-header-logout">
-      {%- if customer.metafields.bestbullysticks.dogs.size < 6 -%}
+      {%- if customer.metafields.bestbullysticks.dogs == blank or customer.metafields.bestbullysticks.dogs.size < 6 -%}
         <a href="#" data-dog-add>Add a New Dog</a>
         {%- include 'account-dog-modal'-%}
       {%- endif -%}
