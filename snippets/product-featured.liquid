@@ -1,0 +1,31 @@
+{%- if product.metafields.bestbullysticks.featured -%}
+<div class="product-featured">
+    <div class="container">
+        <div class="eight columns medium-down--one-whole">
+            <h3 class="product-featured__title">{{ product.metafields.bestbullysticks.featured.title }}</h3>
+            <p class="product-featured__content">{{ product.metafields.bestbullysticks.featured.content }}</p>
+
+            {%- if product.metafields.bestbullysticks.featured.icon_1 -%}
+                <div class="product-featured__icons">
+                    {%- for i in (1..4) -%}
+                        {% assign iconName = 'icon_' | append: i %}
+                        {%- if product.metafields.bestbullysticks.featured[iconName] -%}
+                            <span class="product-featured__icon">
+                                {%- include 'responsive-image' with image: product.metafields.bestbullysticks.featured[iconName],
+                                width: 200, lazyload: true, type: 'file' -%}
+                            </span>
+                        {%- endif -%}
+                    {%- endfor -%}
+                </div>
+            {%- endif -%}
+        </div>
+        <div class="seven columns offset-by-one medium-down--one-whole">
+            {%- include 'responsive-image' with image: product.metafields.bestbullysticks.featured.image,
+            type: 'file',
+            width: 1000,
+            lazyload: true,
+            class: 'product-featured__image' -%}
+        </div>
+    </div>
+</div>
+{%- endif -%}
