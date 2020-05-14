@@ -45,13 +45,13 @@
                         <option value="small" {% if dog.size == 'small' %}selected{% endif %}>Small</option>
                         <option value="medium"{% if dog.size == 'medium' %}selected{% endif %}>Medium</option>
                         <option value="large" {% if dog.size == 'large' %}selected{% endif %}>Large</option>
-                        <option value="extra large" {% if dog.size == 'extra-large' %}selected{% endif %}>Extra Large</option>
+                        <option value="extra large" {% if dog.size == 'extra large' %}selected{% endif %}>Extra Large</option>
                     </select>
                 </div>
 
                 <div>
                     <label for="">Birthday</label>
-                    <input type="text" name="birthday" value="{{ dog.birthday | date: '%d/%m/%Y' }}">
+                    <input type="text" name="birthday" value="{{ dog.birthday | split: 'T' | first | date: '%m/%d/%Y' }}">
                 </div>
 
                 <button type="submit" class="action_button">{% if dog %}Update Dog{% else %}Add Dog{% endif %}</button>
