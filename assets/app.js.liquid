@@ -1260,6 +1260,24 @@ $(document)
 }(jQuery));
 
 
+(function($) {
+    $(document).ready( function () {
+        $('.product-tabs__tabs li').on('click', function(event) {
+            event.preventDefault();
+
+            $(this).addClass('active')
+                .siblings().removeClass('active');
+
+            var tab = $(this).data('tab');
+
+            $('.product-tabs__tab').each( function () {
+                $(this).toggleClass('active', $(this).data('tab') == tab );
+            });
+        });
+    });
+} (jQuery));
+
+
 /**
  * Dogs editor scripts
  * @param  {[type]} $ [description]
