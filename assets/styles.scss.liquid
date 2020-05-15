@@ -1,3 +1,5 @@
+$bestbully-blue: #007bb6;
+$font-family-header: {{ settings.headline__font.family }}, {{ settings.headline__font.fallback_families }};
 /******************************************************************
 Theme Name: Turbo "6.0.1"
 Theme URI: https://outofthesandbox.com/collections/turbo-theme
@@ -12193,5 +12195,163 @@ $delay: 0;
 
     span.points {
         margin-left: auto;
+    }
+}
+
+// Instasearch Overrides.
+
+#isp_left_container_facets .isp_search_res_facets_container .isp_single_facet_wrapper {
+    margin-right: 30px !important;
+
+    &.collapsed {
+        border-bottom: none;
+    }
+}
+
+.isp_single_facet_wrapper .isp_facet_title {
+    outline: none !important;
+}
+
+.isp_single_facet_wrapper .isp_facet_title .isp_facet_title_name {
+    font-family: $font-family-header;
+    text-transform: uppercase;
+    font-weight: 600 !important;
+    font-size: 14px !important;
+    letter-spacing: .5px !important;
+    line-height: 1.4em !important;
+}
+
+#isp_center_container .isp_center_container_header div.isp_results_summary_wrapper h1  {
+    font-size: 24px !important;
+    font-weight: 600 !important;
+    letter-spacing: 1px !important;
+}
+
+#isp_search_result_page_container div.isp_left_container {
+    width: 20% !important;
+}
+
+
+#isp_search_result_page_container div.isp_center_container_position {
+    margin-left: 20% !important;
+}
+
+li.isp_grid_product div.isp_product_info .isp_product_title {
+    font-family: $font-family-header;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .4px;
+}
+
+
+li.isp_grid_product input[type=submit].isp_add_to_cart_btn {
+    background: $bestbully-blue !important;
+    border-radius: 0 !important;
+    text-transform: uppercase !important;
+    color: #fff !important;
+    border: 1px solid $bestbully-blue !important;
+    font-size: 14px !important;
+    transition: background .3s ease;
+
+    &:hover {
+        background: darken($bestbully-blue, 5%) !important;
+    }
+}
+
+
+// Quick View Modal.
+div#isp_product_quick_view_model {
+    height: auto !important;
+    max-height: calc(100% - 60px);
+
+    .isp_quick_view_content_right {
+        display: flex;
+        flex-direction: column;
+        padding: 30px;
+
+        @media screen and (max-width: 768px) {
+            padding: 20px 15px !important;
+        }
+    }
+
+    .isp_quick_view_price_add_to_cart_wrapper {
+        .isp_add_to_cart_quantity_num {
+            height: 100% !important;
+        }
+    }
+
+    .isp_add_to_cart_quantity_quick_view {
+        height: 50px;
+        grid-column-end: 5;
+
+        &:before {
+            display: none;
+        }
+
+        .quantity_quick_view {
+            border-radius: 0 !important;
+        }
+    }
+
+    .isp_quantity_container {
+        height: 50px;
+    }
+
+    .isp_quick_view_add_to_cart_btn_quick_view {
+        background: $bestbully-blue;
+        text-transform: uppercase;
+        border-radius: 0;
+
+        @media screen and (max-width: 768px) {
+            grid-column-start: 7 !important;
+            border-radius: 0 !important;
+        }
+
+        @media screen and (max-width: 480px) {
+            grid-column-start: 8 !important;
+        }
+
+        &:before {
+            display: none;
+        }
+    }
+
+    a.isp_view_full_details {
+        border-radius: 0;
+        box-sizing: border-box;
+        border: 1px solid #000;
+        background: #f2f2f2;
+        grid-column-start: 6;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #000;
+        font-size: 13px;
+        text-transform: uppercase;
+        font-weight: bold;
+        line-height: 1.5em;
+        transition: background .3s ease;
+
+        &:hover {
+            background: #dedede;
+        }
+
+        @media screen and (max-width: 768px) {
+            grid-column-end: 6 !important;
+            border-radius: 0 !important;
+        }
+
+        @media screen and (max-width: 480px) {
+            grid-column-end: 7 !important;
+        }
+
+        &:before {
+            content: 'View Full Details'
+        }
+
+        .isp_tooltip {
+            display: none;
+        }
     }
 }
