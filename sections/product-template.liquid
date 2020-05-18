@@ -138,6 +138,7 @@
             </div>
           {% endif %}
 
+          {% comment %}
           {% if section.settings.product_description_position == "top" %}
             {% if product.description != blank %}
               <div class="description">
@@ -145,12 +146,14 @@
               </div>
             {% endif %}
           {% endif %}
+          {% endcomment %}
 
           {% unless collection_handles contains 'coming-soon' %}
             {% include 'product-form' with 'product' %}
             {% include 'product-notify-me' %}
           {% endunless %}
 
+          {% comment %}
           {% if section.settings.product_description_position == "bottom" %}
             {% if product.description != blank %}
               <div class="description bottom">
@@ -158,6 +161,7 @@
               </div>
             {% endif %}
           {% endif %}
+          {% endcomment %}
 
           {% if section.settings.display_collections or section.settings.display_tags or section.settings.display_type %}
             <div class="product_links">
@@ -225,7 +229,7 @@
         </ul>
     </div>
     <div class="product-tabs__tab active" data-tab="description">
-        <p>{{ product.description | strip_html }}</p>
+        {{ product.description }}
     </div>
     <div class="product-tabs__tab" data-tab="nutrition">
         {% include 'product-specs' %}
