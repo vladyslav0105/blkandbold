@@ -1288,12 +1288,12 @@ $(document)
         $('[data-dog-edit]').on('click', function ( event ) {
             event.preventDefault();
             $(this).closest('.account__dog')
-                .find('.account__dog__modal').fadeIn();
+                .find('.account__dog__modal').trigger('modal.open');
         });
 
         $('[data-dog-add]').on('click', function (event) {
             event.preventDefault();
-            $(this).next('.account__dog__modal').fadeIn();
+            $(this).next('.account__dog__modal').trigger('modal.open');
             $(this).next('.account__dog__modal form').reset()
             $(this).next('.account__dog__modal form')
                 .find('.account__dog__modal__form__error').remove();
@@ -1301,7 +1301,17 @@ $(document)
 
         $('[data-dog-modal-close]').on('click', function (event) {
             event.preventDefault();
-            $('[data-dog-modal]').fadeOut();
+            $('[data-dog-modal]').trigger('modal.close');
+        });
+
+        $('.account__dog__modal').on('modal.open', function (event) {
+            $(this).fadeIn();
+            $('html, body').addClass('fixed');
+        });
+
+        $('.account__dog__modal').on('modal.close', function (event) {
+            $(this).fadeOut();
+            $('html, body').removeClass('fixed');
         });
 
         // To prevent clicking within the modal to close it.

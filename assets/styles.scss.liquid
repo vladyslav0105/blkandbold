@@ -12288,8 +12288,9 @@ $delay: 0;
     right: 0;
     bottom: 0;
     background: rgba(0,0,0,0.6);
-    z-index: 1000;
+    z-index: 10000;
     display: none;
+    overflow-x: hidden;
 }
 
 .account__dog__modal__inner {
@@ -12303,6 +12304,8 @@ $delay: 0;
     transform: translate(-50%, -50%);
     padding: 30px;
     overflow-y: auto;
+    broder-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 
     h4 {
         padding-top: 0;
@@ -12360,5 +12363,15 @@ $delay: 0;
         height: 100%;
         object-fit: cover;
         border-radius: 9999px;
+    }
+}
+
+html, body {
+    &.fixed {
+        position: fixed;
+        height: 100%;
+        top: 0;
+        left: 0;
+        width: 100%;
     }
 }
