@@ -6746,6 +6746,7 @@ a.tag {
     &:hover .thumbnail-overlay {
       opacity: 1;
     }
+
   }
 
   .thumbnail-overlay {
@@ -12193,5 +12194,26 @@ $delay: 0;
 
     span.points {
         margin-left: auto;
+    }
+}
+
+
+.recommended-products--grid {
+    .product-list {
+        display: flex;
+        flex-wrap: wrap;
+
+        .column {
+            display: flex;
+            flex-direction: column;
+
+            .product-wrap {
+                margin-bottom: 20px;
+            }
+
+            .action_button {
+                margin-top: auto;
+            }
+        }
     }
 }
