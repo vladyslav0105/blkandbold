@@ -1,0 +1,106 @@
+{% comment %}
+This liquid script intends to display an image using Html5 responsive
+properties to save bandwidth and improve page performance.
+
+@param image - The image to show.
+@param type - (global|asset|file) The type of image to display.
+@param width - a string of comma separated values to use as sizes.
+@param height - The image height if needed.
+@param crop - The cropping direction if any.
+@param lazyload - Requires a lazyload library to work.
+@param alt - The alt attribute to display for the image.
+@param id - Id of the image
+@param class - Classes for the image.
+{% endcomment %}
+
+
+{% assign proportions = '0.1,0.2,0.25,0.33,0.50,0.66,0.75,1' | split: ',' %}
+{% assign default_width = 2048 %}
+
+
+{%- unless width != blank -%}
+    {%- if image.width -%}
+        {% assign width = image.width %}
+    {%- else -%}
+        {% assign width = default_width %}
+    {%- endif -%}
+{%- endunless -%}
+{% assign width = width | default: default_width %}
+
+{% comment %}If height is defined, we calculate this ratio so we can adjust proportionally {% endcomment %}
+{%- if height -%}
+    {% assign ratio = height | divided_by: width %}
+{%- endif -%}
+
+{% comment %}
+Now let's create a default image url, and then we use replacements for the
+different resolutions.
+{% endcomment %}
+{%- if type == 'file' -%}
+    {% assign image_url = image | file_img_url: '0002x0003', crop: 'center' %}
+{%- elsif type == 'asset' -%}
+    {% assign image_url = image | asset_img_url: '0002x0003', crop: 'center' %}
+{%- else -%}
+    {% assign image_url = image | img_url: '0002x0003', crop: 'center' %}
+{%- endif -%}
+
+{% comment %}
+    Now we modify the image to remove heights or croppings if they're absent.
+{% endcomment %}
+{%- unless height != blank -%}
+    {% assign image_url = image_url | replace: '0003', '' %}
+{%- endunless -%}
+
+{%- unless crop != blank -%}
+    {% assign image_url = image_url | replace: '_crop_center.', '.' %}
+{%- endunless -%}
+
+{% comment %}Let's build the main source now {% endcomment %}
+{% assign cropVar = '' %}
+{%- if crop -%}
+    {% assign cropVar = '_crop_' | append: crop | append: '.' %}
+{%- endif -%}
+
+{% comment %} Now let's build the source sets {% endcomment %}
+{% capture sourceset %}
+  {%- for proportion in proportions -%}
+      {% assign propInt = proportion | times: 1 %}
+      {% assign widthSize = width | times: propInt | floor %}
+
+        {% comment %} A ratio won't be defined if there's no height, so we don't
+        need to worry about using an 1 as default height size, since it won't be
+        used {% endcomment %}
+        {% assign heightSize = 1 %}
+        {%- if ratio -%}
+            {% assign heightSize = widthSize | times: ratio | floor %}
+        {%- endif -%}
+
+    {%- if crop -%}
+        {% assign cropVar = '_crop_' | append: crop | append: '.' %}
+    {%- endif -%}
+
+    {% comment %} Now we generate the image replacing all placeholders {% endcomment %}
+    {% assign image_to_insert = image_url | replace: '0002', widthSize | replace: '0003', heightSize | replace: '_crop_center.', cropVar %}
+    {%- if forloop.first -%}
+    {% assign default_image = image_to_insert %}
+    {%- endif -%}
+    {{ image_to_insert }} {{widthSize}}w{% unless forloop.last %},{% endunless %}
+  {%- endfor -%}
+{% endcapture %}
+
+
+{% comment %} Let's clean up a bit the sourceset {% endcomment %}
+{% assign sourceset = sourceset | strip_newlines | strip %}
+
+{% comment %} Printing the image output {% endcomment %}
+<img {% if lazyload %}data-{% endif %}src="{{ default_image }}"
+  {% if lazyload %}data-{% endif %}srcset="{{ sourceset }}"
+  {% if alt %}alt="{{ alt }}"{% endif %}
+  {%- if id -%}id="{{ id }}"{%- endif -%}
+  {%- if class or lazyload -%}
+    class="
+        {% if class %}{{ class }}{% endif %}
+        {% if lazyload %}lazyload{% endif %}"
+   {%- endif -%}
+   sizes="auto"
+  >
