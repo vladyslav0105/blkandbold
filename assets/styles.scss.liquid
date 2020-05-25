@@ -7442,6 +7442,7 @@ $swatch-label-size: 34px;
     text-transform:uppercase;
     cursor: pointer;
     padding: 0 10px;
+    position: relative;
   }
 
   .swatch .color label {
@@ -7459,6 +7460,26 @@ $swatch-label-size: 34px;
     {% if settings.swatch_style != 'square' %}
       border-radius: 3px;
     {% endif %}
+  }
+
+  .swatch-element.ships-free {
+
+        &:after {
+            content: 'Ships Free';
+                display: block;
+                font-size: 10px;
+                text-transform: uppercase;
+                text-align: center;
+                font-weight: bold;
+                letter-spacing: 0.5px;
+                clear: both;
+                background: #007bb6;
+                color: #fff;
+                padding: 0 5px;
+                margin-left: -1px;
+                margin-right: -1px;
+                margin-bottom: -1px;
+        }
   }
 
   .swatch-element.color {
