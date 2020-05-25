@@ -212,8 +212,8 @@
                     $('.isp_facet_title').each( function () {
                         var values = $(this).closest('.isp_single_facet_wrapper')
                             .find('[aria-checked=true]');
-                        
-                        if ( values.length < 1 ) {
+
+                        if ( values.length < 1 && !$(this).closest('.isp_single_facet_wrapper').hasClass('collapsed') ) {
                             $(this).click();
                         }
                     });
