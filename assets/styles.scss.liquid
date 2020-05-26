@@ -3488,7 +3488,8 @@ div.breadcrumb-collection {
 .article-pagination {
   margin-top: 0px;
   text-transform: uppercase;
-  font-size: {{ settings.regular_font_size | minus: 4 }}px;
+  font-size: 14px;
+  // font-size: {{ settings.regular_font_size | minus: 4 }}px;
   margin-bottom: 0;
   @include respond-to('medium-down'){
     margin-top: 0;
@@ -6748,6 +6749,7 @@ a.tag {
     &:hover .thumbnail-overlay {
       opacity: 1;
     }
+
   }
 
   .thumbnail-overlay {
@@ -12199,7 +12201,6 @@ $delay: 0;
 }
 
 // Instasearch Overrides.
-
 #isp_left_container_facets .isp_search_res_facets_container .isp_single_facet_wrapper {
     margin-right: 30px !important;
     display: none;
@@ -12385,5 +12386,80 @@ div#isp_product_quick_view_model {
         .isp_tooltip {
             display: none;
         }
+    }
+}
+
+
+.recommended-products--grid {
+    .product-list {
+        display: flex;
+        flex-wrap: wrap;
+
+        .column {
+            display: flex;
+            flex-direction: column;
+
+            .product-wrap {
+                margin-bottom: 20px;
+            }
+
+            .action_button {
+                margin-top: auto;
+            }
+        }
+    }
+}
+
+.product-featured {
+    padding: 80px 0;
+    background: #f2f2f2;
+
+    @include respond-to('small') {
+        padding: 40px 0;
+    }
+}
+
+.product-featured .container {
+    @include respond-to('medium-down') {
+        display: flex;
+        flex-direction: column-reverse;
+    }
+}
+
+.product-featured__title {
+    font-size: 30px;
+}
+
+.product-featured__content {
+    font-weight: 300;
+    color: #666;
+    line-height: 1.6em;
+    font-size: 18px;
+}
+
+.product-featured__image {
+    width: 100%;
+
+    @include respond-to('medium-down') {
+        margin-bottom: 40px;
+    }
+}
+
+.product-featured__icons {
+    margin: 50px 0 0;
+    display: flex;
+    justify-content: space-around;
+
+    @include respond-to('medium-down') {
+        margin: 40px 0 0;
+    }
+}
+
+.product-featured__icon {
+    width: 20%;
+    max-width: 90px;
+
+    img {
+        width: 100%;
     }
 }

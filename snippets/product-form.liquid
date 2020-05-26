@@ -39,7 +39,7 @@
 
   {% comment %}
     We use the initial limit so in cart we know how many units can be bought of
-    this product.  
+    this product.
   {% endcomment %}
   {%- if limit != blank -%}
       <input type="hidden" name="properties[_limit]" value="{{ initial_limit }}">
@@ -122,7 +122,7 @@
       {% endif %}
 
       {% capture add_to_cart_label %}{% if collection_handles contains 'pre-order' %}{{ 'collections.general.pre_order' | t }}{% else %}{{ 'products.product.add_to_cart' | t }}{% endif %}{% endcapture %}
-      <button type="{% if settings.cart_action == 'ajax' %}button{% else %}submit{% endif %}" name="add" class="{% if settings.cart_action == 'ajax' %} ajax-submit {% endif %}action_button add_to_cart {% if show_payment_button %} action_button--secondary {% endif %} {% if product.available == false %}disabled{% endif %}" data-label={{ add_to_cart_label | json }}>
+      <button id="AddToCart" type="{% if settings.cart_action == 'ajax' %}button{% else %}submit{% endif %}" name="add" class="{% if settings.cart_action == 'ajax' %} ajax-submit {% endif %}action_button add_to_cart {% if show_payment_button %} action_button--secondary {% endif %} {% if product.available == false %}disabled{% endif %}" data-label={{ add_to_cart_label | json }}>
         <span class="text">
           {% if product.available %}{{ add_to_cart_label }}{% else %}{{ settings.sold_out_text }}{% endif %}
         </span>

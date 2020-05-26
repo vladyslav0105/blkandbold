@@ -83,7 +83,7 @@
             </p>
           {% endif %}
           <h1 class="product_name">{{ product.title }}</h1>
-<span class="stamped-product-reviews-badge stamped-main-badge" data-id="{{product.id}}" data-product-title="{{product.title}}" data-product-type="{{product.type}}" style="display: block;"></span>
+          <span class="stamped-product-reviews-badge stamped-main-badge" data-id="{{product.id}}" data-product-title="{{product.title}}" data-product-type="{{product.type}}" style="display: block;"></span>
           {% if section.settings.enable_shopify_product_badges and settings.enable_shopify_review_comments %}
             <span class="shopify-product-reviews-badge" data-id="{{ product.id }}"></span>
           {% endif %}
@@ -245,15 +245,16 @@
 </div>
 
 
-<div id="stamped-main-widget" class="stamped-main-widget" data-product-id="{{ product.id }}" data-name="{{ product.title | escape }}" data-url="{{ shop.url }}{{ product.url }}" data-image-url="{{ product.featured_image | product_img_url: "large" |replace: " ? ", " % 3F" | replace: "& "," % 26"}}" data-description="{{ product.description | escape }}" data-product-sku="{{product.handle}}" data-product-type="{{product.type}}"> {{ product.metafields.stamped.reviews }} </div>
-
     {% if sidebar %}
+        {%- include 'product-featured' -%}
 
-            {% if section.settings.display_recently_viewed %}
-              {% include 'include-recently-viewed' %}
-            {% endif %}
+        {% if section.settings.display_recently_viewed %}
+          {% include 'include-recently-viewed' %}
+        {% endif %}
 
-            <div data-product-recommendations-container></div>
+        <div id="stamped-main-widget" class="stamped-main-widget" data-product-id="{{ product.id }}" data-name="{{ product.title | escape }}" data-url="{{ shop.url }}{{ product.url }}" data-image-url="{{ product.featured_image | product_img_url: "large" |replace: " ? ", " % 3F" | replace: "& "," % 26"}}" data-description="{{ product.description | escape }}" data-product-sku="{{product.handle}}" data-product-type="{{product.type}}"> {{ product.metafields.stamped.reviews }} </div>
+        <div data-product-recommendations-container></div>
+
           </div>
         </div>
       </div>
@@ -264,9 +265,13 @@
         </div>
       </div>
 
+      {%- include 'product-featured' -%}
+
       {% if section.settings.display_recently_viewed %}
         {% include 'include-recently-viewed' %}
       {% endif %}
+
+      <div id="stamped-main-widget" class="stamped-main-widget" data-product-id="{{ product.id }}" data-name="{{ product.title | escape }}" data-url="{{ shop.url }}{{ product.url }}" data-image-url="{{ product.featured_image | product_img_url: "large" |replace: " ? ", " % 3F" | replace: "& "," % 26"}}" data-description="{{ product.description | escape }}" data-product-sku="{{product.handle}}" data-product-type="{{product.type}}"> {{ product.metafields.stamped.reviews }} </div>
       <div data-product-recommendations-container></div>
 
     {% endif %}
