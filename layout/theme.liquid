@@ -206,48 +206,7 @@
     <script src="{{ 'app.js' | asset_url }}"></script>
 
     {%- if template contains 'collection' -%}
-        <script>
-            var __isp_options = {
-                isp_serp_callback: function(data, facets_only) {
-
-                    $('.isp_grid_product').each( function (index) {
-                        var $product = $(this);
-                        var id = $product.attr('product_id');
-                        var product = ISP_PRODUCTS[ id ];
-
-                        if ( product.p_min != product.p_max) {
-                            var $wrapper = $product.find('.isp_product_price_wrapper');
-                            var $min = $('<span>', {
-                                "class": "isp_product_price money",
-                                "data-currency": "USD",
-                                "data-currency-usd": product.p_min,
-                                "title": '$' + product.p_min
-                            }).text('$' + product.p_min);
-                            var $max = $('<span>', {
-                                "class": "isp_product_price money",
-                                "data-currency": "USD",
-                                "data-currency-usd": product.p_max,
-                                "title": '$' + product.p_max
-                            }).text('$' + product.p_max);
-
-                            $wrapper.html($min).append(' - ').append($max);
-                        }
-                    });
-
-                    $('.isp_facet_title').each( function () {
-                        var values = $(this).closest('.isp_single_facet_wrapper')
-                            .find('[aria-checked=true]');
-
-                        if ( values.length < 1 && !$(this).closest('.isp_single_facet_wrapper').hasClass('collapsed') ) {
-                            $(this).click();
-                        }
-                    });
-                    $('.isp_single_facet_wrapper').addClass('visible');
-                    $('#isp_left_container_header h3').remove();
-                    $('#isp_left_container_header').append('<h3>Filter</h3>');
-                }
-            }
-        </script>
+        {%- include 'instantsearch-customizations' -%}
     {%- endif -%}
 
     {% if settings.show_shipping_calculator and template contains "cart" %}
