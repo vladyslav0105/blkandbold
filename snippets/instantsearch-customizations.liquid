@@ -42,9 +42,17 @@
                     $(this).click();
                 }
             });
+
             $('.isp_single_facet_wrapper').addClass('visible');
             $('#isp_left_container_header h3').remove();
             $('#isp_left_container_header').append('<h3>Filter</h3>');
+
+            // Removing facets with only one option
+            $('.isp_single_facet_wrapper').each(function() {
+                if ($(this).find('.isp_facet_value').length === 1) {
+                    $(this).remove();
+                }
+            });
         }
     }
 </script>
