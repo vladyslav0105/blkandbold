@@ -1,3 +1,4 @@
+{% assign free_shipping_minimum = settings.free_shipping_minimum | times: 100 %}
 {% comment %}
   Set the extension of your color files below. Use 'png', 'jpeg', 'jpg' or 'gif'.
 {% endcomment %}
@@ -31,7 +32,7 @@
       {% assign values = values | split: ',' %}
 
       <input id="swatch-{{ option_index }}-{{ value | handle }}-{{ product.id }}{% if section.id %}-{{ section.id }}{% endif %}" type="radio" name="option-{{ option_index }}" aria-label="{{ value | escape }}" tabindex="0" value="{{ value | escape }}"{% if forloop.first %} checked{% endif %} />
-      <div tabindex="0"  value="{{ value | escape }}" data-value="{{ value | escape }}" data-id="{{ variant.id }}" class="swatch-element {% if is_color %}color {% endif %}{{ value | handle }}-swatch {% if variant.available %}available{% else %}soldout{% endif %}  ships-free">
+      <div tabindex="0"  value="{{ value | escape }}" data-value="{{ value | escape }}" data-id="{{ variant.id }}" class="swatch-element {% if is_color %}color {% endif %}{{ value | handle }}-swatch {% if variant.available %}available{% else %}soldout{% endif %} {% if settings.free_shipping_minimum and variant.price > free_shipping_minimum %}ships-free{% endif %}">
         {% if is_color %}
           <div class="tooltip">{{ value }}</div>
         {% endif %}
