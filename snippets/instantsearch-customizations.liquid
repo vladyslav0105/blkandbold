@@ -1,0 +1,58 @@
+<script>
+    var __isp_options = {
+        isp_serp_raty_reviews_option: {
+            starType: 'i', // Font-based stars (instead of images)
+            starHalf: 'stamped-fa fa-star-half-o',
+            starOff: 'stamped-fa stamped-fa-star-o',
+            starOn: 'stamped-fa stamped-fa-star'
+        },
+        isp_serp_callback: function(data, facets_only) {
+
+            // Updating product prices.
+            $('.isp_grid_product').each( function (index) {
+                var $product = $(this);
+                var id = $product.attr('product_id');
+                var product = ISP_PRODUCTS[ id ];
+
+                if ( product.p_min != product.p_max) {
+                    var $wrapper = $product.find('.isp_product_price_wrapper');
+                    var $min = $('<span>', {
+                        "class": "isp_product_price money",
+                        "data-currency": "USD",
+                        "data-currency-usd": product.p_min,
+                        "title": '$' + product.p_min
+                    }).text('$' + product.p_min);
+                    var $max = $('<span>', {
+                        "class": "isp_product_price money",
+                        "data-currency": "USD",
+                        "data-currency-usd": product.p_max,
+                        "title": '$' + product.p_max
+                    }).text('$' + product.p_max);
+
+                    $wrapper.html($min).append(' - ').append($max);
+                }
+            });
+
+            // Updating Facets behaviors.
+            $('.isp_facet_title').each( function () {
+                var values = $(this).closest('.isp_single_facet_wrapper')
+                    .find('[aria-checked=true]');
+
+                if ( values.length < 1 && !$(this).closest('.isp_single_facet_wrapper').hasClass('collapsed') ) {
+                    $(this).click();
+                }
+            });
+
+            $('.isp_single_facet_wrapper').addClass('visible');
+            $('#isp_left_container_header h3').remove();
+            $('#isp_left_container_header').append('<h3>Filter</h3>');
+
+            // Removing facets with only one option
+            $('.isp_single_facet_wrapper').each(function() {
+                if ($(this).find('.isp_facet_value').length === 1) {
+                    $(this).remove();
+                }
+            });
+        }
+    }
+</script>
