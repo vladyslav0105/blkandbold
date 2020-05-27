@@ -2038,5 +2038,27 @@
         "label": "[DISQUS](http:\/\/help.disqus.com\/en\/articles\/1717111-what-s-a-shortname\/) shortname"
       }
     ]
+},
+{
+    "name": "[BBS] Free Shipping",
+    "settings": [
+        {
+            "type": "number",
+            "id": "free_shipping_minimum",
+            "label": "Free Shipping Minimum",
+            "info": "Variants with prices above this minimum will get the *Ships Free* label"
+        }
+    ]
+},
+{
+    "name": "[BBS] Collections",
+    "settings": [
+        {
+            "type": "textarea",
+            "id": "collections_show_tags",
+            "label": "List of tags to show",
+            "info": "Add tags to this list separated with comma to show these tags in Collections"
+        }
+    ]
 }
 ]

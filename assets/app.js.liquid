@@ -31,7 +31,7 @@ $(function() {
   videoFeature.setupVideoPlayer();
   featuredPromotions.init();
   featuredCollectionSection.init();
-  collectionSidebarFilter.init();
+  // collectionSidebarFilter.init();
   cart.init();
   mapFunction.init();
   productPage.init();
@@ -147,14 +147,14 @@ $(function() {
     }, 500);
   })
 
-  $('body').on('click', '[data-reset-filters]', function(){
-    collectionSidebarFilter.clearAllFilters();
-  });
+  // $('body').on('click', '[data-reset-filters]', function(){
+  //   collectionSidebarFilter.clearAllFilters();
+  // });
 
-  $('body').on('click', '[data-clear-filter]', function(){
-    var selectedOption = $(this).parents('.filter-active-tag');
-    collectionSidebarFilter.clearSelectedFilter(selectedOption);
-  });
+  // $('body').on('click', '[data-clear-filter]', function(){
+  //   var selectedOption = $(this).parents('.filter-active-tag');
+  //   collectionSidebarFilter.clearSelectedFilter(selectedOption);
+  // });
 
   $('body').on('change', '.currencies', function(e) {
       $('[data-initial-modal-price]').attr('data-initial-modal-price', '');
@@ -759,7 +759,7 @@ $(function() {
                 } else if ($('.sticky_nav--stick').length) {
                   $('.sticky_nav .cart_container').addClass('active_link');
                 } else {
-                  $('.top_bar .cart_container').addClass('active_link');
+                  $('.top_bar .cart_container, .header__cart .cart_container').addClass('active_link');
                 }
 
                 //block scrolling on mobile
@@ -1065,7 +1065,7 @@ $(document)
     }
 
     if ($parentSection.hasClass('collection-template-section')){
-      collectionSidebarFilter.init();
+      // collectionSidebarFilter.init();
       recentlyViewed.init();
     }
 
@@ -1077,7 +1077,7 @@ $(document)
       if (Shopify.theme_settings.enable_autocomplete){
         searchAutocomplete.init();
       }
-      collectionSidebarFilter.init();
+      // collectionSidebarFilter.init();
     }
 
     if ($parentSection.hasClass('header-section')){

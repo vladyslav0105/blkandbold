@@ -73,6 +73,11 @@
     </a>
   </div>
 
+  {%- unless template contains 'index' -%}
+    <a class="action_button" href="{{ product.url }}" style="width: 100%">View Details</a>
+  {%- endunless -%}
+
+  {% comment %}
   {% unless settings.quick_shop_style == 'inline' and settings.quick_shop_enabled %}
     {% include 'collection-swatch' %}
   {% endunless %}
@@ -84,4 +89,6 @@
       </div>
     {% endunless %}
   {% endif %}
+  {% endcomment %}
+
 </div>
