@@ -17,7 +17,7 @@
                 <input type="hidden" name="_method" value="PUT">
             {%- endif -%}
             <div class="account__dog__modal__content">
-                <div>
+                <div class="account__dog__modal__image__container">
                     <div class="account__dog__modal__image">
                         {%- if dog.avatar_url -%}
                             <img src="{{ dog.avatar_url }}">
@@ -25,8 +25,10 @@
                             <img src="https://i.pinimg.com/originals/ab/ea/27/abea2766ce27defecba1d0a87a554763.jpg">
                         {%- endif -%}
                     </div>
-                    <label for="">Dog Photo</label>
-                    <input type="file" name="avatar">
+                    <div>
+                        <label for="">Dog Photo</label>
+                        <input type="file" name="avatar">
+                    </div>
                 </div>
                 <div>
                     <label for="">Name</label>

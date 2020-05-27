@@ -12422,11 +12422,26 @@ $delay: 0;
     text-transform: none;
 }
 
+.account__dog__modal__image__container {
+    display: flex;
+
+    & > div:last-child {
+        flex: 1;
+
+        input {
+            width: 100%;
+        }
+
+        .account__dog__modal__form__error {
+            margin-top: 5px;
+        }
+    }
+}
+
 .account__dog__modal__image {
     width: 100px;
     height: 100px;
     position: relative;
-    float: left;
     margin-right: 20px;
     margin-bottom: 20px;
 
