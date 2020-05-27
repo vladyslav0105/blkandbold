@@ -2049,5 +2049,16 @@
             "info": "Variants with prices above this minimum will get the *Ships Free* label"
         }
     ]
+},
+{
+    "name": "[BBS] Collections",
+    "settings": [
+        {
+            "type": "textarea",
+            "id": "collections_show_tags",
+            "label": "List of tags to show",
+            "info": "Add tags to this list separated with comma to show these tags in Collections"
+        }
+    ]
 }
 ]

@@ -1,4 +1,5 @@
 <script>
+    var tagsToShow = '{{ settings.collections_show_tags | replace: ' ', '' | strip | strip_newlines | downcase }}'.split(',');
     var __isp_options = {
         isp_serp_raty_reviews_option: {
             starType: 'i', // Font-based stars (instead of images)
@@ -53,6 +54,18 @@
                     $(this).remove();
                 }
             });
+
+
+            // Let's ony show the desired tags, and let's replace the "tag" title by "type"
+            $('.isp_facet_title[title="Tag"] .isp_facet_title_name').text('Type');
+            $('.isp_facet_title[title="Tag"]').closest('.isp_single_facet_wrapper')
+                .find('.isp_facet_value').each( function () {
+                    var name = $(this).find('.isp_facet_value_name').attr('title');
+                    if ( tagsToShow.indexOf( name.toLowerCase() ) < 0 ) {
+                        $(this).hide();
+                    }
+                });
+
         }
     }
 </script>
