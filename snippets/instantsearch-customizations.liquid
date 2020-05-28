@@ -66,8 +66,10 @@
                     }
                 });
 
+            var interval = setInterval(function () {
+                if ( $('#facet_group_tag').length > 0 ) {
+                    clearInterval( interval );
 
-                setTimeout(function () {
                     $('#facet_group_type').hide();
                     $('#facet_group_tag .isp_facet_group_title_text').text('Type');
                     $('#facet_group_tag .isp_single_mobile_facet').each( function () {
@@ -78,7 +80,8 @@
                         }
                     });
                     $('#facet_group_tag .isp_single_mobile_facet.toggle_facets').hide();
-                }, 100)
+                }
+            }, 100)
         }
     }
 </script>
