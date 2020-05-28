@@ -82,6 +82,14 @@
                     $('#facet_group_tag .isp_single_mobile_facet.toggle_facets').hide();
                 }
             }, 100)
+        },
+
+        isp_serp_quickview_callback: function () {
+            var text = $('.isp_quick_view_product_sellable_status').text();
+
+            if ( text == 'In Stock' ) {
+                $('.isp_quick_view_product_sellable_status').css('color', '#007bb6');
+            }
         }
     }
 </script>
