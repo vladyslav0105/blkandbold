@@ -1361,7 +1361,12 @@ $(document)
                         window.location.reload();
                     },
                     error: function(error) {
-                        console.log(error);
+                        if ( error.status == 422 ) {
+                            for (var name in error.responseJSON.errors ) {
+                                $form.find('[name='+ name +']').eq(0)
+                                    .after('<p class="account__dog__modal__form__error">'+ error.responseJSON.errors[name][0] +'</p>');
+                            }
+                        }
                     }
                 });
 
