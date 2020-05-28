@@ -1276,3 +1276,154 @@ $(document)
         });
     });
 } (jQuery));
+
+
+/**
+ * Dogs editor scripts
+ * @param  {[type]} $ [description]
+ * @return {[type]}   [description]
+ */
+(function ($) {
+    $(document).ready( function () {
+        $('[data-dog-edit]').on('click', function ( event ) {
+            event.preventDefault();
+            $(this).closest('.account__dog')
+                .find('.account__dog__modal').trigger('modal.open');
+        });
+
+        $('[data-dog-add]').on('click', function (event) {
+            event.preventDefault();
+            $(this).next('.account__dog__modal').trigger('modal.open');
+            $(this).next('.account__dog__modal form').reset()
+            $(this).next('.account__dog__modal form')
+                .find('.account__dog__modal__form__error').remove();
+        });
+
+        $('[data-dog-modal-close]').on('click', function (event) {
+            event.preventDefault();
+            $('[data-dog-modal]').trigger('modal.close');
+        });
+
+        $('.account__dog__modal').on('modal.open', function (event) {
+            $(this).fadeIn();
+            $('html, body').addClass('fixed');
+        });
+
+        $('.account__dog__modal').on('modal.close', function (event) {
+            $(this).fadeOut();
+            $('html, body').removeClass('fixed');
+        });
+
+        // To prevent clicking within the modal to close it.
+        $('.account__dog__modal__inner').on('click', function (event) {
+            event.stopPropagation();
+        });
+
+
+        $('input[name=avatar]').on('change', function () {
+
+            var input = this;
+            var reader = new FileReader();
+            var $img = $(this).closest('.account__dog__modal').find('.account__dog__modal__image img');
+
+            console.log ($img);
+
+            reader.onload = function (e) {
+               $img.attr('src', e.target.result);
+            }
+
+           reader.readAsDataURL(input.files[0]);
+        });
+
+
+        $('.acount__dog__modal__form').on('submit', function(event) {
+            event.preventDefault();
+            var $form = $(this);
+            var id = $(this).find('[name=id]').val();
+
+            var formData = new FormData( $form[0] );
+            $form.find('.account__dog__modal__form__error').remove();
+
+            // It's an update.
+            if (typeof id !== 'undefined')  {
+                $.ajax({
+                    url: window.customer_auth.base_uri + 'dogs/' + id,
+                    type: 'POST',
+                    data: formData,
+                    headers: {
+                        'customer-id': window.customer_auth.customer_id,
+                        'customer-hash': window.customer_auth.hash
+                    },
+                    dataType: 'json',
+                    processData: false,
+                    contentType: false,
+                    success: function (data) {
+                        window.location.reload();
+                    },
+                    error: function(error) {
+                        if ( error.status == 422 ) {
+                            for (var name in error.responseJSON.errors ) {
+                                $form.find('[name='+ name +']').eq(0)
+                                    .after('<p class="account__dog__modal__form__error">'+ error.responseJSON.errors[name][0] +'</p>');
+                            }
+                        }
+                    }
+                });
+
+            // It's a creation.
+            } else {
+                $.ajax({
+                    url: window.customer_auth.base_uri + 'dogs',
+                    type: 'POST',
+                    data: formData,
+                    headers: {
+                        'customer-id': window.customer_auth.customer_id,
+                        'customer-hash': window.customer_auth.hash
+                    },
+                    dataType: 'json',
+                    processData: false,
+                    contentType: false,
+                    success: function (data) {
+                        window.location.reload();
+                    },
+                    error: function(error) {
+                        if ( error.status == 422 ) {
+                            for (var name in error.responseJSON.errors ) {
+                                $form.find('[name='+ name +']').eq(0)
+                                    .after('<p class="account__dog__modal__form__error">'+ error.responseJSON.errors[name][0] +'</p>');
+                            }
+                        }
+                    }
+                });
+            }
+        });
+
+        $('[data-dog-remove]').on('click', function ( event ) {
+            event.preventDefault();
+
+            if ( window.confirm('are you sure?') ) {
+                $.ajax({
+                    url: window.customer_auth.base_uri + 'dogs/' + $(this).data('dog-id'),
+                    type: 'POST',
+                    data: {'_method': 'DELETE'},
+                    headers: {
+                        'customer-id': window.customer_auth.customer_id,
+                        'customer-hash': window.customer_auth.hash
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+                        window.location.reload();
+                    },
+                    error: function(error) {
+                        if ( error.status == 422 ) {
+                            for (var name in error.responseJSON.errors ) {
+                                $form.find('[name='+ name +']').eq(0)
+                                    .after('<p class="account__dog__modal__form__error">'+ error.responseJSON.errors[name][0] +'</p>');
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    });
+}(jQuery));

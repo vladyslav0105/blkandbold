@@ -1,0 +1,22 @@
+<div class="account__dog">
+    <div class="account__dog__image">
+        {%- if dog.avatar_url -%}
+            <img src="{{ dog.avatar_url }}">
+        {%- else condition -%}
+            <img src="https://i.pinimg.com/originals/ab/ea/27/abea2766ce27defecba1d0a87a554763.jpg">
+        {%- endif -%}
+    </div>
+    <div class="account__dog__content">
+        <p class="account__dog__name">{{ dog.name }}</p>
+        <p class="account__dog__info"><strong>Breed:</strong> {{ dog.breed }}</p>
+        <p class="account__dog__info"><strong>Size:</strong> {{ dog.size | capitalize }}</p>
+        <p class="account__dog__info"><strong>Birthday:</strong> {{ dog.birthday | split: 'T' | first | date: '%m/%d/%Y' }}</p>
+
+        <div class="account__dog__links">
+            <a href="#" data-dog-edit>Edit</a>
+            <a href="#" data-dog-remove data-dog-id="{{ dog.id }}">Remove</a>
+        </div>
+    </div>
+
+    {%- include 'account-dog-modal' with dog: dog -%}
+</div>

@@ -1,0 +1,63 @@
+<div class="account__dog__modal" data-dog-modal data-dog-modal-close>
+    <div class="account__dog__modal__inner">
+        <a href="#" data-dog-modal-close class="account__dog__modal__close">&times;</a>
+        {%- if dog -%}
+            <h4 class="text-left">Update {{ dog.name }} Information</h4>
+        {% else %}
+            <h4 class="text-left">Add A New Dog</h4>
+        {%- endif -%}
+
+        <form action="#" method="POST" class="acount__dog__modal__form">
+            {%- if dog.id -%}
+                {% comment %}
+                If the dog id is present, then the form will attempt to update
+                the existing dog.
+                {% endcomment %}
+                <input type="hidden" name="id" value="{{ dog.id }}">
+                <input type="hidden" name="_method" value="PUT">
+            {%- endif -%}
+            <div class="account__dog__modal__content">
+                <div class="account__dog__modal__image__container">
+                    <div class="account__dog__modal__image">
+                        {%- if dog.avatar_url -%}
+                            <img src="{{ dog.avatar_url }}">
+                        {% else %}
+                            <img src="https://i.pinimg.com/originals/ab/ea/27/abea2766ce27defecba1d0a87a554763.jpg">
+                        {%- endif -%}
+                    </div>
+                    <div>
+                        <label for="">Dog Photo</label>
+                        <input type="file" name="avatar">
+                    </div>
+                </div>
+                <div>
+                    <label for="">Name</label>
+                    <input type="text" name="name" value="{{ dog.name }}">
+                </div>
+                <div>
+                    <label for="">Breed</label>
+                    <input type="text" name="breed" value="{{ dog.breed }}">
+                </div>
+                <div>
+                    <label for="">Size</label>
+                    <select name="size" id="">
+                        {%- unless dog.size -%}
+                            <option value="">-- Select Size --</option>
+                        {%- endunless -%}
+                        <option value="small" {% if dog.size == 'small' %}selected{% endif %}>Small</option>
+                        <option value="medium"{% if dog.size == 'medium' %}selected{% endif %}>Medium</option>
+                        <option value="large" {% if dog.size == 'large' %}selected{% endif %}>Large</option>
+                        <option value="extra large" {% if dog.size == 'extra large' %}selected{% endif %}>Extra Large</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="">Birthday</label>
+                    <input type="text" name="birthday" value="{{ dog.birthday | split: 'T' | first | date: '%m/%d/%Y' }}">
+                </div>
+
+                <button type="submit" class="action_button">{% if dog %}Update Dog{% else %}Add Dog{% endif %}</button>
+            </div>
+        </form>
+    </div>
+</div>
