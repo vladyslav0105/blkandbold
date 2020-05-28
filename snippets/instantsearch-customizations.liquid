@@ -66,6 +66,19 @@
                     }
                 });
 
+
+                setTimeout(function () {
+                    $('#facet_group_type').hide();
+                    $('#facet_group_tag .isp_facet_group_title_text').text('Type');
+                    $('#facet_group_tag .isp_single_mobile_facet').each( function () {
+                        $(this).removeClass('collapsed').addClass('not_collapsed');
+                        var name = $(this).attr('facet_value');
+                        if ( typeof name !== 'undefined' && tagsToShow.indexOf( name.toLowerCase() ) < 0 ) {
+                            $(this).hide();
+                        }
+                    });
+                    $('#facet_group_tag .isp_single_mobile_facet.toggle_facets').hide();
+                }, 100)
         }
     }
 </script>
