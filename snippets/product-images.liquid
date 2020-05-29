@@ -133,6 +133,7 @@ quickshop: <boolean>
         {% endif %}
       </div>
     {% endfor %}
+    {%- include 'product-chewmeter-image' with section: section, product: product -%}
   </div>
 
   {% if section.settings.product_thumbs %}
@@ -158,6 +159,7 @@ quickshop: <boolean>
             {% endif %}
           </div>
         {% endfor %}
+        {%- include 'product-chewmeter-thumb' -%}
       {% endif %}
       </div>
     {% endif %}

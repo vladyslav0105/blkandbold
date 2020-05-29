@@ -1,0 +1,33 @@
+{%- if product.metafields['Product Specs']['Chew Meter'] -%}
+
+{% assign values = 'light,medium,hard,power,full' | split: ',' %}
+{% assign valueIndex = 20 %}
+
+{% assign chewMeterValues = product.metafields['Product Specs']['Chew Meter'] | replace: ' ', '' | split: ',' %}
+{%- for cm in chewMeterValues -%}
+    {% assign v = cm | downcase %}
+    {%- for value in values -%}
+        {% comment %}
+            If the value exists, and the index is lower, we know the value is
+            lower too. So we get the index.
+        {% endcomment %}
+        {%- if value == v and forloop.index0 < valueIndex -%}
+            {% assign valueIndex = forloop.index0 %}
+            {% break %}
+        {%- endif -%}
+    {%- endfor -%}
+{%- endfor -%}
+
+{% comment %}
+    Then we just get the Lowest value. We capitalize it for naming purposes,
+    the first downcase was to prevent typos.
+{% endcomment %}
+{% assign chewmeter = values[valueIndex] | capitalize %}
+{% assign media = 'bbs-chewmeters-' | append: chewmeter | append: '.jpg' | downcase %}
+{% assign image_alt = 'BBS Chew Meter - ' | append:  chewmeter  %}
+
+<div tabindex="0" class="gallery-cell" data-title="{{ image_alt | escape }}">
+  <img src="{{ media | asset_img_url: '300x' }}" alt="">
+</div>
+
+{%- endif -%}

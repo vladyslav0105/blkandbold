@@ -1,0 +1,73 @@
+{%- if product.metafields['Product Specs']['Chew Meter'] -%}
+
+{% assign values = 'light,medium,hard,power,full' | split: ',' %}
+{% assign valueIndex = 20 %}
+
+{% assign chewMeterValues = product.metafields['Product Specs']['Chew Meter'] | replace: ' ', '' | split: ',' %}
+{%- for cm in chewMeterValues -%}
+    {% assign v = cm | downcase %}
+    {%- for value in values -%}
+        {% comment %}
+            If the value exists, and the index is lower, we know the value is
+            lower too. So we get the index.
+        {% endcomment %}
+        {%- if value == v and forloop.index0 < valueIndex -%}
+            {% assign valueIndex = forloop.index0 %}
+            {% break %}
+        {%- endif -%}
+    {%- endfor -%}
+{%- endfor -%}
+
+{% comment %}
+    Then we just get the Lowest value. We capitalize it for naming purposes,
+    the first downcase was to prevent typos.
+{% endcomment %}
+{% assign chewmeter = values[valueIndex] | capitalize %}
+{% assign media = 'bbs-chewmeters-' | append: chewmeter | append: '.jpg' | downcase %}
+{% assign image_alt = 'BBS Chew Meter - ' | append:  chewmeter  %}
+
+<div class="gallery-cell" data-product-id="{{ product.id }}" data-media-type="image" data-thumb data-title="{{ image_alt }}">
+
+          {% capture image_100x %}{{ media | asset_img_url: '100x' }}{% endcapture %}
+          {% capture image_200x %}{{ media | asset_img_url: '200x' }}{% endcapture %}
+          {% capture image_400x %}{{ media | asset_img_url: '400x' }}{% endcapture %}
+          {% capture image_600x %}{{ media | asset_img_url: '600x' }}{% endcapture %}
+          {% capture image_800x %}{{ media | asset_img_url: '800x' }}{% endcapture %}
+          {% capture image_1200x %}{{ media | asset_img_url: '1200x' }}{% endcapture %}
+          {% capture image_2000x %}{{ media | asset_img_url: '2000x' }}{% endcapture %}
+          {% capture image_5000x %}{{ media | asset_img_url: '5000x' }}{% endcapture %}
+
+          {% if section.settings.enable_product_lightbox and product.images.size > 0 %}
+            <a  href="{{ image_5000x }}"
+                class="lightbox"
+                data-fancybox="{{ product.id }}"
+                rel="product-lightbox" tabindex="0">
+          {% endif %}
+          <div class="image__container" style="max-width: {{original_image_width}}">
+            {% if product.images.size > 0 %}
+              <img  src="{{ image_100x }}"
+                    alt="{{ image_alt | escape }}"
+                    class=" lazyload {{ settings.image_loading_style }}"
+                    data-image-id="{{ product.media[forloop.index0].id }}"
+                    data-index="{{ forloop.index0 }}"
+                    data-sizes="{% if section.settings.enable_product_lightbox %}100vw{% else %}auto{% endif %}"
+                    data-aspectratio="{{ original_image_height }}/{{ original_image_width }}"
+                    data-src="{{ image_2000x }}"
+                    srcset=" {{ image_200x }} 200w,
+                                  {{ image_400x }} 400w,
+                                  {{ image_600x }} 600w,
+                                  {{ image_800x }} 800w,
+                                  {{ image_1200x }} 1200w,
+                                  {{ image_2000x }} 2000w"
+                    />
+            {% else %}
+              <img src="{{ image | img_url: 'master' }}" />
+            {% endif %}
+          </div>
+          {% if section.settings.enable_product_lightbox and product.images.size > 0 %}
+            </a>
+          {% endif %}
+
+</div>
+
+{%- endif -%}
