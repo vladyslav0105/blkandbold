@@ -677,9 +677,9 @@ var searchAutocomplete = {
     var shopURL = $('body').data('shop-url');
 
     if (Shopify.theme_settings.search_option == 'products'){
-      var searchPath = shopURL + '/search?type=product&q=';
+      var searchPath = shopURL + '/pages/search-results?type=product&q=';
     } else {
-      var searchPath = shopURL + '/search?q=';
+      var searchPath = shopURL + '/pages/search-results?q=';
     }
 
     //Submit wildcard searches
@@ -690,7 +690,7 @@ var searchAutocomplete = {
       e.preventDefault();
 
       if(cleanFormValue == null) {
-        window.location.href = '/search';
+        window.location.href = '/pages/search-results';
       } else {
         window.location.href = searchPath + cleanFormValue + '*';
       }

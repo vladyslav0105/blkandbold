@@ -97,7 +97,7 @@
 
         <p class="blog_meta">
           {% if section.settings.blog_byline %}
-            <span><a href="/search?type=article&q={{ article.author }}">{{ a.author }}{{ 'blogs.article.by_author' | t: author: article.author }}</a></span>
+            <span><a href="/pages/search-results?type=article&q={{ article.author }}">{{ a.author }}{{ 'blogs.article.by_author' | t: author: article.author }}</a></span>
           {% endif %}
 
           {% if section.settings.blog_date %}
