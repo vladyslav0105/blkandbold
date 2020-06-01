@@ -48,6 +48,7 @@
 {% if product.available %}{% include 'subscription-product' %}{% endif %}
 <!-- End ReCharge code -->
 
+{%- include 'product-autoship' -%}
 
   {% if product.options.size > 1 %}
     <div class="select">
