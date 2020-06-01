@@ -82,17 +82,24 @@
             {% include "product-info" %}
           </a>
         </div>
+
+        {%- unless template contains 'index' -%}
+          <a class="action_button" href="{{ product.url }}" style="width: 100%">View Details</a>
+        {%- endunless -%}
+
+        {% comment %}
         {% if settings.quick_shop_style == 'popup' and settings.quick_shop_enabled %}
           {% include 'collection-swatch' %}
         {% endif %}
 
         {% if settings.quick_shop_style == 'inline' and settings.quick_shop_enabled %}
-          {% unless collection_handles contains 'coming-soon' %}
+            {% unless collection_handles contains 'coming-soon' %}
             <div class="inline-quickshop js-product_section product-{{ product.id }}">
-              {% include 'product-form', show_payment_button_quickshop: settings.show_payment_button %}
+                {% include 'product-form', show_payment_button_quickshop: settings.show_payment_button %}
             </div>
-          {% endunless %}
+            {% endunless %}
         {% endif %}
+        {% endcomment %}
       </div>
     {% endif %}
   {% endfor %}
