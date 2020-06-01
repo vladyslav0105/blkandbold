@@ -1,5 +1,7 @@
 $bestbully-red: #9A2F36;
 $bestbully-blue: #007bb6;
+$bestbully-gold: #b9ad79;
+$bestbully-denim: #005487;
 $font-family-header: {{ settings.headline__font.family }}, {{ settings.headline__font.fallback_families }};
 /******************************************************************
 Theme Name: Turbo "6.0.1"
@@ -4699,7 +4701,10 @@ input[type="button"].get-rates.action_button {
 
 .sale_banner_product,
 .new_banner_product,
-.preorder_banner_product {
+.preorder_banner_product,
+.top_sellers_banner_product,
+.whats_new_banner_product,
+.top_rated_banner_product {
   font-family: {{ settings.nav__font.family }}, {{ settings.nav__font.fallback_families }};
   font-weight: {{ settings.nav__font.weight }};
   font-size: {{ settings.nav_font_size }}px;
@@ -4747,6 +4752,18 @@ input[type="button"].get-rates.action_button {
   @include respond-to('medium-down'){
     font-size: 8px;
   }
+}
+
+.top_sellers_banner_product {
+    background: $bestbully-gold;
+}
+
+.whats_new_banner_product {
+    background: $bestbully-denim;
+}
+
+.top_rated_banner_product {
+    background: $bestbully-blue;
 }
 
 .product_links {
@@ -6969,7 +6986,7 @@ a.tag {
   right: 0;
 }
 
-.sale_banner, .new_banner, .preorder_banner {
+.sale_banner, .new_banner, .preorder_banner, .top_sellers_banner, .whats_new_banner, .top_rated_banner {
   background: {{ settings.sale_banner_color }};
   font-family: {{ settings.nav__font.family }}, {{ settings.nav__font.fallback_families }};
   font-weight: {{ settings.nav__font.weight }};
@@ -6988,6 +7005,18 @@ a.tag {
     padding: 4px 10px;
     font-size: smaller;
   }
+}
+
+.top_sellers_banner {
+    background: $bestbully-gold;
+}
+
+.whats_new_banner {
+    background: $bestbully-denim;
+}
+
+.top_rated_banner {
+    background: $bestbully-blue;
 }
 
 .new_banner, .preorder_banner {
@@ -8720,7 +8749,10 @@ img[data-flickity-lazyload] {
     }
     .new_banner_product:empty,
     .sale_banner_product:empty,
-    .preorder_banner_product:empty {
+    .preorder_banner_product:empty,
+    .top_sellers_banner_product:empty,
+    .whats_new_banner_product:empty,
+    .top_rated_banner_product:empty {
       display: none;
     }
   }

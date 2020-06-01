@@ -16,6 +16,19 @@
           {% if collection_handles contains 'pre-order' %}
             <div class="preorder_banner_product">{{ 'collections.general.pre_order' | t }}</div>
           {% endif %}
+
+          {%- if product.tags contains 'top-sellers' -%}
+            <div class="top_sellers_banner_product">{{ 'collections.general.top_sellers' | t }}</div>
+          {%- endif -%}
+
+          {%- if product.tags contains 'whats-new' -%}
+            <div class="whats_new_banner_product">{{ 'collections.general.whats_new' | t }}</div>
+          {%- endif -%}
+
+          {%- if product.tags contains 'top-rated' -%}
+            <div class="top_rated_banner_product">{{ 'collections.general.top_rated' | t }}</div>
+          {%- endif -%}
+
         </div>
       </div>
       <div class="product-details half">
