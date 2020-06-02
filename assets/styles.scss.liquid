@@ -681,6 +681,11 @@ img[data-sizes="100vw"] {
 
 .image-element__wrap img {
   height: auto;
+
+  @include respond-to('small-down') {
+      height: 35vh !important;
+      object-fit: cover;
+  }
 }
 
 /*============================================================================
@@ -10712,6 +10717,7 @@ $product-media-bg-color: {{ settings.shop_bg_color }};
   cursor: pointer;
 }
 
+
 .full-width--true .caption {
   @include respond-to('small-down') {
     padding-left: 20px;
@@ -10815,7 +10821,7 @@ $product-media-bg-color: {{ settings.shop_bg_color }};
     {% endif %}
 
     @include respond-to('small-down') {
-      font-size: 2.6em;
+      font-size: 24px !important;
     }
     @include respond-to('medium-down') {
       font-size: {{settings.slideshow_headline_size | divided_by: 1.5 }}px;
@@ -10866,7 +10872,7 @@ $product-media-bg-color: {{ settings.shop_bg_color }};
 .caption--below-true {
 
   @include respond-to('small-down') {
-    margin: 20px auto !important; /* Force caption margin */
+    margin: 5px auto !important; /* Force caption margin */
     font-size: 3vw;
     position: static;
     transform: none;
