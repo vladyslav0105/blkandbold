@@ -1,5 +1,6 @@
 <script>
     var tagsToShow = '{{ settings.collections_show_tags | replace: ' ', '' | strip | strip_newlines | downcase }}'.split(',');
+    var collectionHandle = '{{ collection.handle }}';
     var isp_related_options = {
         LAZYLOAD: 'progressive'
     };
@@ -59,32 +60,34 @@
             });
 
 
-            // Let's ony show the desired tags, and let's replace the "tag" title by "type"
-            $('.isp_facet_title[title="Tag"] .isp_facet_title_name').text('Type');
-            $('.isp_facet_title[title="Tag"]').closest('.isp_single_facet_wrapper')
-                .find('.isp_facet_value').each( function () {
-                    var name = $(this).find('.isp_facet_value_name').attr('title');
-                    if ( tagsToShow.indexOf( name.toLowerCase() ) < 0 ) {
-                        $(this).hide();
-                    }
-                });
-
-            var interval = setInterval(function () {
-                if ( $('#facet_group_tag').length > 0 ) {
-                    clearInterval( interval );
-
-                    $('#facet_group_type').hide();
-                    $('#facet_group_tag .isp_facet_group_title_text').text('Type');
-                    $('#facet_group_tag .isp_single_mobile_facet').each( function () {
-                        $(this).removeClass('collapsed').addClass('not_collapsed');
-                        var name = $(this).attr('facet_value');
-                        if ( typeof name !== 'undefined' && tagsToShow.indexOf( name.toLowerCase() ) < 0 ) {
+            if ( collectionHandle == 'bully-sticks' ) {
+                // Let's ony show the desired tags, and let's replace the "tag" title by "type"
+                $('.isp_facet_title[title="Tag"] .isp_facet_title_name').text('Type');
+                $('.isp_facet_title[title="Tag"]').closest('.isp_single_facet_wrapper')
+                    .find('.isp_facet_value').each( function () {
+                        var name = $(this).find('.isp_facet_value_name').attr('title');
+                        if ( tagsToShow.indexOf( name.toLowerCase() ) < 0 ) {
                             $(this).hide();
                         }
                     });
-                    $('#facet_group_tag .isp_single_mobile_facet.toggle_facets').hide();
-                }
-            }, 100)
+
+                var interval = setInterval(function () {
+                    if ( $('#facet_group_tag').length > 0 ) {
+                        clearInterval( interval );
+
+                        $('#facet_group_type').hide();
+                        $('#facet_group_tag .isp_facet_group_title_text').text('Type');
+                        $('#facet_group_tag .isp_single_mobile_facet').each( function () {
+                            $(this).removeClass('collapsed').addClass('not_collapsed');
+                            var name = $(this).attr('facet_value');
+                            if ( typeof name !== 'undefined' && tagsToShow.indexOf( name.toLowerCase() ) < 0 ) {
+                                $(this).hide();
+                            }
+                        });
+                        $('#facet_group_tag .isp_single_mobile_facet.toggle_facets').hide();
+                    }
+                }, 100)    
+            }
         },
 
         isp_serp_quickview_callback: function () {
