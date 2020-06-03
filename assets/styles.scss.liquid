@@ -12721,6 +12721,48 @@ a.isp_product_quick_view_button {
     }
 }
 
+.isp_badge_top-sellers .isp_product_image_wrapper:after,
+.isp_badge_top-rated .isp_product_image_wrapper:after,
+.isp_badge_whats-new .isp_product_image_wrapper:after {
+    font-family: {{ settings.nav__font.family }}, {{ settings.nav__font.fallback_families }};
+    font-weight: {{ settings.nav__font.weight }};
+    font-style: {{ settings.nav__font.style }};
+    font-size: 15px;
+    text-transform: {{ settings.nav_font_style }};
+    letter-spacing: {{ settings.nav_letter_spacing }}px;
+    padding: 8px 12px;
+    height: auto !important;
+    width: auto !important;
+    text-align: center;
+    color: #fff;
+    -webkit-appearance: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-smoothing: antialiased;
+
+    @include respond-to('medium-down'){
+      padding: 4px 10px;
+      font-size: smaller;
+    }
+}
+
+
+.isp_badge_top-rated .isp_product_image_wrapper:after {
+    content: 'Top Rated' !important;
+    background: $bestbully-blue;
+}
+
+.isp_badge_top-sellers .isp_product_image_wrapper:after {
+    content: 'Top Sellers' !important;
+    background: $bestbully-gold;
+}
+
+.isp_badge_whats-new .isp_product_image_wrapper:after {
+    content: 'What\'s New' !important;
+    background: $bestbully-denim;
+}
+
+
 .recommended-products--grid {
     .product-list {
         display: flex;
