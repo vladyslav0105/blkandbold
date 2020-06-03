@@ -1,5 +1,8 @@
 <script>
     var tagsToShow = '{{ settings.collections_show_tags | replace: ' ', '' | strip | strip_newlines | downcase }}'.split(',');
+    var isp_related_options = {
+        LAZYLOAD: 'progressive'
+    };
     var __isp_options = {
         isp_serp_raty_reviews_option: {
             starType: 'i', // Font-based stars (instead of images)
