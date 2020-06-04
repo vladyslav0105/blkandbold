@@ -59,6 +59,12 @@
             });
         },
 
+        isp_add_to_cart_callback: function(product_id, form_id) {
+            $.get('/cart.js', function(cart) {
+                refreshCart( cart );
+            }, 'json');
+        },
+
         isp_serp_quickview_callback: function () {
             var text = $('.isp_quick_view_product_sellable_status').text();
 

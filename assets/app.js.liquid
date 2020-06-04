@@ -489,9 +489,12 @@ $(function() {
         dataLineId[c].dataset.lineId = lineIndex;
       }
     }
-  }
+}
 
-  function refreshCart(cart) {
+
+
+  // I made this available sitewide so we can use the same method on InstantSearch hooks. 
+  window.refreshCart = function(cart) {
     $(".cart_count").empty();
     $cartBtn = $(".cart_count");
     var value = $cartBtn.text() || '0';
