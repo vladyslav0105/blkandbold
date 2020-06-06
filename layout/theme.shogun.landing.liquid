@@ -6,12 +6,20 @@ This file can be re-written at any time.
 {% capture content %}
 <!DOCTYPE html>
 <html lang="{{ shop.locale }}">
-
+  
 <head>
-
+  
     <meta charset="utf-8">
     <meta http-equiv="cleartype" content="on">
     <meta name="robots" content="index,follow">
+
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-K4TVR8T');</script>
+    <!-- End Google Tag Manager -->
 
     <!-- Mobile Specific Metas -->
     <meta name="HandheldFriendly" content="True">
@@ -34,7 +42,7 @@ This file can be re-written at any time.
     {% endif %}
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.6/jquery.fancybox.css">
-    <!-- Stylesheets for Turbo "5.0.3" -->
+    <!-- Stylesheets for Turbo "6.0.1" -->
     {{ 'styles.scss.css' | asset_url | stylesheet_tag }}
 
     <script>
@@ -92,6 +100,10 @@ This file can be re-written at any time.
 {% include 'LittledataLayer' %}
 <!-- End of Littledata - Fix Google Analytics Script -->
 
+<!-- Share a Sale Script -->
+<script src='https://www.dwin1.com/19038.js' type='text/javascript' defer='defer'></script>
+<!-- End of Share a Sale Script -->
+
 </head>
 
 
@@ -141,15 +153,24 @@ This file can be re-written at any time.
     </style>
   </noscript>
 
-
+  
 <body class="{% if template == '404' %}error-404{% else %}{{ template | replace: '.', '-' | handle }}{% endif %}"
-    data-money-format="{{ shop.money_format }}" data-shop-url="{{ shop.url }}">
-
-
+        data-money-format="
+        {%- if settings.show_multiple_currencies == true and settings.currency_format == 'money_with_currency_format' -%}
+          {{ shop.money_with_currency_format | strip_html }}
+        {%- else -%}
+          {{ shop.money_format | strip_html }}
+        {%- endif -%}"
+        data-shop-currency="{{ shop.currency }}"
+        data-shop-url="{{ shop.url }}">
+  
+  
   {{ content_for_layout }}
-
+  {{ 'cj-event-storage2.js' | asset_url | script_tag }}
   <script id="dsq-count-scr" src="//{{ settings.disqus_shortname }}.disqus.com/count.js" async></script>
 <script src="{{ 'jquery.min.js' | asset_url }}"></script>
+<script type="text/javascript" src="/services/javascripts/currencies.js" data-no-instant></script>
+<script type="text/javascript" src="{{ "jquery.currencies.min.js" | asset_url }}" data-no-instant></script>
 <script src="{{ 'vendors.js' | asset_url }}"></script>
 <script src="{{ 'sections.js' | asset_url }}"></script>
 <script src="{{ 'utilities.js' | asset_url }}"></script>
@@ -195,17 +216,18 @@ try { setTimeout(function(){StampedFn.reloadUGC();},1000); } catch (e){}
 <script>window.gorgiasChatParameters = {"smooch": {"givenName": "{{ customer.name }}","email": "{{ customer.email }}","properties": {"shopify__cart__total_price": "{{ cart.total_price | money | strip_html | default: null }}","shopify__cart__nb_of_items": {{ cart.items | size | default: 0 }},{% for item in cart.items %}"shopify__cart__items-{{ forloop.index }}-[]":"{\"line_price\":\"{{item.line_price|money|strip_html|default:null}}\",\"price\":\"{{item.price|money|strip_html|default:null}}\",\"product_id\":\"{{item.product_id|default:null}}\",\"quantity\":{{item.quantity|default:null}},\"sku\":\"{{item.sku|default:null}}\",\"title\":\"{{item.title}}\",\"variant_id\":{{item.variant_id|default:null}},\"vendor\":\"{{item.vendor|default:null}}\",\"id\":{{item.id|default:null}}}"{% if forloop.last != true %},{% endif %}{% endfor %}}}}</script>
 <script>window.gorgiasChatParameters = {"smooch": {"properties": {"shopify__cart__total_price": "{{ cart.total_price | money | strip_html | default: null }}","shopify__cart__nb_of_items": {{ cart.items | size | default: 0 }},{% for item in cart.items %}"shopify__cart__items-{{ forloop.index }}-[]":"{\"line_price\":\"{{item.line_price|money|strip_html|default:null}}\",\"price\":\"{{item.price|money|strip_html|default:null}}\",\"product_id\":\"{{item.product_id|default:null}}\",\"quantity\":{{item.quantity|default:null}},\"sku\":\"{{item.sku|default:null}}\",\"title\":\"{{item.title}}\",\"variant_id\":{{item.variant_id|default:null}},\"vendor\":\"{{item.vendor|default:null}}\",\"id\":{{item.id|default:null}}}"{% if forloop.last != true %},{% endif %}{% endfor %}}}}</script>
 <script src="https://config.gorgias.io/production/bgJ1Q6Q9dw6vXKOM/chat/30BVo7vZRG7rvzmQ.js" defer></script>
+<script src="https://cdn.attn.tv/bestbullysticks/dtag.js"></script>
   <style type="text/css">
     body, html {
       width: 100% !important;
       background: white !important;
     }
   </style>
-
-  <script src="https://cdn.attn.tv/bestbullysticks/dtag.js"></script>
+  
 </body>
 
 </html>
 {% endcapture %}
 {% assign content = content | replace_first: '<!DOCTYPE', '!DOCTYPE' | split: ' <' %}
 {% for html in content %}{% assign htmlblock = html | strip | prepend: ' <' %}{{htmlblock | replace: ' </', '</'}}{% endfor %}
+
