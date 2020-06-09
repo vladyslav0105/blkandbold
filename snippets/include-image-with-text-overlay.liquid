@@ -2,6 +2,7 @@
   {% assign id = block.id %}
   {% assign wide_display = block.settings.wide_display %}
   {% assign image = block.settings.image %}
+  {% assign image_mobile = block.settings.image_mobile %}
   {% assign pretext = block.settings.pretext %}
   {% assign title = block.settings.title %}
   {% assign subtitle = block.settings.subtitle %}
@@ -22,6 +23,7 @@
   {% assign id = section.id %}
   {% assign wide_display = section.settings.wide_display %}
   {% assign image = section.settings.image %}
+  {% assign image_mobile = section.settings.image_mobile %}
   {% assign pretext = section.settings.pretext %}
   {% assign title = section.settings.title %}
   {% assign subtitle = section.settings.subtitle %}
@@ -41,6 +43,9 @@
 {% endif %}
 
 {% assign mobile_crop = 'mobile-banner--crop-' | append: mobile_image_crop %}
+
+{% assign desktop_classes = mobile_crop | append: ' desktop-image' %}
+{% assign mobile_classes = mobile_crop | append: ' mobile-image' %}
 
 {% comment %}Is the color set to transparent?{% endcomment %}
 {% assign mobile_text_alpha = mobile_text_color | color_extract: 'alpha' %}
@@ -65,9 +70,12 @@
   <div class="sixteen columns">
 {% endif %}
 
-<section id="banner-{{id}}" class="banner full-width--{{ wide_display }}">
+<section id="banner-{{id}}" class="banner full-width--{{ wide_display }} {% if image_mobile != nil %}with-mobile-image{% endif %}">
+    {%- if image_mobile != nil -%}
+    {% include 'image-element', image: image_mobile, alt: image_mobile.alt, stretch_width: true, additional_classes: mobile_classes %}
+    {%- endif -%}
   {% if image != nil %}
-    {% include 'image-element', image: image, alt: image.alt, stretch_width: true, additional_classes: mobile_crop %}
+    {% include 'image-element', image: image, alt: image.alt, stretch_width: true, additional_classes: desktop_classes %}
   {% else %}
     {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg placeholder-svg--banner' }}
   {% endif %}

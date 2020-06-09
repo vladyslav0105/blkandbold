@@ -12971,3 +12971,19 @@ a.isp_product_quick_view_button {
         display: none;
     }
 }
+
+.image-with-text-overlay-section {
+    .banner.with-mobile-image {
+        img.mobile-image {
+            @media screen and (min-width: 799px) {
+                display: none;
+            }
+        }
+
+        img.desktop-image {
+            @media screen and (max-width: 798px) {
+                display: none;
+            }
+        }
+    }
+}
