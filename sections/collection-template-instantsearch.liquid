@@ -4,6 +4,8 @@
 - Uses blocks
 {% endcomment %}
 
+<a name="pagecontent" id="pagecontent"></a>
+
 {% if section.settings.featured_collection_image %}
   <header class="banner center page_banner dark-overlay-{{ section.settings.image_darken }}">
       {% if collection.image %}
@@ -23,10 +25,6 @@
       {% endif %}
   </header>
 {% endif %}
-
-{% comment %}
-<a name="pagecontent" id="pagecontent"></a>
-{% endcomment %}
 
 <div class="container">
   {% paginate collection.products by section.settings.pagination_limit %}
