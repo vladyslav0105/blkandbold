@@ -7,7 +7,7 @@
 <a name="pagecontent" id="pagecontent"></a>
 
 {% if section.settings.featured_collection_image %}
-  <header class="banner center page_banner dark-overlay-{{ section.settings.image_darken }}">
+  <header class="banner center page_banner dark-overlay-{{ section.settings.image_darken }} {% if collection.metafields.layout.mobile_image %}with-mobile-image{% endif %}">
       {% if collection.image %}
         {% assign image = collection.image %}
       {%- elsif section.settings.image -%}
@@ -16,7 +16,11 @@
         {% assign image = collection.products.first.featured_image %}
       {% endif %}
 
-      {% include 'image-element', image: image, alt: collection.title, stretch_width: true, progressive: true %}
+      {%- if collection.metafields.layout.mobile_image -%}
+         {% include 'file-image-element', image: collection.metafields.layout.mobile_image, alt: collection.title, stretch_width: true, progressive: true, additional_classes: 'mobile-image' %}
+      {%- endif -%}
+
+      {% include 'image-element', image: image, alt: collection.title, stretch_width: true, progressive: true, additional_classes: 'desktop-image' %}
 
       {% if section.settings.display_collection_title %}
         <div class="caption captionOverlay--true">
