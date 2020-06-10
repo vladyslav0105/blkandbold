@@ -44,11 +44,6 @@
   {%- if limit != blank -%}
       <input type="hidden" name="properties[_limit]" value="{{ initial_limit }}">
   {%- endif -%}
-<!-- Begin ReCharge code -->
-{% if product.available %}{% include 'subscription-product' %}{% endif %}
-<!-- End ReCharge code -->
-
-{%- include 'product-autoship' -%}
 
   {% if product.options.size > 1 %}
     <div class="select">
@@ -78,6 +73,12 @@
       {% endfor %}
     </div>
   {% endif %}
+
+  <!-- Begin ReCharge code -->
+  {% if product.available %}{% include 'subscription-product' %}{% endif %}
+  <!-- End ReCharge code -->
+
+  {%- include 'product-autoship' -%}
 
   {% if product.available %}
     {% if settings.display_inventory_left %}
