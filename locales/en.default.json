@@ -439,7 +439,7 @@
     "description": "Description"
   },
   "purchase_limits": {
-      "max_items": "You can add up to |items| items to your cart.",
-      "items_in_cart": "You've already added |items| items to your cart."
+    "max_items": "You can add up to |items| items to your cart.",
+    "items_in_cart": "You've already added |items| items to your cart."
   }
 }
