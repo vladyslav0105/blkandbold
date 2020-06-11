@@ -397,7 +397,7 @@ $(function() {
       type: 'post',
       data: $cart.serialize(),
       success: function (data) {
-        refreshCart(data);
+        window.refreshCart(data);
       }
     });
   }
@@ -460,7 +460,7 @@ $(function() {
               // Refreshes cart if inventory is available
               cartItem.parentCartForm.submit();
             } else {
-              refreshCart(data);
+              window.refreshCart(data);
             }
           } else {
             var warning = '<p class="warning warning--quantity animated bounceIn">' + apiQuantityTotal + ' ' + items_left_text + '</p>';
@@ -472,7 +472,7 @@ $(function() {
           // Refreshes cart if inventory is available
           cartItem.parentCartForm.submit();
         } else {
-          refreshCart(data);
+          window.refreshCart(data);
         }
       }
     });
@@ -493,7 +493,7 @@ $(function() {
 
 
 
-  // I made this available sitewide so we can use the same method on InstantSearch hooks. 
+  // I made this available sitewide so we can use the same method on InstantSearch hooks.
   window.refreshCart = function(cart) {
     $(".cart_count").empty();
     $cartBtn = $(".cart_count");

@@ -62,6 +62,14 @@
         isp_add_to_cart_callback: function(product_id, form_id) {
             $.get('/cart.js', function(cart) {
                 refreshCart( cart );
+
+                if($('#header').is(':visible')) {
+                  $('#header .cart_container').addClass('active_link');
+                } else if ($('.sticky_nav--stick').length) {
+                  $('.sticky_nav .cart_container').addClass('active_link');
+                } else {
+                  $('.top_bar .cart_container, .header__cart .cart_container').addClass('active_link');
+                }
             }, 'json');
         },
 
