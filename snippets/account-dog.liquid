@@ -3,7 +3,7 @@
         {%- if dog.avatar_url -%}
             <img src="{{ dog.avatar_url }}">
         {%- else condition -%}
-            <img src="https://i.pinimg.com/originals/ab/ea/27/abea2766ce27defecba1d0a87a554763.jpg">
+            <img src="{{'dog-avatar.png' | asset_url }}">
         {%- endif -%}
     </div>
     <div class="account__dog__content">
