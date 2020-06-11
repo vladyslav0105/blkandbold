@@ -12975,6 +12975,20 @@ a.isp_product_quick_view_button {
 .image-with-text-overlay-section,
 .collection-template-section
  {
+    .banner-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 1000;
+    }
+
+    .action_button {
+        position: relative;
+        z-index: 1001; // so it's above the overlay 
+    }
+
     .banner.with-mobile-image {
         img.mobile-image {
             @media screen and (min-width: 799px) {

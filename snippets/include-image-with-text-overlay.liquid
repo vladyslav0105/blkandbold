@@ -71,6 +71,9 @@
 {% endif %}
 
 <section id="banner-{{id}}" class="banner full-width--{{ wide_display }} {% if image_mobile != nil %}with-mobile-image{% endif %}">
+    {%- if button1_link != blank -%}
+        <a href="{{ button1_link }}" class="banner-overlay"></a>        
+    {%- endif -%}
     {%- if image_mobile != nil -%}
     {% include 'image-element', image: image_mobile, alt: image_mobile.alt, stretch_width: true, additional_classes: mobile_classes %}
     {%- endif -%}
