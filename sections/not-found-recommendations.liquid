@@ -1,0 +1,56 @@
+<div class="not-found__recommendations" data-show-count="{{ section.settings.products_to_show }}">
+    <div class="container featured_products product-grid">
+        <div class="sixteen columns center homepage_content">
+            <h2 class="title">{{ section.settings.title }}</h2>
+            <div class="feature_divider"></div>
+        </div>
+    </div>
+
+    <div class="product-list clearfix equal-columns--clear equal-columns--outside-trim">
+        <div class="template four columns medium-down--one-half small-down--one-half thumbnail">
+            <div class="product-wrap">
+                <div class="relative product_image">
+                    <a href="">
+                        <div class="image__container">
+                            <div class="image-element__wrap">
+                                <img src="" alt="">
+                            </div>
+                        </div>
+                    </a>
+                    <div class="banner_holder"></div>
+                </div>
+                <a href="" class="product-info__caption">
+                    <div class="product-details">
+                        <span class="title"></span>
+                            <span class="stamped-product-reviews-badge" data-product-sku="" data-id="" style="display:block;"></span>
+                        <span class="price">
+                            <span class="current_price">
+                                <span class="money"></span>
+                            </span>
+                        </span>
+                    </div>
+                </a>
+            </div>
+            <a href="" style="width:100%;" class="action_button">VIEW DETAILS</a>
+        </div>
+    </div>
+</div>
+{% schema %}
+{
+    "name": "Recommendations",
+    "settings": [
+        {
+            "type": "text",
+            "id": "title",
+            "label": "Title",
+            "default": "Our Recommendations"
+        },
+        {
+            "type": "number",
+            "id": "products_to_show",
+            "label": "Products to Show",
+            "default": 4
+        }
+    ]
+}
+{% endschema %}

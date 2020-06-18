@@ -1430,3 +1430,115 @@ $(document)
         });
     });
 }(jQuery));
+
+
+/**
+ * Recommendations in 404 not found page.
+ */
+(function($) {
+    $(document).ready( function () {
+
+        if( !$('body').hasClass('error-404') ) return;
+
+        var searchTerm = window.location.pathname.split('/').pop();
+        var store_id = 30224384137;
+        var uuid = '1ec31736-92e3-4421-96ee-a31be608ac44';
+
+        var url = 'https://api.instantsearchplus.com/full_text_search?q=​'+ searchTerm +'​&sort_by=relevancy&store_id=​'+ store_id +'&UUID=' + uuid;
+
+        $.ajax({
+            url: url,
+            dataType: 'jsonp',
+            success: function (data) {
+                loadItems( data.items )
+            }
+        });
+    });
+
+    function loadItems( items )
+    {
+        var template = $('.not-found__recommendations .template');
+        var list = $('.not-found__recommendations .product-list');
+        var showCount = $('.not-found__recommendations').data('show-count');
+
+        var itemsToShow = items.slice(0, showCount );
+
+        var handles = itemsToShow.map( function (item) {
+            return item.u.split('/').pop().split('?').shift();
+        });
+
+        var $calls = [];
+        var products = {};
+
+        handles.forEach( function (handle) {
+            $calls.push( $.get('/products/' + handle + '.json', function (prod) {
+                products[handle] = prod.product;
+            }, 'json'));
+        });
+
+        $.when.apply($, $calls).then( function () {
+            itemsToShow.forEach( function (item) {
+                var handle = item.u.split('/').pop().split('?').shift();
+                var product = template.clone();
+                product.removeClass('template');
+
+                product.find('img').attr('src', item.t ).attr('alt', item.l );
+                product.find('.action_button, .product_image a, .product-info__caption').attr('href', item.u );
+                product.find('span.title').text( item.l );
+                product.find('span.current_price .money').text('$' + item.p );
+
+                product.find('.stamped-product-reviews-badge')
+                    .attr('data-product-sku', handle )
+                    .attr('data-id', item.id );
+
+
+                // Let's add a secondary image if found:
+                if ( products[handle].images.length > 1 ) {
+                    var secondaryImage = products[handle].images[1].src;
+                    product.find('.image__container').after('<div class="image-element__wrap"><img class="secondary secondary-media-hidden" src="' + secondaryImage +'"></div>')
+                    product.addClass('has-secondary-media-swap');
+                    console.log('secondary-image');
+                }
+
+
+                // Here we hav the tags for each produts, that we can use to add
+                // badges.
+                var tags = products[handle].tags.split(', ');
+
+                if (tags.indexOf('top-sellers') > -1) {
+                    product.find('.banner_holder').append('<div class="top_sellers_banner">Top Sellers</div>');
+                }
+
+                if (tags.indexOf('whats-new') > -1) {
+                    product.find('.banner_holder').append('<div class="whats_new_banner">What\'s New</div>');
+                }
+
+                if (tags.indexOf('top-rated') > -1) {
+                    product.find('.banner_holder').append('<div class="top_rated_banner">Top Rated</div>');
+                }
+
+                product.appendTo( list );
+            });
+
+            // Let's just remove the template node ... just in case.
+            template.remove();
+
+            // And we reload Stamped
+            if (typeof StampedFn !== 'undefined') {
+                StampedFn.reloadUGC();
+            }
+
+
+            if ($(window).width() > 798) {
+              $('.not-found__recommendations .has-secondary-media-swap').off().on('mouseenter', function() {
+                $(this).find('.image-element__wrap img').toggleClass('secondary-media-hidden');
+              });
+
+              $('.not-found__recommendations .has-secondary-media-swap').on('mouseleave', function() {
+                $(this).find('.image-element__wrap img').toggleClass('secondary-media-hidden');
+              });
+            }
+
+        });
+    }
+}(jQuery));
