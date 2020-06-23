@@ -14,7 +14,7 @@ gtag('config', 'AW-1061359871');
 gtag('event', 'view_item_list', {
 ecomm_prodid: [{% for item in collection.all_products %}'{{ item.id }}'{% if forloop.last != true %},{% endif %}{% endfor %}],
 ecomm_pagetype: 'category',
-ecomm_totalvalue: {{ collection.all_products.first.price_min | money_without_currency | remove: "," }}
+ecomm_totalvalue: {{ collection.all_products.first.price | money_without_currency | remove: "," }}
 });
 
 {% elsif template contains 'product' %}
@@ -25,7 +25,7 @@ ecomm_totalvalue: {{ collection.all_products.first.price_min | money_without_cur
 gtag('event', 'view_item', {
 ecomm_prodid: ['{{ product.id }}'],
 ecomm_pagetype: 'product',
-ecomm_totalvalue: {{ product.price_min | money_without_currency | remove: "," }}
+
 });
 
 {% elsif template contains 'cart' %}

@@ -1,15 +1,20 @@
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-1483727-1"></script>
 
-
+<style>.async-hide { opacity: 0 !important} </style>
+<script>(function(a,s,y,n,c,h,i,d,e){s.className+=' '+y;h.start=1*new Date;
+h.end=i=function(){s.className=s.className.replace(RegExp(' ?'+y),'')};
+(a[n]=a[n]||[]).hide=h;setTimeout(function(){i();h.end=null},c);h.timeout=c;
+})(window,document.documentElement,'async-hide','dataLayer',4000,
+{'GTM-TKJZ6XC':true});</script>
 
 <script name="littledata-tracking-tag">
 (function(){
 	/* Data layer for Google Analytics by Littledata app */
-	/* Version v8.1 */
+	/* Version v8.2 */
 
 	LittledataLayer = {
-		version: 'v8.1',
+		version: 'v8.2',
 		transactionWatcherURL: 'https://transactions.littledata.io',
 		referralExclusion: /(paypal|visa|MasterCard|clicksafe|arcot\.com|geschuetzteinkaufen|checkout\.shopify\.com|checkout\.rechargeapps\.com|portal\.afterpay\.com|payfort)/,
 		googleSignals: true,
@@ -25,7 +30,7 @@
 
 	
 	LittledataLayer.webPropertyID = 'UA-1483727-1'
-	
+	LittledataLayer.optimizeId = 'GTM-TKJZ6XC'
 
 	{%if customer %}
 		LittledataLayer.customer = {
@@ -154,7 +159,7 @@
 				var pos = 1;
 				collectionProducts.forEach(function(p){
 					var found = LittledataLayer.ecommerce.impressions.filter(function (x) {
-						x.name == p.title && x.handle == p.handle
+						return x.name == p.title && x.handle == p.handle
 					})
 
 					if (!found.length) {
