@@ -1,3 +1,16 @@
+<style>
+    .login__disclaimer {
+        font-size: 14px;
+        margin: 30px 0;
+        font-style: italic;
+        opacity: 0.7;
+    }
+
+    .login__disclaimer a {
+        display: inline;
+    }
+</style>
+
 <a name="pagecontent" id="pagecontent"></a>
 
 <div class="sixteen columns clearfix collection_nav">
@@ -34,6 +47,9 @@
           {{ 'customer.login.new_customer_label' | t }} <a href="{{ routes.account_register_url }}" id="customer_register_link">{{ 'customer.login.sign_up_html' | t }}</a>
         </p>
       {% endunless %}
+
+      <p class="login__disclaimer">We have recently updated our website. If you have not re-activated your account after 6/8/2020, please click forgot your password and reset. Please contact customer service via <a href="#" onclick="Smooch.open(); return false;">chat</a>, phone <a href="tel:18774835853">1-877-483-5853</a>, or email <a href="mailto:support@bestbullysticks.com">support@bestbullysticks.com</a> if you need assistance.</p>
+
     {% endform %}
 <!-- Begin ReCharge code -->
 {% include 'subscription-account-login' %}
