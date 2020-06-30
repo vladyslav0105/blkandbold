@@ -78,7 +78,9 @@
   {% if product.available %}{% include 'subscription-product' %}{% endif %}
   <!-- End ReCharge code -->
 
-  {%- include 'product-autoship' -%}
+  {%- unless product.tags contains 'hide-autoship' -%}
+      {%- include 'product-autoship' -%}
+  {%- endunless -%}
 
   {% if product.available %}
     {% if settings.display_inventory_left %}
