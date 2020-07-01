@@ -1,0 +1,36 @@
+<script>
+var attributes = {
+    'TYPE': '422747',
+    'CID': '1528707',
+    'CURRENCY': 'USD',
+    'METHOD': 'IMG',
+    'CJEVENT': '',
+    'OID': {{ order_number }}
+};
+
+var index = 1;
+{% for item in line_items %}
+    attributes['ITEM' + index ] = '{{ item.sku }}';
+    attributes['AMT' + index ] = {{ item.price }};
+    attributes['QTY' + index ] = {{ item.quantity }};
+    index++;
+{% endfor %}
+
+
+if ( {{ discount }} > 0 ) {
+    attributes['DISCOUNT'] = {{ discount }};
+    attributes['COUPON'] = '{{ discount_code }}';
+}
+
+var query = [];
+for (var key in attributes ) {
+    query.push( key + '=' + attributes[key]);
+}
+
+// Creating the image
+var src = 'https://www.emjcd.com/u?' + query.join('&');
+var img = document.createElement('img');
+img.src = src; img.width = "20"; img.height = "1";
+
+document.getElementsByTagName('body')[0].appendChild(img);
+</script>
