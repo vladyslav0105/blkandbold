@@ -31,10 +31,8 @@
   {% else %}
     {{ og_image_fallback }}
   {% endif %}
-  {% comment %}
   <meta property="product:price:amount" content="{{ product.price | money_without_currency | strip_html | escape }}">
   <meta property="product:price:currency" content="{{ shop.currency }}">
-  {% endcomment %}
 {% elsif template contains 'collection' %}
   <meta property="og:type" content="product.group">
   <meta property="og:title" content="{{ collection.title | strip_html | escape }}">
