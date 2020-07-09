@@ -1202,7 +1202,30 @@ $(document)
 
 
 (function($) {
+    function cartHasTieredDiscountProducts() {
+      $.getJSON('/cart.js', function(cart) {
+        if(cart.items.length) checkProductHandle(cart.items);
+      });
+    }
+
+    function checkProductHandle(handles) {
+      if(handles.length) {
+        $.getJSON('/products/'+handles[0].handle+'.js', function(product) { 
+          console.log(product.tags.includes('tiered-discounts'));
+          if(product.tags.includes('tiered-discounts')) console.log('cart has discount');
+          else {
+            handles.shift();
+            if(handles.length) checkProductHandle(handles);
+          }
+        } ); 
+      }
+    }
+
     $(document).ready( function () {
+      console.log('cart pre updated');
+      $('body').on('cartUpdated', function() {
+        console.log(cartHasTieredDiscountProducts());
+      });
         $('#quantity').on('change', function ( event ) {
             var $input = $(this);
             var limit = $input.data('limit');
