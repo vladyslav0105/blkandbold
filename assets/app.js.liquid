@@ -1204,27 +1204,52 @@ $(document)
 (function($) {
     function cartHasTieredDiscountProducts() {
       $.getJSON('/cart.js', function(cart) {
-        if(cart.items.length) checkProductHandle(cart.items);
+        if(cart.items.length) checkProductHandle(cart.items, 0);
       });
     }
 
-    function checkProductHandle(handles) {
+    function checkProductHandle(handles, productsPrice) {
       if(handles.length) {
         $.getJSON('/products/'+handles[0].handle+'.js', function(product) { 
-          console.log(product.tags.includes('tiered-discounts'));
-          if(product.tags.includes('tiered-discounts')) console.log('cart has discount');
-          else {
-            handles.shift();
-            if(handles.length) checkProductHandle(handles);
+          if(product.tags.includes('tiered-discounts')) {
+            productsPrice += parseInt(product.price * handles[0].quantity);
           }
-        } ); 
+          handles.shift();
+          if(handles.length) checkProductHandle(handles,productsPrice);
+          else {
+            // has discount Products
+            if(productsPrice > 0 ) {
+              if(productsPrice < 7000) {
+                applyDiscount("tier15all");
+              } else if (productsPrice >= 7000 && productsPrice < 10000) {
+                applyDiscount("tier30for70");
+              } else {
+                applyDiscount("tier40for100");
+              }
+            }
+          }
+        }); 
       }
     }
 
+    function applyDiscount(discount) {
+      $.ajax({
+        type: 'HEAD',
+        url: '/discount/' + discount,
+        success: function(res){
+          /*
+          getCheckoutPage(discount, function(checkoutPage, discount){
+            var discountApplied = validateDiscount(checkoutPage, discount);
+            callback(discountApplied);
+          });*/
+        },
+        error: function(){}
+      });
+    }
+
     $(document).ready( function () {
-      console.log('cart pre updated');
       $('body').on('cartUpdated', function() {
-        console.log(cartHasTieredDiscountProducts());
+        cartHasTieredDiscountProducts();
       });
         $('#quantity').on('change', function ( event ) {
             var $input = $(this);
