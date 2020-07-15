@@ -25,21 +25,21 @@ function checkProductHandle(handles, productsPrice) {
       else {
         // has discount Products
         if(productsPrice > 0 ) {
-          if(productsPrice < 7000) {
+          if(productsPrice < 10000) {
             applyDiscount("tier15all");
             localStorage.setItem("tieredDiscount", "tier15all");
             localStorage.setItem("tieredDiscountName", "15% Off Selected Products");
             localStorage.setItem("tieredDiscountPercentage", "15");
             localStorage.setItem("tieredDiscountAmount", parseInt(parseInt(productsPrice) * 0.15));
-          } else if (productsPrice >= 7000 && productsPrice < 10000) {
-            applyDiscount("tier30for70");
-            localStorage.setItem("tieredDiscount", "tier30for70");
+          } else if (productsPrice >= 10000 && productsPrice < 15000) {
+            applyDiscount("tier30for100");
+            localStorage.setItem("tieredDiscount", "tier30for100");
             localStorage.setItem("tieredDiscountName", "30% Off Selected Products");
             localStorage.setItem("tieredDiscountPercentage", "30");
             localStorage.setItem("tieredDiscountAmount", parseInt(parseInt(productsPrice) * 0.3));
           } else {
-            applyDiscount("tier40for100");
-            localStorage.setItem("tieredDiscount", "tier40for100");
+            applyDiscount("tier40for150");
+            localStorage.setItem("tieredDiscount", "tier40for150");
             localStorage.setItem("tieredDiscountName", "40% Off Selected Products");
             localStorage.setItem("tieredDiscountPercentage", "40");
             localStorage.setItem("tieredDiscountAmount", parseInt(parseInt(productsPrice) * 0.4));
