@@ -8,9 +8,13 @@ function cartHasTieredDiscountProducts() {
 
 function checkProductHandle(handles, productsPrice) {
   if(handles.length) {
-    $.getJSON('/products/'+handles[0].handle+'.js', function(product) { 
+    var prodHandle = handles[0].handle;
+    if(handles[0].product_description.includes('This product is for Recharge Subscriptions use')) {
+      prodHandle = prodHandle.replace("-1","");
+    }
+    $.getJSON('/products/'+prodHandle+'.js', function(product) { 
       if(product.tags.includes('tiered-discounts')) {
-        productsPrice += parseInt(product.price * handles[0].quantity);
+        productsPrice += parseInt(handles[0].price * handles[0].quantity);
       }
     })
     .fail(function() { 
