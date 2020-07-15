@@ -1,6 +1,98 @@
 //document ready
-$(function() {
 
+function cartHasTieredDiscountProducts() {
+  $.getJSON('/cart.js', function(cart) {
+    if(cart.items.length) checkProductHandle(cart.items, 0);
+  });
+}
+
+function checkProductHandle(handles, productsPrice) {
+  if(handles.length) {
+    $.getJSON('/products/'+handles[0].handle+'.js', function(product) { 
+      if(product.tags.includes('tiered-discounts')) {
+        productsPrice += parseInt(product.price * handles[0].quantity);
+      }
+    })
+    .fail(function() { 
+    })
+    .always(function() {
+      handles.shift();
+      if(handles.length) checkProductHandle(handles,productsPrice);
+      else {
+        // has discount Products
+        if(productsPrice > 0 ) {
+          if(productsPrice < 7000) {
+            applyDiscount("tier15all");
+            localStorage.setItem("tieredDiscount", "tier15all");
+            localStorage.setItem("tieredDiscountName", "15% Off Selected Products");
+            localStorage.setItem("tieredDiscountPercentage", "15");
+            localStorage.setItem("tieredDiscountAmount", parseInt(parseInt(productsPrice) * 0.15));
+          } else if (productsPrice >= 7000 && productsPrice < 10000) {
+            applyDiscount("tier30for70");
+            localStorage.setItem("tieredDiscount", "tier30for70");
+            localStorage.setItem("tieredDiscountName", "30% Off Selected Products");
+            localStorage.setItem("tieredDiscountPercentage", "30");
+            localStorage.setItem("tieredDiscountAmount", parseInt(parseInt(productsPrice) * 0.3));
+          } else {
+            applyDiscount("tier40for100");
+            localStorage.setItem("tieredDiscount", "tier40for100");
+            localStorage.setItem("tieredDiscountName", "40% Off Selected Products");
+            localStorage.setItem("tieredDiscountPercentage", "40");
+            localStorage.setItem("tieredDiscountAmount", parseInt(parseInt(productsPrice) * 0.4));
+          }
+          
+        } else {
+          if(localStorage.tieredDiscount != undefined) {
+            localStorage.removeItem("tieredDiscount");
+            localStorage.removeItem("tieredDiscountName");
+            localStorage.removeItem("tieredDiscountPercentage");
+            localStorage.removeItem("tieredDiscountAmount");
+          }
+        }
+
+        if(localStorage.tieredDiscount != undefined) {
+          $('.js-cart_savings').html(`<span class="right"> <span class="money">`+Shopify.formatMoney(localStorage.tieredDiscountAmount, $('body').data('money-format'))+`</span></span> <span>`+localStorage.tieredDiscountName+`</span>`);
+        }
+        
+        updateDiscountLabels();
+      }
+    })
+  }
+}
+
+function applyDiscount(discount) {
+  $.ajax({
+    type: 'HEAD',
+    url: '/discount/' + discount,
+    success: function(res){
+      /*
+      getCheckoutPage(discount, function(checkoutPage, discount){
+        var discountApplied = validateDiscount(checkoutPage, discount);
+        callback(discountApplied);
+      });*/
+    },
+    error: function(){}
+  });
+}
+
+function updateDiscountLabels() {
+  if(localStorage.tieredDiscount != undefined) {
+    if($('.cart__wrapper .subtotal').length) {
+      if(!$('.cart__wrapper .subtotal .cart_savings').length) {
+        $('.cart__wrapper .subtotal .cart_subtotal').after(`<p class="cart_savings js-cart_savings sale"><span class="right"> <span class="money">`+Shopify.formatMoney(localStorage.tieredDiscountAmount, $('body').data('money-format'))+`</span></span> <span>`+localStorage.tieredDiscountName+`</span></p>`);
+        
+        /* $.getJSON('/cart.js' , function(cart) {
+          $('.js-cart_subtotal .money').text(Shopify.formatMoney(cart.total_price - localStorage.tieredDiscountAmount, $('body').data('money-format')));
+          $('.js-cart_subtotal .money').show();
+        }) */
+      }           
+    }
+  } else {
+    //if($('.cart__wrapper .subtotal .cart_discounts').length) $('.cart__wrapper .subtotal .cart_discounts').remove();
+  }
+}
+
+$(function() {
   var oldFlickityCreate = window.Flickity.prototype._create;
 
   window.Flickity.prototype._create = function(){
@@ -642,9 +734,7 @@ $(function() {
         cart_savings_html = "";
       }
 
-      if(localStorage.tieredDiscount != undefined) {
-        cart_savings_html = `<span class="right"> <span class="money">`+Shopify.formatMoney(localStorage.tieredDiscountAmount, $('body').data('money-format'))+`</span></span> <span>`+localStorage.tieredDiscountName+`</span>`;
-      }
+      cartHasTieredDiscountProducts();
     }
 
     $('.js-cart_items').html(cart_items_html);
@@ -1206,105 +1296,7 @@ $(document)
 
 
 (function($) {
-    function cartHasTieredDiscountProducts() {
-      $.getJSON('/cart.js', function(cart) {
-        if(cart.items.length) checkProductHandle(cart.items, 0);
-      });
-    }
-
-    function checkProductHandle(handles, productsPrice) {
-      if(handles.length) {
-        $.getJSON('/products/'+handles[0].handle+'.js', function(product) { 
-          if(product.tags.includes('tiered-discounts')) {
-            productsPrice += parseInt(product.price * handles[0].quantity);
-          }
-        })
-        .fail(function() { 
-        })
-        .always(function() {
-          handles.shift();
-          if(handles.length) checkProductHandle(handles,productsPrice);
-          else {
-            // has discount Products
-            if(productsPrice > 0 ) {
-              if(productsPrice < 7000) {
-                applyDiscount("tier15all");
-                localStorage.setItem("tieredDiscount", "tier15all");
-                localStorage.setItem("tieredDiscountName", "15% Off Selected Products");
-                localStorage.setItem("tieredDiscountPercentage", "15");
-                localStorage.setItem("tieredDiscountAmount", parseInt(parseInt(productsPrice) * 0.15));
-              } else if (productsPrice >= 7000 && productsPrice < 10000) {
-                applyDiscount("tier30for70");
-                localStorage.setItem("tieredDiscount", "tier30for70");
-                localStorage.setItem("tieredDiscountName", "30% Off Selected Products");
-                localStorage.setItem("tieredDiscountPercentage", "30");
-                localStorage.setItem("tieredDiscountAmount", parseInt(parseInt(productsPrice) * 0.3));
-              } else {
-                applyDiscount("tier40for100");
-                localStorage.setItem("tieredDiscount", "tier40for100");
-                localStorage.setItem("tieredDiscountName", "40% Off Selected Products");
-                localStorage.setItem("tieredDiscountPercentage", "40");
-                localStorage.setItem("tieredDiscountAmount", parseInt(parseInt(productsPrice) * 0.4));
-              }
-              
-            } else {
-              if(localStorage.tieredDiscount != undefined) {
-                localStorage.removeItem("tieredDiscount");
-                localStorage.removeItem("tieredDiscountName");
-                localStorage.removeItem("tieredDiscountPercentage");
-                localStorage.removeItem("tieredDiscountAmount");
-              }
-            }
-
-            updateDiscountLabels();
-          }
-        })
-      }
-    }
-
-    function applyDiscount(discount) {
-      $.ajax({
-        type: 'HEAD',
-        url: '/discount/' + discount,
-        success: function(res){
-          /*
-          getCheckoutPage(discount, function(checkoutPage, discount){
-            var discountApplied = validateDiscount(checkoutPage, discount);
-            callback(discountApplied);
-          });*/
-        },
-        error: function(){}
-      });
-    }
-
-    function updateDiscountLabels() {
-      if(localStorage.tieredDiscount != undefined) {
-        if($('.cart__wrapper .subtotal').length) {
-          if(!$('.cart__wrapper .subtotal .cart_discounts').length || $('.cart__wrapper .subtotal .cart_discounts').data('discount-total') != localStorage.tieredDiscountAmount) {
-            $('.cart__wrapper .subtotal').prepend(`<p class="cart_discounts js-cart_discounts sale">
-              <span class="cart_discounts--title">`+localStorage.tieredDiscountName+`</span>
-              <span class="cart_discounts--price" data-discount-total="`+localStorage.tieredDiscountAmount+`">
-                -<span class="money">`+Shopify.formatMoney(localStorage.tieredDiscountAmount, $('body').data('money-format'))+`</span>
-              </span>
-            </p>`);
-            $.getJSON('/cart.js' , function(cart) {
-              $('.js-cart_subtotal .money').text(Shopify.formatMoney(cart.total_price - localStorage.tieredDiscountAmount, $('body').data('money-format')));
-              $('.js-cart_subtotal .money').show();
-            })
-          } else if ($('.cart__wrapper .subtotal .cart_discounts').length && $('.cart__wrapper .subtotal .cart_discounts').data('discount-total') != localStorage.tieredDiscountAmount) {
-            $('.cart__wrapper .subtotal .cart_discounts .cart_discounts--title').text(localStorage.tieredDiscountName);
-            $('.cart__wrapper .subtotal .cart_discounts .cart_discounts--price .money').data('discount-total', localStorage.tieredDiscountAmount).text(Shopify.formatMoney(localStorage.tieredDiscountAmount, $('body').data('money-format')));
-          }            
-        }
-      } else {
-        if($('.cart__wrapper .subtotal .cart_discounts').length) $('.cart__wrapper .subtotal .cart_discounts').remove();
-      }
-    }
-
-    $(document).ready( function () {  
-        if(localStorage.tieredDiscount != undefined) {
-          $('.js-cart_savings').html(`<span class="right"> <span class="money">`+Shopify.formatMoney(localStorage.tieredDiscountAmount, $('body').data('money-format'))+`</span></span> <span>`+localStorage.tieredDiscountName+`</span>`);
-        }
+    $(document).ready( function () {
         cartHasTieredDiscountProducts();
         $('body').on('cartUpdated', function() {
           cartHasTieredDiscountProducts();
