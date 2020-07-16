@@ -70,6 +70,8 @@
                 } else {
                   $('.top_bar .cart_container, .header__cart .cart_container').addClass('active_link');
                 }
+
+                $('body').trigger('cartUpdated');
             }, 'json');
         },
 

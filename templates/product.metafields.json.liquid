@@ -1,0 +1,8 @@
+{%- layout none -%}
+{
+    {%- if product.selected_or_first_available_variant.metafields.subscriptions.original_handle -%}
+    "subscriptions": {
+        "original_handle": "{{ product.selected_or_first_available_variant.metafields.subscriptions.original_handle }}"
+    }
+    {%- endif -%}
+}
