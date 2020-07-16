@@ -738,7 +738,9 @@ $(function() {
         cart_savings_html = "";
       }
 
+      {% if settings.enable_tiered_discounts %}
       cartHasTieredDiscountProducts();
+      {% endif %}
     }
 
     $('.js-cart_items').html(cart_items_html);
@@ -1301,10 +1303,12 @@ $(document)
 
 (function($) {
     $(document).ready( function () {
+        {% if settings.enable_tiered_discounts %}        
         cartHasTieredDiscountProducts();
         $('body').on('cartUpdated', function() {
           cartHasTieredDiscountProducts();
         });
+        {% endif %}
         $('#quantity').on('change', function ( event ) {
             var $input = $(this);
             var limit = $input.data('limit');
