@@ -1,6 +1,102 @@
 //document ready
-$(function() {
 
+function cartHasTieredDiscountProducts() {
+  $.getJSON('/cart.js', function(cart) {
+    if(cart.items.length) checkProductHandle(cart.items, 0);
+  });
+}
+
+function checkProductHandle(handles, productsPrice) {
+  if(handles.length) {
+    var prodHandle = handles[0].handle;
+    if(handles[0].product_description.includes('This product is for Recharge Subscriptions use')) {
+      prodHandle = prodHandle.replace("-1","");
+    }
+    $.getJSON('/products/'+prodHandle+'.js', function(product) { 
+      if(product.tags.includes('tiered-discounts')) {
+        productsPrice += parseInt(handles[0].price * handles[0].quantity);
+      }
+    })
+    .fail(function() { 
+    })
+    .always(function() {
+      handles.shift();
+      if(handles.length) checkProductHandle(handles,productsPrice);
+      else {
+        // has discount Products
+        if(productsPrice > 0 ) {
+          if(productsPrice < 10000) {
+            applyDiscount("tier15all");
+            localStorage.setItem("tieredDiscount", "tier15all");
+            localStorage.setItem("tieredDiscountName", "15% Off Selected Products");
+            localStorage.setItem("tieredDiscountPercentage", "15");
+            localStorage.setItem("tieredDiscountAmount", parseInt(parseInt(productsPrice) * 0.15));
+          } else if (productsPrice >= 10000 && productsPrice < 15000) {
+            applyDiscount("tier30for100");
+            localStorage.setItem("tieredDiscount", "tier30for100");
+            localStorage.setItem("tieredDiscountName", "30% Off Selected Products");
+            localStorage.setItem("tieredDiscountPercentage", "30");
+            localStorage.setItem("tieredDiscountAmount", parseInt(parseInt(productsPrice) * 0.3));
+          } else {
+            applyDiscount("tier40for150");
+            localStorage.setItem("tieredDiscount", "tier40for150");
+            localStorage.setItem("tieredDiscountName", "40% Off Selected Products");
+            localStorage.setItem("tieredDiscountPercentage", "40");
+            localStorage.setItem("tieredDiscountAmount", parseInt(parseInt(productsPrice) * 0.4));
+          }
+          
+        } else {
+          if(localStorage.tieredDiscount != undefined) {
+            localStorage.removeItem("tieredDiscount");
+            localStorage.removeItem("tieredDiscountName");
+            localStorage.removeItem("tieredDiscountPercentage");
+            localStorage.removeItem("tieredDiscountAmount");
+          }
+        }
+
+        if(localStorage.tieredDiscount != undefined) {
+          $('.js-cart_savings').html(`<span class="right"> <span class="money">`+Shopify.formatMoney(localStorage.tieredDiscountAmount, $('body').data('money-format'))+`</span></span> <span>`+localStorage.tieredDiscountName+`</span>`);
+        }
+        
+        updateDiscountLabels();
+      }
+    })
+  }
+}
+
+function applyDiscount(discount) {
+  $.ajax({
+    type: 'HEAD',
+    url: '/discount/' + discount,
+    success: function(res){
+      /*
+      getCheckoutPage(discount, function(checkoutPage, discount){
+        var discountApplied = validateDiscount(checkoutPage, discount);
+        callback(discountApplied);
+      });*/
+    },
+    error: function(){}
+  });
+}
+
+function updateDiscountLabels() {
+  if(localStorage.tieredDiscount != undefined) {
+    if($('.cart__wrapper .subtotal').length) {
+      if(!$('.cart__wrapper .subtotal .cart_savings').length) {
+        $('.cart__wrapper .subtotal .cart_subtotal').after(`<p class="cart_savings js-cart_savings sale"><span class="right"> <span class="money">`+Shopify.formatMoney(localStorage.tieredDiscountAmount, $('body').data('money-format'))+`</span></span> <span>`+localStorage.tieredDiscountName+`</span></p>`);
+        
+        /* $.getJSON('/cart.js' , function(cart) {
+          $('.js-cart_subtotal .money').text(Shopify.formatMoney(cart.total_price - localStorage.tieredDiscountAmount, $('body').data('money-format')));
+          $('.js-cart_subtotal .money').show();
+        }) */
+      }           
+    }
+  } else {
+    //if($('.cart__wrapper .subtotal .cart_discounts').length) $('.cart__wrapper .subtotal .cart_discounts').remove();
+  }
+}
+
+$(function() {
   var oldFlickityCreate = window.Flickity.prototype._create;
 
   window.Flickity.prototype._create = function(){
@@ -641,6 +737,10 @@ $(function() {
       } else {
         cart_savings_html = "";
       }
+
+      {% if settings.enable_tiered_discounts %}
+      cartHasTieredDiscountProducts();
+      {% endif %}
     }
 
     $('.js-cart_items').html(cart_items_html);
@@ -1203,6 +1303,12 @@ $(document)
 
 (function($) {
     $(document).ready( function () {
+        {% if settings.enable_tiered_discounts %}        
+        cartHasTieredDiscountProducts();
+        $('body').on('cartUpdated', function() {
+          cartHasTieredDiscountProducts();
+        });
+        {% endif %}
         $('#quantity').on('change', function ( event ) {
             var $input = $(this);
             var limit = $input.data('limit');

@@ -111,15 +111,21 @@
 		}
 		function buildCheckoutUrl(options) {
 			// Build the Checkout URL
+
+			var tieredDiscount = '';
+			if (localStorage.getItem('tieredDiscount')){  
+				tieredDiscount = localStorage.getItem('tieredDiscount');
+			}
+
 			var checkout_url = 'https://' + options.checkout_domain + '/r/checkout?',
 				url_params = [
 					'myshopify_domain=' + options.permanent_domain,
 				];
 			url_params = url_params
 				.concat(get_cart_token())
-				.concat(get_ga_linker())
-                .concat(get_cj_event());
-			return checkout_url + url_params.join('&');
+				 .concat(get_ga_linker())
+          .concat(get_cj_event());
+			return checkout_url + url_params.join('&') + '&discount=' + tieredDiscount;
 		}
 		function filterVisible(elems) {
 			// Return visible elements
