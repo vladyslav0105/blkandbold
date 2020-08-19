@@ -3,8 +3,26 @@
 novum.
 **/
 $bbs-blue: #005487;
+$bbs-blue-light: lighten( $bbs-blue, 8% );
 $bbs-white: white;
 $headers-fonts: "Avenir Next", sans-serif;
+
+@mixin primary-button-hover {
+    background: $bbs-blue-light !important;
+    border-color: $bbs-blue-light !important;
+    color: #fff !important;
+}
+
+@mixin primary-button {
+    background: $bbs-blue !important;
+    border-color: $bbs-blue !important;
+    color: #fff !important;
+    transition: all .15s ease;
+
+    &:hover {
+        @include primary-button-hover;
+    }
+}
 
 body#recharge-novum #recharge-te {
     background: #fff !important;
@@ -44,6 +62,10 @@ body#recharge-novum #recharge-te {
         line-height: 1.4em !important;
     }
 
+    a {
+        color: $bbs-blue !important;
+    }
+
     .nav__list--desktop, .nav--wrapper {
         background: $bbs-blue !important;
         color: $bbs-white;
@@ -66,13 +88,7 @@ body#recharge-novum #recharge-te {
     }
 
     .rc_btn--secondary {
-        color: $bbs-blue !important;
-        border: 1px solid $bbs-blue !important;
-
-        &:hover {
-            background: $bbs-blue !important;
-            color: $bbs-white !important;
-        }
+        @include primary-button;
     }
 
     .order-photo {
@@ -80,30 +96,56 @@ body#recharge-novum #recharge-te {
     }
 
     .rc_btn {
-        background: $bbs-blue !important;
+        @include primary-button;
     }
 
     #rc_te-template-wrapper {
-        h5 {
 
+        h2, h3, h6, .title-bold {
+            color: $bbs-blue !important;
         }
 
         .rc_btn {
-            background: $bbs-blue !important;
+            @include primary-button;
         }
 
         .rc_element_wrapper {
-            border: 1px solid #f2f2f2;
+            border: 1px solid #dedede !important;
+            border-radius: 0 !important;
+            box-shadow: none !important;
         }
 
-        .rc_btn--secondary--color:hover {
-            background: $bbs-blue !important;
-            color: $bbs-white !important;
+        .rc_btn--secondary--color {
+            @include primary-button;
+
+            &:hover {
+                @include primary-button-hover;
+            }
         }
 
-        #rc__upsells--container li:hover {
+        #rc__upsells--container li.rc_element_wrapper {
+            .js-card p.text-font-14 {
+                font-family: $headers-fonts !important;
+                font-weight: 600 !important;
+                line-height: 1.4em !important;
+                color: $bbs-blue !important;
+            }
+        }
+
+        #rc__upsells--container li.rc_element_wrapper:hover {
+
             @media screen and (min-width: 768px) {
                 background: $bbs-blue !important;
+
+                .rc_upsells-btns input {
+                    @include primary-button;
+                    border: 1px solid #fff !important;
+
+                    &:hover {
+                        border: 1px solid #fff !important;
+                    }
+                }
+
             }
         }
     }
@@ -115,14 +157,14 @@ body#recharge-novum #recharge-te {
     #ReChargeForm_date,
     #ReChargeForm_variant {
         input, select, button[type=submit], button {
-            border: 1px solid lighten($bbs-blue, 20%) !important;
+            border: 1px solid $bbs-blue-light !important;
         }
     }
 
     .js-edit-next-charge-date,
     .js-edit-frequency {
         h3 {
-            color: lighten($bbs-blue, 20%) !important;
+            color: $bbs-blue-light !important;
         }
     }
 
@@ -135,4 +177,10 @@ body#recharge-novum #recharge-te {
 #credit-card-form .rc_button,
 #edit-customer-card-form .rc_button {
     background: $bbs-blue !important;
+}
+
+.rc_subscription_next_charge_date {
+    h2 {
+        color: $bbs-blue-light !important;
+    }
 }
