@@ -368,7 +368,9 @@
       "subtotal": "Subtotal",
       "discount": "Discount",
       "update": "Update Subtotal",
-      "checkout": "Checkout"
+      "checkout": "Checkout",
+      "free_shipping": "You have free shipping!",
+      "free_shipping_remainder": "Spend $x more to get free shipping!"
     },
     "shipping_calculator": {
       "estimated_shipping": "estimated shipping",

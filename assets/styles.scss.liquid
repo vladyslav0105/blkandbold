@@ -7099,7 +7099,50 @@ a.secondary_button, input.secondary_button {
     margin-bottom: 20px;
     font-size: 20px;
   }
+  
+  .promo-message {
+/*     padding: 20px; */
+    color: #006aad; // {{ settings.btn_color }}
+/*     background-color: #eee; */
+    
+    p {
+      display: inline;
+      vertical-align: middle;
+    }
+    
+    strong {
+      text-transform: uppercase;
+    }
+    
+    svg {
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 6px;
+    }
+  }
 }
+
+.cart__wrapper .columns > .promo-message {
+  /*     padding: 20px; */
+  color: #006aad; // {{ settings.btn_color }}
+  /*     background-color: #eee; */
+
+  p {
+    display: inline;
+    vertical-align: middle;
+  }
+
+  strong {
+    text-transform: uppercase;
+  }
+
+  svg {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 6px;
+  }
+}
+
 .subtotal {
   padding-top: 20px;
   padding-left: 40px;
@@ -12722,6 +12765,7 @@ a.isp_product_quick_view_button {
 }
 
 .isp_badge_top-sellers .isp_product_image_wrapper:after,
+.isp_badge_sale .isp_product_image_wrapper:before,
 .isp_badge_top-rated .isp_product_image_wrapper:after,
 .isp_badge_whats-new .isp_product_image_wrapper:after {
     font-family: {{ settings.nav__font.family }}, {{ settings.nav__font.fallback_families }};
@@ -12747,17 +12791,33 @@ a.isp_product_quick_view_button {
 }
 
 
-.isp_badge_top-rated .isp_product_image_wrapper:after {
+#isp_search_results_container .isp_badge_sale .isp_product_image_wrapper{
+  &:before {
+  	position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 1;
+    content: 'Sale' !important;
+    background: {{ settings.sale_banner_color }};
+  }
+  
+  &:after {
+    background: none;
+    top: 46px;
+  }
+}
+
+#isp_search_results_container .isp_badge_top-rated .isp_product_image_wrapper:after {
     content: 'Top Rated' !important;
     background: $bestbully-blue;
 }
 
-.isp_badge_top-sellers .isp_product_image_wrapper:after {
+#isp_search_results_container .isp_badge_top-sellers .isp_product_image_wrapper:after {
     content: 'Top Sellers' !important;
     background: $bestbully-gold;
 }
 
-.isp_badge_whats-new .isp_product_image_wrapper:after {
+#isp_search_results_container .isp_badge_whats-new .isp_product_image_wrapper:after {
     content: 'What\'s New' !important;
     background: $bestbully-denim;
 }
@@ -12941,11 +13001,15 @@ a.isp_product_quick_view_button {
 
 .product-autoship__content {
     display: flex;
-    justify-content: space-around;
+  	flex-direction: column;
 }
 
 .product-autoship__item {
-    text-align: center;
+    display: flex;
+  	justify-content: space-between;
+    text-align: center; 
+    padding: 0 20px;
+ 
 }
 
 .product-autoship__item__title {
