@@ -27,6 +27,10 @@ $headers-fonts: "Avenir Next", sans-serif;
 body#recharge-novum #recharge-te {
     background: #fff !important;
 
+    @media screen and (min-width: 1025px) {
+        padding: 0 30px;
+    }
+
     .rc_page-width {
         padding-left: 0 !important;
         padding-right: 0 !important;
@@ -101,12 +105,20 @@ body#recharge-novum #recharge-te {
 
     #rc_te-template-wrapper {
 
-        h2, h3, h6, .title-bold {
+        h2, h3, h6, .title-bold:not(input):not(button) {
             color: $bbs-blue !important;
         }
 
-        .rc_btn {
+        .rc_btn, .rc_btn--secondary {
             @include primary-button;
+
+            &.title-bold {
+                color: #fff !important;
+            }
+
+            &.rc_btn--secondary--color:hover {
+                background: $bbs-blue-light;    
+            }
         }
 
         .rc_element_wrapper {
@@ -121,6 +133,10 @@ body#recharge-novum #recharge-te {
             &:hover {
                 @include primary-button-hover;
             }
+        }
+
+        .rc_btn--secondary--color:hover {
+            background: $bbs-blue-light !important;
         }
 
         #rc__upsells--container li.rc_element_wrapper {
