@@ -117,7 +117,7 @@ body#recharge-novum #recharge-te {
             }
 
             &.rc_btn--secondary--color:hover {
-                background: $bbs-blue-light;    
+                background: $bbs-blue-light;
             }
         }
 
@@ -187,6 +187,12 @@ body#recharge-novum #recharge-te {
     #rc__upsells--container .rc_element_wrapper .js-card p:first-child {
         font-family: $headers-fonts !important;
         line-height: 1.4em !important;
+    }
+
+    #ReChargeForm_variant .element__flex-column .rc_image_container img,
+    #ReChargeForm_subscriptionNew .element__flex-column .rc_image_container img {
+        height: auto;
+        width: 100%;
     }
 }
 
