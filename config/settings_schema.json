@@ -2086,6 +2086,27 @@
     ]
   },
   {
+    "name": "Cart Incentives",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Cart Banner"
+      },
+      {
+        "type": "checkbox",
+        "id": "incentive_cart_banner_enable",
+        "label": "Enable Cart Banner",
+        "default": true
+      }, 
+      {
+        "type": "text",
+        "id": "incentive_cart_banner_text",
+        "label": "Cart Banner Text",
+        "default": "FREE GIFT WITH PURCHASE OVER $79!"
+      }
+    ]
+  },
+  {
     "name": "[BBS] Collections",
     "settings": [
       {
