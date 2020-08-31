@@ -1,0 +1,53 @@
+{% if settings.free_shipping_minimum and settings.free_shipping_progressbar_enable %}
+    {% assign percentage = cart.total_price | divided_by: settings.free_shipping_minimum | ceil %}
+    {% assign difference = settings.free_shipping_minimum | times: 100 | minus: cart.total_price | money %}
+    <div class="free-shipping">
+        {% if percentage >= 100 %}
+            <p>{{ settings.free_shipping_success }}</p>
+        {% else %}
+            <p>{{ settings.free_shipping_left | replace: '|money|', difference }}</p>
+        {% endif %}
+        <div>{{ cart.total_price | money }}</div>
+        <div class="free-shipping__progress-bar">
+        <span class="free-shipping__progress-bar__inner" style="width: {{ percentage }}%;"></span>
+        </div>
+        <div>{{ settings.free_shipping_minimum | times: 100 | money }}</div>
+    </div>    
+{% endif %}
+
+
+
+<style>
+
+.free-shipping {
+    display: flex;
+    align-items: center; 
+    padding-bottom: 32px; 
+    border-bottom: solid 1px #dddddd;
+    margin-bottom: 32px;
+    flex-wrap: wrap; 
+}
+
+.free-shipping p {
+    width: 100%;
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+.free-shipping__progress-bar {
+    flex: 1; 
+    border-radius: 9999px; 
+    height: 12px;
+    overflow: hidden;
+    background: #dddddd;
+    margin: 0 15px;
+}
+
+.free-shipping__progress-bar__inner {
+    display: block;
+    height: 100%; 
+    background-color: #00b200;
+    border-radius: 9999px;
+}
+
+</style>

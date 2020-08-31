@@ -2058,6 +2058,30 @@
         "id": "free_shipping_minimum",
         "label": "Free Shipping Minimum",
         "info": "Variants with prices above this minimum will get the *Ships Free* label"
+      },
+      {
+        "type": "header",
+        "content": "Progress Bar"
+      },
+      {
+        "type": "checkbox",
+        "id": "free_shipping_progressbar_enable",
+        "label": "Enable Progress Bar",
+        "default": true
+      }, 
+      {
+        "type": "text",
+        "id": "free_shipping_success",
+        "label": "Free Shipping Achieved",
+        "info": "This message is displayed after achieving free shipping.",
+        "default": "You've earned <strong>FREE</strong> shipping!"
+      },
+      {
+        "type": "text",
+        "id": "free_shipping_left",
+        "label": "Free Shipping - Amount Left",
+        "info": "The message that is displayed before achieving free shipping. use |money| to show the amount left.",
+        "default": "|money| left to unlock FREE shipping."
       }
     ]
   },

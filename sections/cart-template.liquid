@@ -134,8 +134,14 @@
       </div>
 
       <div class="five columns medium-down--one-whole">
+
+        
+
         <div class="section clearfix">
           <div class="subtotal">
+
+            {% include 'cart-free-shipping-progress' %}
+
             {% if cart.cart_level_discount_applications != blank %}
               <p class="cart_discounts js-cart_discounts sale">
               {% for discount_application in cart.cart_level_discount_applications %}
