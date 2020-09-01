@@ -6,7 +6,8 @@
   {% assign show_payment_button = false %}
 {% endif %}
 
-{%- if product.metafields.product.limit -%}
+{% assign limit = '' %}
+{%- if product.metafields.product.limit and settings.limit_quantity -%}
     {% assign limit = product.metafields.product.limit %}
     {% assign initial_limit = limit %}
     {% assign inCart = 0 %}

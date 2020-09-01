@@ -125,12 +125,42 @@
                       {{ item.original_line_price | money }}
                     </span>
                   </p>
+              
+                  {% if section.settings.item_gift != blank and item.product.tags contains 'promomessage1' %}
+                    <div class="promo-message">
+                      {% include 'icon-present' %}{{ section.settings.item_gift }}
+                    </div>
+		          {% endif %}
+
+                  {% if section.settings.item_gift_2 != blank and item.product.tags contains 'promomessage2' %}
+                    <div class="promo-message">
+                      {% include 'icon-present' %}{{ section.settings.item_gift_2 }}
+                    </div>
+                  {% endif %}
+
+                  {% if section.settings.item_gift_3 != blank and item.product.tags contains 'promomessage3' %}
+                    <div class="promo-message">
+                      {% include 'icon-present' %}{{ section.settings.item_gift_3 }}
+                    </div>
+                  {% endif %}
 
                   <a href="{{ routes.cart_change_url }}?line={{ forloop.index }}&amp;quantity=0" class="cart__remove-btn" data-line-id="{{ forloop.index }}" data-remove-item="cart-template"><span class="remove-text">{{ 'cart.general.remove' | t }}</span> <span class="remove-icon"></span></a>
 
                 </div>
           </div>
         {% endfor %}
+        {% if section.settings.cart_gift != blank and section.settings.cart_gift_amount != 0 %}
+      	  {% assign gift_amount_needed = section.settings.cart_gift_amount | times: 100 %}
+      	  {% assign amount_left_to_get_a_gift = gift_amount_needed | minus: cart.total_price | money %}
+          <div class="promo-message">
+            {% include 'icon-present' %}
+            {% if cart.total_price  >= gift_amount_needed %}
+            	{{ section.settings.cart_gift_earned }}
+            {% else %}
+            	{{ section.settings.cart_gift | replace: '%s', amount_left_to_get_a_gift }}
+            {% endif %}
+          </div>
+        {% endif %}
       </div>
 
       <div class="five columns medium-down--one-whole">
@@ -168,6 +198,17 @@
                 <span>{{ 'layout.general.savings' | t }}</span>
               </p>
             {% endif %}
+            
+            {% comment %}
+              {% assign free_shipping_value = settings.free_shipping_minimum | times: 100 %}
+              {% assign remainder = free_shipping_value | minus: cart.total_price %}
+              {%- if remainder < 0 -%}
+                  <p class="cart_subtotal_message"><strong>{{ 'cart.general.free_shipping' | t }}</strong></p>
+              {%- else -%}
+                {% assign rep = remainder | money_without_trailing_zeros %}
+                <p class="cart_subtotal_message"><strong>{{ 'cart.general.free_shipping_remainder' | t | replace: '$x', rep }}</strong></p>
+              {%- endif -%}
+            {% endcomment %}
 
             {% if settings.show_multiple_currencies %}
               {% unless shop.enabled_currencies.size > 1 %}
@@ -257,6 +298,47 @@
       "type": "richtext",
       "id": "cart_message",
       "label": "Cart message"
+    },
+	{
+		"type": "header",
+		"content": "Gift Messages"
+	},
+    {
+      "type": "richtext",
+      "id": "item_gift",
+      "label": "Item gift message 1",
+	  "info": "Tag: promomessage1"
+    },
+    {
+      "type": "richtext",
+      "id": "item_gift_2",
+      "label": "Item gift message 2",
+	  "info": "Tag: promomessage2"
+    },
+    {
+      "type": "richtext",
+      "id": "item_gift_3",
+      "label": "Item gift message 3",
+	  "info": "Tag: promomessage3"
+    },
+    {
+      "type": "richtext",
+      "id": "cart_gift",
+      "label": "Cart gift message"
+    },
+	{
+	  "type": "richtext",
+	  "id": "cart_gift_earned",
+	  "label": "Cart gift earned message"
+	},
+    {
+      "type": "range",
+      "id": "cart_gift_amount",
+      "label": "Total amount to get a gift",
+	  "default": 50,
+	  "min": 0,
+	  "max": 100,
+	  "unit": "$"
     }
   ],
   "blocks": [

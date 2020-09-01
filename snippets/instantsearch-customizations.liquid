@@ -34,6 +34,8 @@
                     }).text('$' + product.p_max);
 
                     $wrapper.html($min).append(' - ').append($max);
+                  
+                  	$wrapper.closest('.isp_grid_product').addClass('isp_badge isp_badge_sale ');
                 }
             });
 
