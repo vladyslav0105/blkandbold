@@ -1,0 +1,75 @@
+{%- comment -%}
+    So we need to subscribe the customer if checked. 
+{%- endcomment -%}
+
+<!-- The first step here is to find the original variant, no matter what -->
+
+{% comment %}
+    If this is the subscription product, we need the references to get the original product. 
+{% endcomment %}
+{% if item.properties.shipping_interval_frequency %}
+    {% assign is_subscribed = true %}
+    {% assign original_product = all_products[item.product.metafields.subscriptions.original_handle] %}
+    {% assign variant = nil %}
+    {% for v in original_product.variants %}
+        {% if v.option1 == item.variant.option1 and v.option2 == item.variant.option2 and v.option3 == item.variant.option3 %}
+            {% assign variant = v %}            
+            {% break %}
+        {% endif %}
+    {% endfor %}
+
+{% comment %}
+    Otherwise we need to get the original product only. 
+{% endcomment %}
+{% else %}
+    {% assign is_subscribed = false %}
+    {% assign original_product = item.product %}
+    {% assign variant = item.variant %} 
+{% endif %}
+
+{% comment %}
+    Here we just pulls the variables we need to make this work. 
+{% endcomment %}
+{% assign key = item.key %}
+{% assign original_variant_id = variant.id %}
+{% assign subscription_variant_id = variant.metafields.subscriptions.discount_variant_id %}
+{% assign subscription_variant_price = variant.metafields.subscriptions.discount_variant_price %}
+{% assign interval_frequency = original_product.metafields.subscriptions.shipping_interval_frequency | split: ',' %}
+{% assign interval_unit = original_product.metafields.subscriptions.shipping_interval_unit_type %}
+
+
+<div class="cart-subscription-upsell"
+    data-key="{{ key }}"
+    data-original-id="{{ original_variant_id }}"
+    data-subscription-id="{{ subscription_variant_id }}"
+    data-interval-unit="{{ interval_unit }}"
+    data-quantity="{{ item.quantity }}"
+    data-subscribed="{% if is_subscribed %}true{% else %}false{% endif %}">
+
+    <p class="cart-subscription-upsell__trigger">
+        <a href="#" class="subscribe">
+            {% if is_subscribed %}
+                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="10" viewBox="0 0 13 10">
+                    <path fill="#006AAD" d="M12.99 2L11.58 0.58 4.99 7.17 2.41 4.6 0.99 6.01 4.99 10z"/>
+                </svg>
+            {% endif %}
+        </a>
+        Subscribe and Save ${{ subscription_variant_price }}
+    </p>
+    <div class="cart-subscription-upsell__delivery">
+        <label for="period">Deliver Every</label>
+        <select class="interval-frequency">
+            {% for i in interval_frequency %}
+                <option
+                    {% if is_subscribed and item.properties.shipping_interval_frequency == i %}selected="selected"{% endif %}
+                    value="{{ i }}">
+                    {{ i }} {{ interval_unit }}
+                </option>    
+            {% endfor %}
+        </select>
+    </div>
+
+
+    {% include 'cart-subscription-upsell-recharge-widget' %}
+
+</div>

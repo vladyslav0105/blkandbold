@@ -41,7 +41,7 @@
 {% if collection_style == 'slider' %}
   {% assign col = settingCollection | handleize %}
   {% assign products = collections[col].products %}
-  {% assign product_count = collections[col].all_products_count %}
+  {% assign product_count = collections[col].all_products_count | plus: 1 %}
   {% assign per_slide = products_per %}
 
   <div class="container js-product-slider homepage-product-slider full-width--true {% if per_slide == 2 or per_slide == 4 or per_slide == 6 %}even-num-slides{% endif %} featured-collection__products">

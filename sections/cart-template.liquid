@@ -128,6 +128,8 @@
                       {{ item.original_line_price | money }}
                     </span>
                   </p>
+
+                  {% include 'cart-subscription-upsell' with item: item %}
               
                   {% if section.settings.item_gift != blank and item.product.tags contains 'promomessage1' %}
                     <div class="promo-message">
