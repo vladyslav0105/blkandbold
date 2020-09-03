@@ -1,0 +1,208 @@
+/**
+/// These customizations are intended to be used in the new recharge
+novum.
+**/
+$bbs-blue: #005487;
+$bbs-blue-light: lighten( $bbs-blue, 8% );
+$bbs-white: white;
+$headers-fonts: "Avenir Next", sans-serif;
+
+@mixin primary-button-hover {
+    background: $bbs-blue-light !important;
+    border-color: $bbs-blue-light !important;
+    color: #fff !important;
+}
+
+@mixin primary-button {
+    background: $bbs-blue !important;
+    border-color: $bbs-blue !important;
+    color: #fff !important;
+    transition: all .15s ease;
+
+    &:hover {
+        @include primary-button-hover;
+    }
+}
+
+body#recharge-novum #recharge-te {
+    background: #fff !important;
+
+    @media screen and (min-width: 1025px) {
+        padding: 0 30px;
+    }
+
+    .rc_page-width {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
+    h2 {
+        font-size: 16px !important;
+        font-family: $headers-fonts !important;
+        font-weight: normal;
+        letter-spacing: normal;
+        font-size: 16px !important;
+        text-transform: uppercase !important;
+        font-weight: 600 !important;
+        letter-spacing: 1px;
+        margin-top: 50px;
+        border-bottom: 1px solid #dedede;
+        padding-bottom: 5px;
+    }
+
+    h3, .order-number, .order-total {
+        font-family: $headers-fonts !important;
+        line-height: 1.3em !important;
+        font-weight: 600 !important;
+
+        @media screen and (max-width: 767px) {
+            font-size: 20px !important;
+        }
+    }
+
+    h5 {
+        font-family: $headers-fonts !important;
+        font-weight: 600 !important;
+        line-height: 1.4em !important;
+    }
+
+    a {
+        color: $bbs-blue !important;
+    }
+
+    .nav__list--desktop, .nav--wrapper {
+        background: $bbs-blue !important;
+        color: $bbs-white;
+        justify-content: space-around !important;
+
+        a {
+            color: $bbs-white !important;
+        }
+    }
+
+    .nav__list--mobile li {
+        background: $bbs-blue !important;
+    }
+
+    .rc_order_title {
+        font-family: 'Avenir Next', sans-serif !important;
+        font-weight: 600 !important;
+        color: $bbs-blue !important;
+        line-height: 1.4em !important;
+    }
+
+    .rc_btn--secondary {
+        @include primary-button;
+    }
+
+    .order-photo {
+        flex-shrink: 0;
+    }
+
+    .rc_btn {
+        @include primary-button;
+    }
+
+    #rc_te-template-wrapper {
+
+        h2, h3, h6, .title-bold:not(input):not(button) {
+            color: $bbs-blue !important;
+        }
+
+        .rc_btn, .rc_btn--secondary {
+            @include primary-button;
+
+            &.title-bold {
+                color: #fff !important;
+            }
+
+            &.rc_btn--secondary--color:hover {
+                background: $bbs-blue-light;
+            }
+        }
+
+        .rc_element_wrapper {
+            border: 1px solid #dedede !important;
+            border-radius: 0 !important;
+            box-shadow: none !important;
+        }
+
+        .rc_btn--secondary--color {
+            @include primary-button;
+
+            &:hover {
+                @include primary-button-hover;
+            }
+        }
+
+        .rc_btn--secondary--color:hover {
+            background: $bbs-blue-light !important;
+        }
+
+        #rc__upsells--container li.rc_element_wrapper {
+            .js-card p.text-font-14 {
+                font-family: $headers-fonts !important;
+                font-weight: 600 !important;
+                line-height: 1.4em !important;
+                color: $bbs-blue !important;
+            }
+        }
+
+        #rc__upsells--container li.rc_element_wrapper:hover {
+
+            @media screen and (min-width: 768px) {
+                background: $bbs-blue !important;
+
+                .rc_upsells-btns input {
+                    @include primary-button;
+                    border: 1px solid #fff !important;
+
+                    &:hover {
+                        border: 1px solid #fff !important;
+                    }
+                }
+
+            }
+        }
+    }
+
+    #ReChargeForm_address,
+    #ReChargeForm_customer,
+    #customer-card-form,
+    #ReChargeForm_applyDiscount,
+    #ReChargeForm_date,
+    #ReChargeForm_variant {
+        input, select, button[type=submit], button {
+            border: 1px solid $bbs-blue-light !important;
+        }
+    }
+
+    .js-edit-next-charge-date,
+    .js-edit-frequency {
+        h3 {
+            color: $bbs-blue-light !important;
+        }
+    }
+
+    #rc__upsells--container .rc_element_wrapper .js-card p:first-child {
+        font-family: $headers-fonts !important;
+        line-height: 1.4em !important;
+    }
+
+    #ReChargeForm_variant .element__flex-column .rc_image_container img,
+    #ReChargeForm_subscriptionNew .element__flex-column .rc_image_container img {
+        height: auto;
+        width: 100%;
+    }
+}
+
+#credit-card-form .rc_button,
+#edit-customer-card-form .rc_button {
+    background: $bbs-blue !important;
+}
+
+.rc_subscription_next_charge_date {
+    h2 {
+        color: $bbs-blue-light !important;
+    }
+}
