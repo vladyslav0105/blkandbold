@@ -97,15 +97,36 @@ This file can be re-written at any time.
     {% if collection.previous_product %}<link rel="prev" href="{{ collection.previous_product }}">{% endif %}
     {% if collection.next_product %}<link rel="next" href="{{ collection.next_product }}">{% endif %}
 
-  {% include 'shogun-head' %}
+  
 
-<!-- Start of Littledata - Fix Google Analytics Script-->
-{% include 'LittledataLayer' %}
-<!-- End of Littledata - Fix Google Analytics Script -->
+  <!-- Start of Littledata - Fix Google Analytics Script-->
+  {% include 'LittledataLayer' %}
+  <!-- End of Littledata - Fix Google Analytics Script -->
 
-<!-- Share a Sale Script -->
-<script src='https://www.dwin1.com/19038.js' type='text/javascript' defer='defer'></script>
-<!-- End of Share a Sale Script -->
+  <!-- Share a Sale Script -->
+  <script src='https://www.dwin1.com/19038.js' type='text/javascript' defer='defer'></script>
+  <!-- End of Share a Sale Script -->
+
+  <meta name="google-site-verification" content="07FHb3xgiQusRbK5_KqtJyX2cXltUNO6orCVls8gNx8" />
+  <meta name="google-site-verification" content="WqV4JMA2n0JuvGdLJgwIgHQuZAYV_TFl_JwyCoEEMWY" />
+
+  <!-- Start VWO Async SmartCode -->
+  <script type='text/javascript'>
+  window._vwo_code = window._vwo_code || (function(){
+  var account_id=274988,
+  settings_tolerance=2000,
+  library_tolerance=2500,
+  use_existing_jquery=false,
+  is_spa=1,
+  hide_element='body',
+
+  /* DO NOT EDIT BELOW THIS LINE */
+  f=false,d=document,code={use_existing_jquery:function(){return use_existing_jquery;},library_tolerance:function(){return library_tolerance;},finish:function(){if(!f){f=true;var a=d.getElementById('_vis_opt_path_hides');if(a)a.parentNode.removeChild(a);}},finished:function(){return f;},load:function(a){var b=d.createElement('script');b.src=a;b.type='text/javascript';b.innerText;b.onerror=function(){_vwo_code.finish();};d.getElementsByTagName('head')[0].appendChild(b);},init:function(){
+  window.settings_timer=setTimeout('_vwo_code.finish()',settings_tolerance);var a=d.createElement('style'),b=hide_element?hide_element+'{opacity:0 !important;filter:alpha(opacity=0) !important;background:none !important;}':'',h=d.getElementsByTagName('head')[0];a.setAttribute('id','_vis_opt_path_hides');a.setAttribute('type','text/css');if(a.styleSheet)a.styleSheet.cssText=b;else a.appendChild(d.createTextNode(b));h.appendChild(a);this.load('https://dev.visualwebsiteoptimizer.com/j.php?a='+account_id+'&u='+encodeURIComponent(d.URL)+'&f='+(+is_spa)+'&r='+Math.random());return settings_timer; }};window._vwo_settings_timer = code.init(); return code; }());
+  </script>
+  <!-- End VWO Async SmartCode --> 
+
+  {% render 'shogun-head' %}
 
 </head>
 
@@ -215,6 +236,29 @@ try { setTimeout(function(){StampedFn.reloadUGC();},1000); } catch (e){}
 <script>
       {{ settings.custom_scripts }}
     </script>
+<script>
+document.addEventListener('rebuy.productsChange', function(event) {
+  console.log('rebuy.productsChange event', event.detail);
+  var widget = event.detail.widget;
+  var products = event.detail.products;
+  var widget_id = '1284';
+  var gift_item = null;
+  // Find GWP item...
+  for (var i = 0; i < Rebuy.Cart.cart.items.length; i++) {
+    if (Rebuy.Cart.cart.items[i].properties['_widget_id'] && Rebuy.Cart.cart.items[i].properties['_widget_id'] == widget_id) {
+      gift_item = Rebuy.Cart.cart.items[i];
+      break;
+    }
+  }
+  if (widget.id == widget_id && products.length > 0 && !gift_item) {
+    // Add gift item...
+    widget.addToCart(products[0]);
+  } else if (widget.id == '1284' && products.length == 0 && gift_item) {
+    // Remove gift item...
+    widget.removeFromCartAtIndex(Rebuy.Cart.cart.items.indexOf(gift_item));
+  }
+});
+</script>
 <script async type="text/javascript" id="stamped-script-widget" data-api-key="pubkey-hB8A8aou62168X78f8Z4AYqOQ7NZne" src="https://cdn1.stamped.io/files/widget.min.js"></script>
 <script>window.gorgiasChatParameters = {"smooch": {"givenName": "{{ customer.name }}","email": "{{ customer.email }}","properties": {"shopify__cart__total_price": "{{ cart.total_price | money | strip_html | default: null }}","shopify__cart__nb_of_items": {{ cart.items | size | default: 0 }},{% for item in cart.items %}"shopify__cart__items-{{ forloop.index }}-[]":"{\"line_price\":\"{{item.line_price|money|strip_html|default:null}}\",\"price\":\"{{item.price|money|strip_html|default:null}}\",\"product_id\":\"{{item.product_id|default:null}}\",\"quantity\":{{item.quantity|default:null}},\"sku\":\"{{item.sku|default:null}}\",\"title\":\"{{item.title}}\",\"variant_id\":{{item.variant_id|default:null}},\"vendor\":\"{{item.vendor|default:null}}\",\"id\":{{item.id|default:null}}}"{% if forloop.last != true %},{% endif %}{% endfor %}}}}</script>
 <script>window.gorgiasChatParameters = {"smooch": {"properties": {"shopify__cart__total_price": "{{ cart.total_price | money | strip_html | default: null }}","shopify__cart__nb_of_items": {{ cart.items | size | default: 0 }},{% for item in cart.items %}"shopify__cart__items-{{ forloop.index }}-[]":"{\"line_price\":\"{{item.line_price|money|strip_html|default:null}}\",\"price\":\"{{item.price|money|strip_html|default:null}}\",\"product_id\":\"{{item.product_id|default:null}}\",\"quantity\":{{item.quantity|default:null}},\"sku\":\"{{item.sku|default:null}}\",\"title\":\"{{item.title}}\",\"variant_id\":{{item.variant_id|default:null}},\"vendor\":\"{{item.vendor|default:null}}\",\"id\":{{item.id|default:null}}}"{% if forloop.last != true %},{% endif %}{% endfor %}}}}</script>
