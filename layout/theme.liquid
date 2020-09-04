@@ -120,6 +120,8 @@
   <!-- End VWO Async SmartCode --> 
 
   {% render 'shogun-head' %}
+
+  {{ 'recharge.scss.css' | asset_url | stylesheet_tag }}
 </head>
 
   {% if template contains "index" %}
