@@ -13,11 +13,13 @@
     {{ checkout_stylesheets }}
     {{ checkout_scripts }}
   
-  {% include 'shogun-head' %}
+  
 
 <!-- Start of Littledata - Fix Google Analytics Script-->
 {% include 'LittledataLayer' %}
 <!-- End of Littledata - Fix Google Analytics Script -->
+
+  {% render 'shogun-head' %}
 </head>
   <body>
     {{ skip_to_content_link }}
@@ -61,3 +63,6 @@
     {% include 'smile-points-slider' %}
   </body>
 </html>
+
+<div data-rebuy-id="1254"></div>
+<script src="https://rebuyengine.com/js/rebuy?shop=bestbully.myshopify.com"></script>
