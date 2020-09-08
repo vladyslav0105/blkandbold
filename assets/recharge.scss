@@ -60,6 +60,13 @@ body#recharge-novum #recharge-te {
         }
     }
 
+    h4 {
+        font-family: $headers-fonts !important;
+        line-height: 1.5em !important;
+        text-transform: uppercase !important;
+        font-weight: 600 !important;
+    }
+
     h5 {
         font-family: $headers-fonts !important;
         font-weight: 600 !important;
@@ -101,6 +108,17 @@ body#recharge-novum #recharge-te {
 
     .rc_btn {
         @include primary-button;
+    }
+
+    .te-modal-title {
+        font-family: $headers-fonts;
+        line-height: 1.4em;
+    }
+
+    .rc_purchase_type {
+        label {
+            font-family: $headers-fonts;
+        }
     }
 
     #rc_te-template-wrapper {
@@ -163,6 +181,15 @@ body#recharge-novum #recharge-te {
                 }
 
             }
+        }
+
+        .rc_cancel-btn {
+            @include primary-button;
+            margin: 0; 
+            width: 100%;
+            padding: 15px 20px;
+            cursor: pointer;
+            border-radius: 5px;
         }
     }
 
