@@ -31,7 +31,7 @@ quickshop: <boolean>
               slideshow_animation--{{ section.settings.slideshow_animation }}
               popup-enabled--{{ section.settings.enable_product_lightbox }}
               show-gallery-arrows--{{ section.settings.gallery_arrows }}
-              {% if product.media.size > 1 %} multi-image {% else %} single-image {% endif %}"
+              {% if product.media.size > 1 %} multi-image {% elsif product.media.size == 1 and product.metafields['Product Specs']['Chew Meter'] %} multi-image {% else %} single-image {% endif %}"
             data-thumbnails-enabled="{{ section.settings.product_thumbs }}"
             data-gallery-arrows-enabled="{{ section.settings.gallery_arrows }}"
             data-slideshow-speed="{{ section.settings.slideshow_speed }}"
@@ -42,7 +42,7 @@ quickshop: <boolean>
             data-video-loop="{{ section.settings.video_looping }}"
             data-product-id="{{ product.id }}"
             data-product-lightbox="{{ section.settings.enable_product_lightbox }}"
-            data-media-count="{{ product.media.size }}"
+            data-media-count="{{ product.media.size | plus: 1 }}"
             data-product-gallery>
 
     {% for media in product.media %}
@@ -139,7 +139,7 @@ quickshop: <boolean>
   {% if section.settings.product_thumbs %}
     {% if image_width != 'full' %}
       <div class="product_gallery_nav product_gallery_nav--{{ section.settings.thumbnail_position }} product-{{ product.id }}-gallery-nav">
-      {% if product.media.size > 1 %}
+        {% if product.media.size >= 1 %}
         {% for media in product.media %}
 
           {% if media.media_type contains 'video' %}
