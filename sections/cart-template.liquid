@@ -39,6 +39,9 @@
   <form action="{{ routes.cart_url }}" method="post" id="cart_form" data-cart-form="cart-template" data-total-discount="{{ cart.total_discount }}">
     <div class="section clearfix cart__wrapper">
       <div class="eleven columns medium-down--one-whole">
+
+        {% include 'cart-incentive-banner' %}
+
         {% assign total_saving = 0 %}
         {% for item in cart.items %}
           {% if item.variant.compare_at_price > item.variant.price %}
@@ -126,6 +129,8 @@
                       {{ item.original_line_price | money }}
                     </span>
                   </p>
+
+                  {% include 'cart-subscription-upsell' with item: item %}
               
                   {% if section.settings.item_gift != blank and item.product.tags contains 'promomessage1' %}
                     <div class="promo-message">
@@ -165,8 +170,14 @@
       </div>
 
       <div class="five columns medium-down--one-whole">
+
+        
+
         <div class="section clearfix">
           <div class="subtotal">
+
+            {% include 'cart-free-shipping-progress' %}
+
             {% if cart.cart_level_discount_applications != blank %}
               <p class="cart_discounts js-cart_discounts sale">
               {% for discount_application in cart.cart_level_discount_applications %}

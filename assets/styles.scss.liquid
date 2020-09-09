@@ -7099,21 +7099,21 @@ a.secondary_button, input.secondary_button {
     margin-bottom: 20px;
     font-size: 20px;
   }
-  
+
   .promo-message {
 /*     padding: 20px; */
     color: #006aad; // {{ settings.btn_color }}
 /*     background-color: #eee; */
-    
+
     p {
       display: inline;
       vertical-align: middle;
     }
-    
+
     strong {
       text-transform: uppercase;
     }
-    
+
     svg {
       display: inline-block;
       vertical-align: middle;
@@ -12800,7 +12800,7 @@ a.isp_product_quick_view_button {
     content: 'Sale' !important;
     background: {{ settings.sale_banner_color }};
   }
-  
+
   &:after {
     background: none;
     top: 46px;
@@ -13007,9 +13007,9 @@ a.isp_product_quick_view_button {
 .product-autoship__item {
     display: flex;
   	justify-content: space-between;
-    text-align: center; 
+    text-align: center;
     padding: 0 20px;
- 
+
 }
 
 .product-autoship__item__title {
@@ -13077,4 +13077,80 @@ a.isp_product_quick_view_button {
 
 .not-found__recommendations .template {
     display: none !important;
+}
+
+.cart-subscription-upsell {
+  padding: 20px 0 0;
+  border-top: 1px solid #dedede;
+  clear: both;
+}
+
+.cart-subscription-upsell #rc_container {
+  margin-bottom: 0;
+  margin-top: 5px;
+  margin-left: -5px;
+
+  .rc_popup__hover {
+    font-size: 13px;
+  }
+
+  .rc_popup__block__content {
+    font-size: 16px;
+  }
+}
+
+
+.cart-subscription-upsell__trigger {
+  font-size: 13px;
+  font-weight: 600;
+  color: #676767;
+  display: flex;
+  align-items: center;
+  text-transform: uppercase;
+  position: relative;
+  margin-bottom: 5px;
+
+  a {
+    display: inline-block;
+    margin-right: 10px;
+    width: 14px;
+    height: 14px;
+    border: 1px solid #dedede;
+    position: relative;
+    text-align: center;
+    line-height: 14px;
+
+    svg {
+      width: 12px;
+      height: 14px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+  }
+
+}
+
+.cart-subscription-upsell__delivery {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+  padding-left: 24px;
+
+  label {
+    flex-shrink: 0;
+    display: inline-block;
+    margin: 0 10px 0 0;
+  }
+
+  select {
+    width: 100px;
+    height: 30px;
+    padding: 5px;
+    line-height: 1;
+    min-height: 0;
+    margin: 0;
+    background-color: #e2e2e2;
+  }
 }
