@@ -24,7 +24,7 @@
 {% else %}
     {% assign is_subscribed = false %}
     {% assign original_product = item.product %}
-    {% assign variant = item.variant %} 
+    {% assign variant = item.variant %}
 {% endif %}
 
 {% comment %}
@@ -40,11 +40,21 @@
 
 <div class="cart-subscription-upsell"
     data-key="{{ key }}"
+    data-original-product-id="{{ original_product.id }}"
     data-original-id="{{ original_variant_id }}"
     data-subscription-id="{{ subscription_variant_id }}"
     data-interval-unit="{{ interval_unit }}"
     data-quantity="{{ item.quantity }}"
-    data-subscribed="{% if is_subscribed %}true{% else %}false{% endif %}">
+    data-subscribed="{% if is_subscribed %}true{% else %}false{% endif %}"
+    {% comment %}
+    The following line is unrelated to the upsell, but it is used to limit 
+    the purchase if the customer switches from subscription to non subscription, and 
+    the quantity is above the limit. 
+    {% endcomment %}
+    {% if original_product.metafields.product.limit and settings.limit_quantity %}
+    data-limit="{{ original_product.metafields.product.limit }}"
+    {% endif %}
+    >
 
     <p class="cart-subscription-upsell__trigger">
         <a href="#" class="subscribe">
