@@ -113,6 +113,7 @@
                 data-limit="{{ limit }}"
                 data-initial-limit="{{ initial_limit }}"
                 data-in-cart="{{ inCart }}"
+                data-subscription="false"
             {%- endif -%}
             data-prev="1"
             min="1" size="2" class="quantity" name="quantity" id="quantity" value="1" {% if settings.limit_quantity and variant.inventory_management != blank and variant.inventory_policy == "deny" %}max="{{ variant.inventory_quantity }}"{% endif %} />

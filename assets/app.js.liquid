@@ -1309,16 +1309,36 @@ $(document)
       cartHasTieredDiscountProducts();
     });
     {% endif %}
+
+
+    /** 
+     * When the purchase type block changes, we need to set the subscription value so it
+     * is picked accordingly. 
+     */
+    $(document).on('change', '[name=purchase_type]', function () {
+        var value = $(this).val(); 
+        var $input = $(this).closest('form').find('input[data-limit]'); 
+        $('p.quantity-limit').remove();
+        
+        $input.data('subscription', value == 'autodeliver'); 
+        if ( $input.val() > $input.data('limit') ) {
+          $input.val( $input.data('limit') );
+          $input.data('prev', $input.data('limit') );
+        }
+    }); 
+
+
     $('#quantity').on('change', function (event) {
       var $input = $(this);
       var limit = $input.data('limit');
       var initialLimit = $input.data('initial-limit');
       var inCart = $input.data('in-cart');
+      var isSubscription = $input.data('subscription'); 
 
       $('p.quantity-limit').remove();
 
       // If it wants to go beyond the limit, we just roll back.
-      if (limit !== null && $input.val() > limit) {
+      if (limit !== null && $input.val() > limit && !isSubscription) {
         $input.val($input.data('prev'));
 
         var maxItemsInfo = '{{ 'purchase_limits.max_items' | t }}';
@@ -1347,8 +1367,10 @@ $(document)
     var quantity = $quantity.val();
     var initialLimit = $quantity.data('initial-limit');
     var inCart = $quantity.data('in-cart');
+    var isSubscription = $quantity.data('subscription'); 
 
-    if (limit !== null && quantity > limit) {
+
+    if (limit !== null && quantity > limit && !isSubscription) {
       $('p.quantity-limit').remove();
 
       var maxItemsInfo = '{{ 'purchase_limits.max_items' | t }}';
