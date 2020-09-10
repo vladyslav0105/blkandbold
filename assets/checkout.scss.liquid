@@ -1,0 +1,645 @@
+$bestbully-red: #9A2F36;
+$bestbully-blue: #007bb6;
+$bestbully-gold: #b9ad79;
+$bestbully-denim: #005487;
+$font-family-header: {{ settings.headline__font.family }}, {{ settings.headline__font.fallback_families }};
+/******************************************************************
+Theme Name: Turbo "6.0.1"
+Theme URI: https://outofthesandbox.com/collections/turbo-theme
+Author: Out of the Sandbox (https://outofthesandbox.com)
+Description: Shopify Theme (https://www.shopify.com/&ref=out-of-the-sandbox)
+******************************************************************/
+/* Table of Contents
+==================================================
+#Variables
+#Mixins
+#Functions
+#Reset
+#Basic Styles
+#Typography
+#Links
+#Lists
+#Menu
+#Images
+#Placeholders
+#Videos
+#Buttons
+#Tabs
+#Accordions
+#Forms
+#Contact Form
+#Newsletter
+#Tables
+#Misc
+#Testimonials
+#FAQ Template
+#Team Template
+#Logo-list
+#Gallery Section
+#Recently Viewed
+#Search autocomplete
+#Search page
+#Search Section
+#Site Styles
+#Header
+#Swatch Styles
+#Plyr
+#Flickity
+#Layout
+#Password Page
+#Account
+#Policy pages
+#Page Details
+#Product Media
+#Product Details
+#Product Recommendations
+#Home page - general
+#Home page - slideshow
+#Home page - image with text
+#Home page - Rich text and image
+#Home page - featured promotions
+#Home page - featured collection
+#Home page - image with text overlay
+#Home page - video
+#Home page - Text column with images
+#Font-Face
+#Custom Styles */
+
+/* #Variables
+================================================== */
+
+$font-size-header: {{ settings.headline_font_size }};
+$font-size-column: {{ settings.headline_font_size | times: 1.3 }};
+
+$site-width: 1200px;
+$gutter: 20px;
+
+$grid-small: 480px;
+$grid-medium: 798px;
+$grid-large: 1024px;
+$grid-widescreen: 1400px;
+
+$small: 'small';
+$small-down: 'small-down';
+$small-up: 'small-up';
+$medium: 'medium';
+$medium-down: 'medium-down';
+$medium-up: 'medium-up';
+$large: 'large';
+$large-down: 'large-down';
+$large-up: 'large-up';
+$widescreen-up: 'widescreen-up';
+$widescreen-down: 'widescreen-down';
+
+// The `$breakpoints` list is used to build our media queries.
+// You can use these in the media-query mixin.
+$breakpoints: (
+  $small-down '(max-width: #{$grid-small})',
+  $small '(min-width: #{$grid-small + 1}) and (max-width: #{$grid-medium})',
+  $small-up '(min-width: #{$grid-small + 1})',
+  $medium-down '(max-width: #{$grid-medium})',
+  $medium '(min-width: #{$grid-medium + 1}) and (max-width: #{$grid-large})',
+  $medium-up '(min-width: #{$grid-medium + 1})',
+  $large-down '(max-width: #{$grid-large})',
+  $large '(min-width: #{$grid-large + 1}) and (max-width: #{$grid-widescreen})',
+  $large-up '(min-width: #{$grid-large + 1})',
+  $widescreen-down '(max-width: #{$grid-widescreen})',
+  $widescreen-up '(min-width: #{$grid-widescreen + 1})'
+);
+
+/* #Mixins
+================================================== */
+
+@mixin background-opacity($color, $opacity: 0.5) {
+  background: $color;
+  background: rgba($color, $opacity);
+}
+
+@mixin text-opacity($color, $opacity: 0.5) {
+  color: $color;
+  color: rgba($color, $opacity);
+}
+
+// Clearfix for parents with floated children
+@mixin clearfix() {
+  &::after {
+    content: '';
+    display: table;
+    clear: both;
+  }
+  *zoom: 1;
+}
+
+@mixin diagonal-line($line-color: #999, $line-width: 1px, $line-blur: 0px) {
+  $color-start: 50%;
+  $full-color-end: calc(50% + #{$line-width});
+  $color-end: 50%;
+  @if($line-blur == 0 or $line-blur == 0px) {
+    $color-start: 50%;
+  }
+
+  background-image: linear-gradient(to bottom left, transparent $color-start, $line-color 50%, $line-color $full-color-end, transparent $color-end), linear-gradient(to bottom right, transparent $color-start, $line-color 50%, $line-color $full-color-end, transparent $color-end);
+}
+
+// Media query mixin
+@mixin respond-to($media-query) {
+  $breakpoint-found: false;
+
+  @each $breakpoint in $breakpoints {
+    $name: nth($breakpoint, 1);
+    $declaration: nth($breakpoint, 2);
+
+    @if $media-query == $name and $declaration {
+      $breakpoint-found: true;
+
+      @media only screen and #{$declaration} {
+        @content;
+      }
+    }
+  }
+
+  @if $breakpoint-found == false {
+    @warn 'Breakpoint "#{$media-query}" does not exist';
+  }
+}
+
+// Responsive Show/Hide Helper
+@mixin responsive-display-helper($breakpoint: '') {
+  .#{$breakpoint}show {
+    display: block !important;
+  }
+
+  .#{$breakpoint}hide {
+    display: none !important;
+  }
+}
+
+// Responsive Text Alignment Helper
+@mixin responsive-text-align-helper($breakpoint: '') {
+  .#{$breakpoint}text-left {
+    text-align: left !important;
+  }
+
+  .#{$breakpoint}text-right {
+    text-align: right !important;
+  }
+
+  .#{$breakpoint}text-center {
+    text-align: center !important;
+  }
+}
+
+/*
+  This mixin can be used to set the object-fit:
+  @include object-fit(contain);
+   or object-fit and object-position:
+  @include object-fit(cover, top);
+*/
+@mixin object-fit($fit: fill, $position: null){
+  -o-object-fit: $fit;
+     object-fit: $fit;
+  @if $position {
+    -o-object-position: $position;
+       object-position: $position;
+    font-family: 'object-fit: #{$fit}; object-position: #{$position}';
+  } @else {
+    font-family: 'object-fit: #{$fit}';
+  }
+}
+
+/*
+  Prefix mixin for generating vendor prefixes.
+  Based on https://github.com/thoughtbot/bourbon/blob/v4-stable/app/assets/stylesheets/addons/_prefixer.scss
+
+  Usage:
+    // Input:
+    .element {
+      @include prefix(transform, scale(1), ms webkit spec);
+    }
+
+    // Output:
+    .element {
+      -ms-transform: scale(1);
+      -webkit-transform: scale(1);
+      transform: scale(1);
+    }
+*/
+@mixin prefix($property, $value, $prefixes) {
+  @each $prefix in $prefixes {
+    @if $prefix == webkit {
+      -webkit-#{$property}: $value;
+    } @else if $prefix == moz {
+      -moz-#{$property}: $value;
+    } @else if $prefix == ms {
+      -ms-#{$property}: $value;
+    } @else if $prefix == o {
+      -o-#{$property}: $value;
+    } @else if $prefix == spec {
+      #{$property}: $value;
+    } @else  {
+      @warn 'Unrecognized prefix: #{$prefix}';
+    }
+  }
+}
+
+//Flexbox
+// Flexbox display
+@mixin flexbox() {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+}
+
+// Inline flexbox display
+@mixin inline-flexbox() {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -moz-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+// The 'flex' shorthand
+// - applies to: flex items
+// <positive-number>, initial, auto, or none
+@mixin flex($values) {
+  -webkit-box-flex: $values;
+     -moz-box-flex: $values;
+      -webkit-flex: $values;
+      -ms-flex: $values;
+          flex: $values;
+}
+
+// Flex Flow Direction
+// - applies to: flex containers
+// row | row-reverse | column | column-reverse
+@mixin flex-direction($direction) {
+  -webkit-flex-direction: $direction;
+     -moz-flex-direction: $direction;
+      -ms-flex-direction: $direction;
+          flex-direction: $direction;
+}
+
+// Flex Line Wrapping
+// - applies to: flex containers
+// nowrap | wrap | wrap-reverse
+@mixin flex-wrap($wrap) {
+  -webkit-flex-wrap: $wrap;
+     -moz-flex-wrap: $wrap;
+      -ms-flex-wrap: $wrap;
+          flex-wrap: $wrap;
+}
+
+// Flex Direction and Wrap
+// - applies to: flex containers
+// <flex-direction> || <flex-wrap>
+@mixin flex-flow($flow) {
+  -webkit-flex-flow: $flow;
+     -moz-flex-flow: $flow;
+      -ms-flex-flow: $flow;
+          flex-flow: $flow;
+}
+
+// Display Order
+// - applies to: flex items
+// <integer>
+@mixin order($val) {
+  -webkit-box-ordinal-group: $val;
+     -moz-box-ordinal-group: $val;
+         -ms-flex-order: $val;
+          -webkit-order: $val;
+            order: $val;
+}
+
+// Flex grow factor
+// - applies to: flex items
+// <number>
+@mixin flex-grow($grow) {
+  -webkit-flex-grow: $grow;
+     -moz-flex-grow: $grow;
+      -ms-flex-grow: $grow;
+          flex-grow: $grow;
+}
+
+// Flex shrink
+// - applies to: flex item shrink factor
+// <number>
+@mixin flex-shrink($shrink) {
+  -webkit-flex-shrink: $shrink;
+     -moz-flex-shrink: $shrink;
+      -ms-flex-shrink: $shrink;
+          flex-shrink: $shrink;
+}
+
+// Flex basis
+// - the initial main size of the flex item
+// - applies to: flex itemsnitial main size of the flex item
+// <width>
+@mixin flex-basis($width) {
+  -webkit-flex-basis: $width;
+     -moz-flex-basis: $width;
+      -ms-flex-basis: $width;
+          flex-basis: $width;
+}
+
+// Axis Alignment
+// - applies to: flex containers
+// flex-start | flex-end | center | space-between | space-around
+@mixin justify-content($justify) {
+  -webkit-justify-content: $justify;
+     -moz-justify-content: $justify;
+      -ms-justify-content: $justify;
+          justify-content: $justify;
+            -ms-flex-pack: $justify;
+}
+
+// Packing Flex Lines
+// - applies to: multi-line flex containers
+// flex-start | flex-end | center | space-between | space-around | stretch
+@mixin align-content($align) {
+  -webkit-align-content: $align;
+     -moz-align-content: $align;
+      -ms-align-content: $align;
+          align-content: $align;
+}
+
+// Cross-axis Alignment
+// - applies to: flex containers
+// flex-start | flex-end | center | baseline | stretch
+@mixin align-items($align) {
+  -webkit-align-items: $align;
+     -moz-align-items: $align;
+      -ms-align-items: $align;
+          align-items: $align;
+}
+
+// Cross-axis Alignment
+// - applies to: flex items
+// auto | flex-start | flex-end | center | baseline | stretch
+@mixin align-self($align) {
+  -webkit-align-self: $align;
+     -moz-align-self: $align;
+      -ms-align-self: $align;
+          align-self: $align;
+}
+
+@mixin vertical-alignment {
+  position: relative;
+  top: 50%;
+  -webkit-transform: translateY(-50.1%);
+  -ms-transform: translateY(-50.1%);
+  transform: translateY(-50.1%);
+  padding: 10px 0;
+}
+
+@mixin headline-style($font-size: $font-size-header) {
+  font-family: {{ settings.headline__font.family }}, {{ settings.headline__font.fallback_families }};
+  font-weight: {{ settings.headline__font.weight }};
+  font-style: {{ settings.headline__font.style }};
+  font-size: $font-size * 1px;
+  text-transform: {{ settings.headline_font_style }};
+  line-height: 1.5;
+  color: {{ settings.headline_color }};
+  display: block;
+  letter-spacing: {{ settings.headline_letter_spacing }}px;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  @include respond-to('medium-down'){
+    font-size: floor($font-size * 0.8) * 1px;
+  }
+}
+
+@mixin word-wrap {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  -ms-word-break: break-word;
+  word-break: break-word;
+}
+
+@mixin table-with-borders {
+  width: 100%;
+
+  th {
+    background: #F9F9F9;
+  }
+
+  th,
+  td {
+    padding: 4px;
+    border-right:1px solid #DCDCDC;
+  }
+
+  th:first-child,
+  td:first-child {
+    border-left:1px solid #DCDCDC
+  }
+
+  tr {
+    border-bottom: 1px solid #DCDCDC;
+  }
+
+  tr:first-child {
+    border-top:1px solid #DCDCDC;
+  }
+
+  .em {
+    font-weight: 700;
+  }
+}
+
+/* #Functions
+================================================== */
+@function set-text-color($color) {
+  @if (lightness($color) > 50) {
+    @return {{ settings.regular_color }}; // Lighter background, return dark color
+  } @else {
+    @return #ffffff; // Darker background, return light color
+  }
+}
+
+@function secondary-button-color($color) {
+  @if (lightness($color) > 80) {
+    @return {{ settings.regular_color }}; // Too light, send something darker
+  } @else {
+    @return $color; // Normal color
+  }
+}
+
+/* #Reset & Basics
+================================================== */
+article,aside,details,figcaption,figure,footer,header,hgroup,nav,section,summary{display:block;}audio,canvas,video{display:inline-block;}audio:not([controls]){display:none;height:0;}[hidden]{display:none;}html{font-family:sans-serif;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;}a:focus{outline:thin dotted;}a:active,a:hover{outline:0;}h1{font-size:2em;}abbr[title]{border-bottom:1px dotted;}b,strong{font-weight:700;}dfn{font-style:italic;}mark{background:#ff0;color:#000;}code,kbd,pre,samp{font-family:monospace, serif;font-size:1em;}pre{white-space:pre-wrap;word-wrap:break-word;}q{quotes:\201C \201D \2018 \2019;}small{font-size:80%;}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline;}sup{top:-.5em;}sub{bottom:-.25em;}img{border:0;}svg:not(:root){overflow:hidden;}fieldset{border:1px solid silver;margin:0 2px;padding:.35em .625em .75em;}button,input,select,textarea{font-family:inherit;font-size:100%;margin:0;}button,input{line-height:normal;}button,html input[type=button],/* 1 */
+input[type=reset],input[type=submit]{-webkit-appearance:button;cursor:pointer;}button[disabled],input[disabled]{cursor:default;}input[type=checkbox],input[type=radio]{box-sizing:border-box;padding:0;}input[type=search]{-webkit-appearance:textfield;-moz-box-sizing:content-box;-webkit-box-sizing:content-box;box-sizing:content-box;}input[type=search]::-webkit-search-cancel-button,input[type=search]::-webkit-search-decoration{-webkit-appearance:none;}textarea{overflow:auto;vertical-align:top;}table{border-collapse:collapse;border-spacing:0;}body,figure{margin:0;}legend,button::-moz-focus-inner,input::-moz-focus-inner{border:0;padding:0;}
+
+.clearfix:after {visibility: hidden; display: block; font-size: 0; content: " "; clear: both; height: 0; }
+
+* { -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box; }
+
+.clear {
+  clear: both;
+  display: block;
+  overflow: hidden;
+  visibility: hidden;
+  width: 0;
+  height: 0;
+  @include respond-to('medium-down') {
+    display: none;
+  }
+}
+
+/* #Fonts
+================================================== */
+
+{%- capture font_settings_list -%}
+  {{ settings.regular__font | font_face }}~
+  {{ settings.regular__font | font_modify: 'weight', 'bolder' | font_face }}~
+  {{ settings.regular__font | font_modify: 'style', 'italic' | font_face }}~
+  {{ settings.regular__font | font_modify: 'style', 'italic' | font_modify: 'weight', 'bolder' | font_face }}~
+  {{ settings.logo__font | font_face }}~
+  {{ settings.logo__font | font_modify: 'weight', 'bolder' | font_face }}~
+  {{ settings.logo__font | font_modify: 'style', 'italic' | font_face }}~
+  {{ settings.logo__font | font_modify: 'style', 'italic' | font_modify: 'weight', 'bolder' | font_face }}~
+  {{ settings.headline__font | font_face }}~
+  {{ settings.headline__font | font_modify: 'weight', 'bolder' | font_face }}~
+  {{ settings.headline__font | font_modify: 'style', 'italic' | font_face }}~
+  {{ settings.headline__font | font_modify: 'style', 'italic' | font_modify: 'weight', 'bolder' | font_face }}~
+  {{ settings.nav__font | font_face }}~
+  {{ settings.nav__font | font_modify: 'weight', 'bolder' | font_face }}~
+  {{ settings.nav__font | font_modify: 'style', 'italic' | font_face }}~
+  {{ settings.nav__font | font_modify: 'style', 'italic' | font_modify: 'weight', 'bolder' | font_face }}~
+  {{ settings.nav__font | font_modify: 'weight', 'lighter' | font_face }}~
+  {{ settings.nav__font | font_modify: 'style', 'italic' | font_modify: 'weight', 'lighter' | font_face }}~
+  {{ settings.slideshow_headline__font | font_face }}~
+  {{ settings.slideshow_headline__font | font_modify: 'weight', 'bolder' | font_face }}~
+  {{ settings.slideshow_headline__font | font_modify: 'style', 'italic' | font_face }}~
+  {{ settings.slideshow_headline__font | font_modify: 'style', 'italic' | font_modify: 'weight', 'bolder' | font_face }}~
+  {{ settings.slideshow_subtitle__font | font_face }}~
+  {{ settings.slideshow_subtitle__font | font_modify: 'weight', 'bolder' | font_face }}~
+  {{ settings.slideshow_subtitle__font | font_modify: 'style', 'italic' | font_face }}~
+  {{ settings.slideshow_subtitle__font | font_modify: 'style', 'italic' | font_modify: 'weight', 'bolder' | font_face }}
+
+{%- endcapture -%}
+{%- assign font_array = font_settings_list | split: '~' -%}
+
+{%- for name in font_array -%}
+  {%- unless name contains 'error' -%}
+    {{ name }}
+  {%- endunless -%}
+{%- endfor -%}
+
+/* #Basic Styles
+================================================== */
+body {
+  font-family: {{ settings.regular__font.family }}, {{ settings.regular__font.fallback_families }};
+  font-weight: {{ settings.regular__font.weight }};
+  font-style: {{ settings.regular__font.style }};
+  font-size: {{ settings.regular_font_size }}px;
+  text-transform: {{ settings.regular_font_style }};
+  color: {{ settings.regular_color }};
+  line-height: 1.6em;
+  overflow: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-smoothing: antialiased;
+
+  background-color: {{ settings.shop_bg_color }};
+  {% if settings.custom_bg != nil %}
+    background-image: url("{{ settings.custom_bg | img_url: '2000x' }}");
+    {% if settings.bg_stretched %}
+      background-repeat:no-repeat;
+      background-attachment:fixed;
+      -webkit-background-size:cover;
+      -moz-background-size:cover;
+      -o-background-size:cover;
+      background-size:cover;
+    {% else %}
+      background-repeat:{{ settings.repeat_bg }};
+      {% if settings.bg_fixed %}
+        background-attachment:fixed;
+      {% endif %}
+    {% endif %}
+  {% endif %}
+}
+
+.shopify-checkout {
+
+  .content {
+
+    .sidebar__content {
+      hr {
+        height: 1px;
+        background-color: rgba(175,175,175,0.34);
+        margin: 24px 0;
+        border: 0;
+      }
+    }
+
+    .promo-message {
+      color: #006aad;
+      display: flex;
+      justify-content: center;
+      background-color: #fff;
+      padding: 24px;
+      width: 100%;
+      flex-wrap: wrap;
+      border-radius: 8px;
+      border: 1px solid #e6e6e6;
+
+      .info {
+        text-align: center;
+        width: 100%;
+        line-height: 1.2;
+
+        p {
+          display: inline;
+          vertical-align: middle;
+        }
+    
+        strong {
+          text-transform: uppercase;
+        }
+    
+        svg {
+          display: inline-block;
+          vertical-align: middle;
+          margin-right: 6px;
+        }
+
+      }
+
+      .progress {
+        display: flex;
+        width: 100%;
+        padding-top: 6px;
+        align-items: center;
+
+        .amount {
+          color: #333;
+          font-weight: 500;
+          flex-shrink: 0;
+        }
+        .bar-wrapper {
+          width: 100%;
+          margin: 0 6px;
+          background-color: #ddd;
+          height: 12px;
+          border-radius: 12px;
+          .bar {
+            width: 0%;
+            background-color: #00b201;
+            height: 100%;
+            border-radius: 12px;
+            transition: width .4s ease-in;
+          }
+        }
+      }
+
+    }
+
+  }
+
+}
+  
