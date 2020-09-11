@@ -638,13 +638,13 @@ $(function () {
 
         cart_items_html += '<div class="mini-cart__item--content"><div class="mini-cart__item__title"><div class="item_title"><a href="' + item.url + '">' + item.title + '</a></div>';
 
-        if (item.properties) {
-          $.each(item.properties, function (title, value) {
-            if (value && !title.startsWith('_')) {
-              cart_items_html += '<div class="line-item">' + title + ': ' + value + ' </div>';
-            }
-          });
-        }
+        // if (item.properties) {
+        //   $.each(item.properties, function (title, value) {
+        //     if (value && !title.startsWith('_')) {
+        //       cart_items_html += '<div class="line-item">' + title + ': ' + value + ' </div>';
+        //     }
+        //   });
+        // }
 
         cart_items_html += '<strong class="right price">';
 
@@ -708,9 +708,11 @@ $(function () {
           limit = 'data-limit="' + parseInt(item.properties._limit) + '"';
         }
 
+        var isSubscription = (item.properties.shipping_interval_frequency != null); 
+
         cart_items_html += '<div class="left product-quantity-box">';
         cart_items_html += '<span class="ss-icon product-minus js-change-quantity" data-func="minus"><span class="icon-minus"></span></span>';
-        cart_items_html += '<input type="number" data-prev="' + item.quantity + '" ' + limit + ' min="0" class="quantity" name="updates[]" id="updates_' + item.id + '" value="' + item.quantity + '" data-cart-quantity-input="mini-cart" />';
+        cart_items_html += '<input type="number" data-subscription="' +isSubscription+ '" data-prev="' + item.quantity + '" ' + limit + ' min="0" class="quantity" name="updates[]" id="updates_' + item.id + '" value="' + item.quantity + '" data-cart-quantity-input="mini-cart" />';
         cart_items_html += '<span class="ss-icon product-plus js-change-quantity" data-func="plus"><span class="icon-plus"></span></span>';
         cart_items_html += '</div></div></div>';
         cart_items_html += '<a href="/cart/change?line=' + line_id + '&amp;quantity=0" class="js-cart-remove-btn cart__remove-btn" data-line-id="' + line_id + '" data-remove-item="mini-cart"><span class="remove-icon"></span></a>';
@@ -758,23 +760,26 @@ $(function () {
     var $input = $(this);
     var $cart = $(this).closest('[data-cart-form]');
     var limit = $input.data('limit');
+    var isSubscription = $input.data('subscription');
     var product_id = $input.closest('[data-cart-item]').data('product-id');
     $('.quantity-limit').remove();
 
-    var added = 0;
-    $cart.find('[data-cart-item]').each(function () {
-      var itemProductId = $(this).data('product-id');
-      if (product_id == itemProductId) {
-        added += parseInt($(this).find('.quantity').val());
+    if (!isSubscription) {
+      var added = 0;
+      $cart.find('[data-cart-item]').each(function () {
+        var itemProductId = $(this).data('product-id');
+        if (product_id == itemProductId) {
+          added += parseInt($(this).find('.quantity').val());
+        }
+      });
+  
+      // If it wants to go beyond the limit, we just roll back.
+      if (limit !== null && added > limit) {
+        $input.val($input.data('prev'));
+        $input.closest('.product-quantity-box')
+          .after('<p class="quantity-limit">You can add up to ' + limit + ' items to your cart</p>');
+        return false;
       }
-    });
-
-    // If it wants to go beyond the limit, we just roll back.
-    if (limit !== null && added > limit) {
-      $input.val($input.data('prev'));
-      $input.closest('.product-quantity-box')
-        .after('<p class="quantity-limit">You can add up to ' + limit + ' items to your cart</p>');
-      return false;
     }
 
     $input.data('prev', $input.val());
@@ -1678,7 +1683,7 @@ $(document)
       event.preventDefault();
       var $container = $(this).closest('.cart-subscription-upsell');
 
-      // If it's already subscribed, we unsubscribe. 
+      // If it's already subscribed, we unsubscribe.
       if ($container.data('subscribed')) {
           console.log( 'trying to unsbuscribe' );
 
