@@ -638,13 +638,13 @@ $(function () {
 
         cart_items_html += '<div class="mini-cart__item--content"><div class="mini-cart__item__title"><div class="item_title"><a href="' + item.url + '">' + item.title + '</a></div>';
 
-        if (item.properties) {
-          $.each(item.properties, function (title, value) {
-            if (value && !title.startsWith('_')) {
-              cart_items_html += '<div class="line-item">' + title + ': ' + value + ' </div>';
-            }
-          });
-        }
+        // if (item.properties) {
+        //   $.each(item.properties, function (title, value) {
+        //     if (value && !title.startsWith('_')) {
+        //       cart_items_html += '<div class="line-item">' + title + ': ' + value + ' </div>';
+        //     }
+        //   });
+        // }
 
         cart_items_html += '<strong class="right price">';
 
@@ -708,9 +708,11 @@ $(function () {
           limit = 'data-limit="' + parseInt(item.properties._limit) + '"';
         }
 
+        var isSubscription = (item.properties.shipping_interval_frequency != null); 
+
         cart_items_html += '<div class="left product-quantity-box">';
         cart_items_html += '<span class="ss-icon product-minus js-change-quantity" data-func="minus"><span class="icon-minus"></span></span>';
-        cart_items_html += '<input type="number" data-prev="' + item.quantity + '" ' + limit + ' min="0" class="quantity" name="updates[]" id="updates_' + item.id + '" value="' + item.quantity + '" data-cart-quantity-input="mini-cart" />';
+        cart_items_html += '<input type="number" data-subscription="' +isSubscription+ '" data-prev="' + item.quantity + '" ' + limit + ' min="0" class="quantity" name="updates[]" id="updates_' + item.id + '" value="' + item.quantity + '" data-cart-quantity-input="mini-cart" />';
         cart_items_html += '<span class="ss-icon product-plus js-change-quantity" data-func="plus"><span class="icon-plus"></span></span>';
         cart_items_html += '</div></div></div>';
         cart_items_html += '<a href="/cart/change?line=' + line_id + '&amp;quantity=0" class="js-cart-remove-btn cart__remove-btn" data-line-id="' + line_id + '" data-remove-item="mini-cart"><span class="remove-icon"></span></a>';
@@ -758,23 +760,26 @@ $(function () {
     var $input = $(this);
     var $cart = $(this).closest('[data-cart-form]');
     var limit = $input.data('limit');
+    var isSubscription = $input.data('subscription');
     var product_id = $input.closest('[data-cart-item]').data('product-id');
     $('.quantity-limit').remove();
 
-    var added = 0;
-    $cart.find('[data-cart-item]').each(function () {
-      var itemProductId = $(this).data('product-id');
-      if (product_id == itemProductId) {
-        added += parseInt($(this).find('.quantity').val());
+    if (!isSubscription) {
+      var added = 0;
+      $cart.find('[data-cart-item]').each(function () {
+        var itemProductId = $(this).data('product-id');
+        if (product_id == itemProductId) {
+          added += parseInt($(this).find('.quantity').val());
+        }
+      });
+  
+      // If it wants to go beyond the limit, we just roll back.
+      if (limit !== null && added > limit) {
+        $input.val($input.data('prev'));
+        $input.closest('.product-quantity-box')
+          .after('<p class="quantity-limit">You can add up to ' + limit + ' items to your cart</p>');
+        return false;
       }
-    });
-
-    // If it wants to go beyond the limit, we just roll back.
-    if (limit !== null && added > limit) {
-      $input.val($input.data('prev'));
-      $input.closest('.product-quantity-box')
-        .after('<p class="quantity-limit">You can add up to ' + limit + ' items to your cart</p>');
-      return false;
     }
 
     $input.data('prev', $input.val());
@@ -1309,16 +1314,36 @@ $(document)
       cartHasTieredDiscountProducts();
     });
     {% endif %}
+
+
+    /** 
+     * When the purchase type block changes, we need to set the subscription value so it
+     * is picked accordingly. 
+     */
+    $(document).on('change', '[name=purchase_type]', function () {
+        var value = $(this).val(); 
+        var $input = $(this).closest('form').find('input[data-limit]'); 
+        $('p.quantity-limit').remove();
+        
+        $input.data('subscription', value == 'autodeliver'); 
+        if ( $input.val() > $input.data('limit') ) {
+          $input.val( $input.data('limit') );
+          $input.data('prev', $input.data('limit') );
+        }
+    }); 
+
+
     $('#quantity').on('change', function (event) {
       var $input = $(this);
       var limit = $input.data('limit');
       var initialLimit = $input.data('initial-limit');
       var inCart = $input.data('in-cart');
+      var isSubscription = $input.data('subscription'); 
 
       $('p.quantity-limit').remove();
 
       // If it wants to go beyond the limit, we just roll back.
-      if (limit !== null && $input.val() > limit) {
+      if (limit !== null && $input.val() > limit && !isSubscription) {
         $input.val($input.data('prev'));
 
         var maxItemsInfo = '{{ 'purchase_limits.max_items' | t }}';
@@ -1347,8 +1372,10 @@ $(document)
     var quantity = $quantity.val();
     var initialLimit = $quantity.data('initial-limit');
     var inCart = $quantity.data('in-cart');
+    var isSubscription = $quantity.data('subscription'); 
 
-    if (limit !== null && quantity > limit) {
+
+    if (limit !== null && quantity > limit && !isSubscription) {
       $('p.quantity-limit').remove();
 
       var maxItemsInfo = '{{ 'purchase_limits.max_items' | t }}';
@@ -1656,16 +1683,50 @@ $(document)
       event.preventDefault();
       var $container = $(this).closest('.cart-subscription-upsell');
 
-      // If it's already subscribed, we unsubscribe. 
+      // If it's already subscribed, we unsubscribe.
       if ($container.data('subscribed')) {
-          $.post('/cart/change.js', { id: $container.data('key'), quantity: 0 }, function (response) {
-            $.post('/cart/add.js', {
-              id: $container.data('original-id'),
-              quantity: $container.data('quantity')
-            }, function (response) {
-              window.location.reload();
-            }, 'json');
-          }, 'json');
+          console.log( 'trying to unsbuscribe' );
+
+          // This code is all commented out, because if a customer is subscribed, 
+          // we're cancelling the unsubscription option, and we're only showing 
+          // the widget with the option to add a period of time. 
+          return false; 
+
+          // var productid = $container.data('original-product-id'); 
+          // var quantityToAdd = $container.data('quantity'); 
+
+          // if ( $container.data('limit') ) {
+          //   // This loop finds all products in the cart that share the 
+          //   // same product id. Once found them, we need to add the current 
+          //   // val and if it is greater than the limit, we need to update the quantity. 
+          //   var added = quantityToAdd; 
+          //   $('[data-cart-form] [data-cart-item]').each(function () {
+          //     if (productid == $(this).data('product-id')) {
+          //       added += parseInt($(this).find('.quantity').val());
+          //     }
+          //   });
+
+          //   // If the total added is greater than the limit, then 
+          //   // we need to make sure we deduct the quantity until the limit is met. 
+          //   // 
+          //   // NOTE: There is some edge case if the quantity to add is zero, which 
+          //   // would potentially remove the item from the cart. 
+          //   if ( added > $container.data('limit') ) {
+          //     quantityToAdd = $container.data('limit') - (added - quantityToAdd)
+          //   }
+          // }
+
+
+
+
+          // $.post('/cart/change.js', { id: $container.data('key'), quantity: 0 }, function (response) {
+          //   $.post('/cart/add.js', {
+          //     id: $container.data('original-id'),
+          //     quantity: quantityToAdd,
+          //   }, function (response) {
+          //     window.location.reload();
+          //   }, 'json');
+          // }, 'json');
 
         // Otherwise, the customer is unsubscribed, and we subscribe. 
       } else {
