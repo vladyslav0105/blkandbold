@@ -1680,42 +1680,48 @@ $(document)
 
       // If it's already subscribed, we unsubscribe. 
       if ($container.data('subscribed')) {
+          console.log( 'trying to unsbuscribe' );
 
-          var productid = $container.data('original-product-id'); 
-          var quantityToAdd = $container.data('quantity'); 
+          // This code is all commented out, because if a customer is subscribed, 
+          // we're cancelling the unsubscription option, and we're only showing 
+          // the widget with the option to add a period of time. 
+          return false; 
 
-          if ( $container.data('limit') ) {
-            // This loop finds all products in the cart that share the 
-            // same product id. Once found them, we need to add the current 
-            // val and if it is greater than the limit, we need to update the quantity. 
-            var added = quantityToAdd; 
-            $('[data-cart-form] [data-cart-item]').each(function () {
-              if (productid == $(this).data('product-id')) {
-                added += parseInt($(this).find('.quantity').val());
-              }
-            });
+          // var productid = $container.data('original-product-id'); 
+          // var quantityToAdd = $container.data('quantity'); 
 
-            // If the total added is greater than the limit, then 
-            // we need to make sure we deduct the quantity until the limit is met. 
-            // 
-            // NOTE: There is some edge case if the quantity to add is zero, which 
-            // would potentially remove the item from the cart. 
-            if ( added > $container.data('limit') ) {
-              quantityToAdd = $container.data('limit') - (added - quantityToAdd)
-            }
-          }
+          // if ( $container.data('limit') ) {
+          //   // This loop finds all products in the cart that share the 
+          //   // same product id. Once found them, we need to add the current 
+          //   // val and if it is greater than the limit, we need to update the quantity. 
+          //   var added = quantityToAdd; 
+          //   $('[data-cart-form] [data-cart-item]').each(function () {
+          //     if (productid == $(this).data('product-id')) {
+          //       added += parseInt($(this).find('.quantity').val());
+          //     }
+          //   });
+
+          //   // If the total added is greater than the limit, then 
+          //   // we need to make sure we deduct the quantity until the limit is met. 
+          //   // 
+          //   // NOTE: There is some edge case if the quantity to add is zero, which 
+          //   // would potentially remove the item from the cart. 
+          //   if ( added > $container.data('limit') ) {
+          //     quantityToAdd = $container.data('limit') - (added - quantityToAdd)
+          //   }
+          // }
 
 
 
 
-          $.post('/cart/change.js', { id: $container.data('key'), quantity: 0 }, function (response) {
-            $.post('/cart/add.js', {
-              id: $container.data('original-id'),
-              quantity: quantityToAdd,
-            }, function (response) {
-              window.location.reload();
-            }, 'json');
-          }, 'json');
+          // $.post('/cart/change.js', { id: $container.data('key'), quantity: 0 }, function (response) {
+          //   $.post('/cart/add.js', {
+          //     id: $container.data('original-id'),
+          //     quantity: quantityToAdd,
+          //   }, function (response) {
+          //     window.location.reload();
+          //   }, 'json');
+          // }, 'json');
 
         // Otherwise, the customer is unsubscribed, and we subscribe. 
       } else {
