@@ -17,9 +17,11 @@
                 var $product = $(this);
                 var id = $product.attr('product_id');
                 var product = ISP_PRODUCTS[ id ]; 
+                console.log(product); 
 
-                if ( product.p_min != product.p_max) {
+                if ( parseFloat(product.p) < parseFloat(product.p_c) ) {
                     var $wrapper = $product.find('.isp_product_price_wrapper');
+                    /*
                     var $min = $('<span>', {
                         "class": "isp_product_price money",
                         "data-currency": "USD",
@@ -33,7 +35,7 @@
                         "title": '$' + product.p_max
                     }).text('$' + product.p_max);
 
-                    $wrapper.html($min).append(' - ').append($max);
+                    $wrapper.html($min).append(' - ').append($max);*/
                   
                   	$wrapper.closest('.isp_grid_product').addClass('isp_badge isp_badge_sale ');
                 }
