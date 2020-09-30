@@ -166,7 +166,13 @@
 
       {% if collection.description != blank %}
         <div class="section clearfix collection_description">
-          {{ collection.description }}
+          {% assign collection_description = collection.description | split: '<!-- split -->' %}
+          {% assign collection_description_top = collection_description | first %}
+          {% assign collection_description_bottom = collection_description | last %}
+          {{ collection_description_top }}
+          <span class="hide-mobile">
+            {{ collection_description_bottom }}
+          </span>
         </div>
       {% endif %}
 
@@ -179,9 +185,15 @@
         {% include 'product-loop', sidebar: sidebar %}
       {% endif %}
 
-    {% if settings.pagination_type == 'basic_pagination' %}
-      {% include 'pagination' with sidebar %}
-    {% endif %}
+      {% if settings.pagination_type == 'basic_pagination' %}
+        {% include 'pagination' with sidebar %}
+      {% endif %}
+
+      {% if collection_description.size > 1 %}
+        <div class="section clearfix collection_description hide-desktop">
+          {{ collection_description_bottom }}
+        </div>
+      {% endif %}
 
     </div>
   {% endpaginate %}
