@@ -164,9 +164,11 @@
           {% assign collection_description_top = collection_description | first %}
           {% assign collection_description_bottom = collection_description | last %}
           {{ collection_description_top }}
-          <span class="hide-mobile">
-            {{ collection_description_bottom }}
-          </span>
+          {% if collection_description.size > 1 %}
+            <span class="hide-mobile">
+              {{ collection_description_bottom }}
+            </span>
+          {% endif %}
         </div>
       {% endif %}
 
