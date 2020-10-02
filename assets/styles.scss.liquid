@@ -12564,17 +12564,7 @@ html, body {
         border-bottom: none;
     }
 }
-.isp_mobile_dropdown_container {
-  > form {
-    margin-bottom: 0;
-  }
-}
-.promo_banner-show {
 
-  .isp_mobile_dropdown_container {
-    grid-template-rows: 70px auto;
-  }
-}
 .isp_single_facet_wrapper .isp_facet_title {
     outline: none !important;
 }
@@ -13175,5 +13165,21 @@ a.isp_product_quick_view_button {
     min-height: 0;
     margin: 0;
     background-color: #e2e2e2;
+  }
+}
+.hide-desktop {
+  @media screen and (max-width: 798px) {
+    display: block;
+  }
+  @media screen and (min-width: 799px) {
+    display: none;
+  }
+}
+.hide-mobile {
+  @media screen and (max-width: 798px) {
+    display: none;
+  }
+  @media screen and (min-width: 799px) {
+    display: block;
   }
 }
