@@ -54,11 +54,11 @@
             {% if settings.display_free_shipping_bar %}
               {% if settings.cart_gift != blank and settings.cart_gift_amount != 0 %}
                 {% assign gift_amount_needed = settings.cart_gift_amount | times: 100 %}
-                {% assign amount_left_to_get_a_gift = gift_amount_needed | minus: checkout.total_price | money %}
+                {% assign amount_left_to_get_a_gift = gift_amount_needed | minus: checkout.line_items_subtotal_price | money %}
                 <div class="promo-message">
                   <div class="info">
                     {% include 'icon-present' %}
-                    {% if checkout.total_price  >= gift_amount_needed %}
+                    {% if checkout.line_items_subtotal_price  >= gift_amount_needed %}
                       {{ settings.cart_gift_earned }}
                     {% else %}
                       {{ settings.cart_gift | replace: '%s', amount_left_to_get_a_gift }}
@@ -67,8 +67,10 @@
                   <div class="progress">
                     <span class="amount">{{ checkout.total_price | money }}</span>
                     <div class="bar-wrapper">
-                    <div class="bar" style="width: {{ gift_amount_needed | minus: checkout.total_price | times: 100.0 | divided_by: gift_amount_needed | round }}%;"></div>
+                    <!-- <div class="bar" style="width: {{ gift_amount_needed | minus: checkout.line_items_subtotal_price | times: 100 | divided_by: gift_amount_needed | round }}%;"></div> -->
+                    <div class="bar" style="width: {{ checkout.line_items_subtotal_price | times: 100 | divided_by: gift_amount_needed | round | at_most: 100 }}%;"></div>
                     </div>
+
                     <span class="amount">{{ gift_amount_needed | money }}</span>
                   </div>
                 </div>
