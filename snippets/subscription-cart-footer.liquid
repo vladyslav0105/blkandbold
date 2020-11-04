@@ -41,18 +41,6 @@
 			}
 		}
 
-        /**
-         * Gets the current CJ Event and passes it through URL
-         */
-        function get_cj_event() {
-            // Build the cart_token param for the URL generator
-			try {
-				return ['cjevent=' + (document.cookie.match('(^|; )cjevent=([^;]*)')||0)[2]];
-			} catch (e) {
-				return [];
-			}
-        }
-
 		function get_ga_linker() {
 			// Build the ga_linker param for the URL generator
 			try {
@@ -123,8 +111,7 @@
 				];
 			url_params = url_params
 				.concat(get_cart_token())
-				 .concat(get_ga_linker())
-          .concat(get_cj_event());
+				 .concat(get_ga_linker());
 			return checkout_url + url_params.join('&') + '&discount=' + tieredDiscount;
 		}
 		function filterVisible(elems) {

@@ -1,12 +1,12 @@
 var referralPeriod = 365;
-var url = window.location.href;
+var urlCJ = window.location.href;
 var cjEvent;
 var isCjCookiePresent = false;
 
-if (url.includes("cjevent")){
-    var start = url.indexOf("cjevent");
-    var end = url.length;
-    var query = url.substring(start,end);
+if (urlCJ.includes("cjevent")){
+    var start = urlCJ.indexOf("cjevent");
+    var end = urlCJ.length;
+    var query = urlCJ.substring(start,end);
     var newEnd = query.indexOf("&");
     if (newEnd == -1) {newEnd = query.length};
     cjEvent = query.substring(8,newEnd);
