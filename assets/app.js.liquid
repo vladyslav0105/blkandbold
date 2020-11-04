@@ -226,8 +226,8 @@ $(function () {
 
   $('body')
     .on('change', '#blog_filter', function () {
-      var url = $(this).val();
-      window.location = url;
+      var blogurl = $(this).val();
+      window.location = blogurl;
     });
 
   $('input, select, textarea').on('focus blur', function (event) {
@@ -1577,10 +1577,10 @@ $(document)
     var store_id = 30224384137;
     var uuid = '1ec31736-92e3-4421-96ee-a31be608ac44';
 
-    var url = 'https://api.instantsearchplus.com/full_text_search?q=​' + searchTerm + '​&sort_by=relevancy&store_id=​' + store_id + '&UUID=' + uuid;
+    var search_url = 'https://api.instantsearchplus.com/full_text_search?q=​' + searchTerm + '​&sort_by=relevancy&store_id=​' + store_id + '&UUID=' + uuid;
 
     $.ajax({
-      url: url,
+      url: search_url,
       dataType: 'jsonp',
       success: function (data) {
         loadItems(data.items)

@@ -247,8 +247,7 @@
     <script src="{{ 'sections.js' | asset_url }}"></script>
     <script src="{{ 'utilities.js' | asset_url }}"></script>
     <script src="{{ 'app.js' | asset_url }}"></script>
-    {{ 'cj-event-storage2.js' | asset_url | script_tag }}
-
+    
     {%- if template contains 'collection' -%}
         {%- include 'instantsearch-customizations' -%}
     {%- endif -%}
