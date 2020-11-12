@@ -1,4 +1,5 @@
 
+		<meta name="referrer" content="no-referrer-when-downgrade"/>
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-1483727-1"></script>
 
 <style>.async-hide { opacity: 0 !important} </style>
@@ -11,10 +12,10 @@ h.end=i=function(){s.className=s.className.replace(RegExp(' ?'+y),'')};
 <script name="littledata-tracking-tag">
 (function(){
 	/* Data layer for Google Analytics by Littledata app */
-	/* Version v8.4 */
+	/* Version v8.6 */
 
 	LittledataLayer = {
-		version: 'v8.4',
+		version: 'v8.6',
 		transactionWatcherURL: 'https://transactions.littledata.io',
 		referralExclusion: /(paypal|visa|MasterCard|clicksafe|arcot\.com|geschuetzteinkaufen|checkout\.shopify\.com|checkout\.rechargeapps\.com|portal\.afterpay\.com|payfort)/,
 		googleSignals: true,
@@ -31,6 +32,7 @@ h.end=i=function(){s.className=s.className.replace(RegExp(' ?'+y),'')};
 	
 	LittledataLayer.webPropertyID = 'UA-1483727-1'
 	LittledataLayer.optimizeId = 'GTM-TKJZ6XC'
+	
 
 	{%if customer %}
 		LittledataLayer.customer = {
@@ -96,18 +98,17 @@ h.end=i=function(){s.className=s.className.replace(RegExp(' ?'+y),'')};
 		{% assign collectionProds = "" %}
 		{%- for product in search.results -%}
 			
+	{% assign productId = product.id | append: "|~;" %}
+	{% assign productTitle = product.title | append: "|~;" %}
+	{% assign productPrice = product.price | append: "|~;" %}
+	{% assign productVendor = product.vendor | append: "|~;" %}
+	{% assign productCategory = product.type | append: "|~;" %}
+	{% assign productHandle = product.handle | append: "|~;" %}
+	{% assign compareAtPrice = product.compare_at_price | append: "|~;" %}
 	{%- for variant in product.variants -%}
-		{% assign productId = product.id | append: "|~;" %}
 		{% assign productSku = variant.sku | append: "|~;" %}
-		{% assign productTitle = product.title | append: "|~;" %}
-		{% assign productPrice = product.price | append: "|~;" %}
-		{% assign productVendor = product.vendor | append: "|~;" %}
-		{% assign productCategory = product.type | append: "|~;" %}
-		{% assign productHandle = product.handle | append: "|~;" %}
 		{% assign productVariant = variant.title | append: "|~;" %}
 		{% assign variantId = variant.id | append: "|~;" %}
-		{% assign compareAtPrice = product.compare_at_price | append: "|~;" %}
-
 		{% assign prod = productId | append: productSku | append: productTitle | append: productPrice | append: productVendor | append: productCategory | append: productHandle | append: productVariant | append: variantId | append: compareAtPrice %}
 		{% assign finalProdArray = prod | append: "<|>" %}
 		{% assign collectionProds = collectionProds | append: finalProdArray %}
@@ -125,18 +126,17 @@ h.end=i=function(){s.className=s.className.replace(RegExp(' ?'+y),'')};
 		{% assign collectionProds = "" %}
 		{%- for product in collection.products -%}
 			
+	{% assign productId = product.id | append: "|~;" %}
+	{% assign productTitle = product.title | append: "|~;" %}
+	{% assign productPrice = product.price | append: "|~;" %}
+	{% assign productVendor = product.vendor | append: "|~;" %}
+	{% assign productCategory = product.type | append: "|~;" %}
+	{% assign productHandle = product.handle | append: "|~;" %}
+	{% assign compareAtPrice = product.compare_at_price | append: "|~;" %}
 	{%- for variant in product.variants -%}
-		{% assign productId = product.id | append: "|~;" %}
 		{% assign productSku = variant.sku | append: "|~;" %}
-		{% assign productTitle = product.title | append: "|~;" %}
-		{% assign productPrice = product.price | append: "|~;" %}
-		{% assign productVendor = product.vendor | append: "|~;" %}
-		{% assign productCategory = product.type | append: "|~;" %}
-		{% assign productHandle = product.handle | append: "|~;" %}
 		{% assign productVariant = variant.title | append: "|~;" %}
 		{% assign variantId = variant.id | append: "|~;" %}
-		{% assign compareAtPrice = product.compare_at_price | append: "|~;" %}
-
 		{% assign prod = productId | append: productSku | append: productTitle | append: productPrice | append: productVendor | append: productCategory | append: productHandle | append: productVariant | append: variantId | append: compareAtPrice %}
 		{% assign finalProdArray = prod | append: "<|>" %}
 		{% assign collectionProds = collectionProds | append: finalProdArray %}
