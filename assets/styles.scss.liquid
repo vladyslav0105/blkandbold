@@ -4013,6 +4013,16 @@ button.shopify-payment-button__more-options {
   @include flexbox;
   @include align-items(center);
   @include flex-wrap(wrap);
+  @include respond-to('medium-down') {
+    position: fixed;
+    bottom: 0;
+    z-index: 999;
+    background-color: #fff;
+    padding: 20px;
+    left: 0;
+    border-radius: 20px 20px 0 0;
+    box-shadow: 0 -3px 6px 0 rgba(0, 0, 0, 0.06);
+  }
 }
 
 .product_section .smart-payment-button--true.product_form {
@@ -4048,6 +4058,7 @@ button.shopify-payment-button__more-options {
   width: calc(50% - 12px);
   @include respond-to('small-down') {
     width: 100%;
+    margin-right: 0;
   }
   input.quantity {
     padding-top: 11px;
