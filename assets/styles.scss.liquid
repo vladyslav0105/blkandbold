@@ -4083,6 +4083,17 @@ button.shopify-payment-button__more-options {
 
 p.checkout_button {
   margin-bottom: 0;
+  @include respond-to('medium-down') {
+    position: fixed;
+    bottom: 0;
+    z-index: 999;
+    background-color: #fff;
+    left: 0;
+    border-radius: 20px 20px 0 0;
+    padding: 18px 20px 12px 20px;
+    box-shadow: 0 -3px 6px 0 rgba(31, 31, 31, 0.13);
+    width: 100%;
+  }
 }
 
 .purchase-details__buttons {
