@@ -4013,6 +4013,16 @@ button.shopify-payment-button__more-options {
   @include flexbox;
   @include align-items(center);
   @include flex-wrap(wrap);
+  @include respond-to('medium-down') {
+    position: fixed;
+    bottom: 0;
+    z-index: 999;
+    background-color: #fff;
+    padding: 20px;
+    left: 0;
+    border-radius: 20px 20px 0 0;
+    box-shadow: 0 -3px 6px 0 rgba(0, 0, 0, 0.06);
+  }
 }
 
 .product_section .smart-payment-button--true.product_form {
@@ -4048,6 +4058,7 @@ button.shopify-payment-button__more-options {
   width: calc(50% - 12px);
   @include respond-to('small-down') {
     width: 100%;
+    margin-right: 0;
   }
   input.quantity {
     padding-top: 11px;
@@ -4072,6 +4083,17 @@ button.shopify-payment-button__more-options {
 
 p.checkout_button {
   margin-bottom: 0;
+  @include respond-to('medium-down') {
+    position: fixed;
+    bottom: 0;
+    z-index: 999;
+    background-color: #fff;
+    left: 0;
+    border-radius: 20px 20px 0 0;
+    padding: 18px 20px 12px 20px;
+    box-shadow: 0 -3px 6px 0 rgba(31, 31, 31, 0.13);
+    width: 100%;
+  }
 }
 
 .purchase-details__buttons {
@@ -7592,26 +7614,7 @@ $swatch-label-size: 34px;
     {% endif %}
   }
 
-  .swatch-element.ships-free {
-
-        &:after {
-            content: 'Ships Free';
-                display: block;
-                font-size: 9px;
-                line-height: 20px;
-                text-transform: uppercase;
-                text-align: center;
-                font-weight: bold;
-                letter-spacing: 0.5px;
-                clear: both;
-                background: #007bb6;
-                color: #fff;
-                padding: 0 5px;
-                margin-left: -1px;
-                margin-right: -1px;
-                margin-bottom: -1px;
-        }
-  }
+  
 
   .swatch-element.color {
     padding: 3px;
@@ -13075,7 +13078,19 @@ a.isp_product_quick_view_button {
     }
 }
 
+.with-mobile-image {
+  img.mobile-image {
+      @media screen and (min-width: 799px) {
+          display: none;
+      }
+  }
 
+  img.desktop-image {
+      @media screen and (max-width: 798px) {
+          display: none;
+      }
+  }
+}
 .not-found__recommendations .template {
     display: none !important;
 }

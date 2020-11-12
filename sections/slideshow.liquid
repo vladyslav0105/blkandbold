@@ -36,9 +36,15 @@
 
       {% assign mobile_crop = 'mobile-banner--crop-' | append: block.settings.mobile_image_crop %}
 
-        <div class="gallery-cell slide-{{ forloop.index }}" {{ block.shopify_attributes }} data-block-id="{{block.id}}">
-        {% if block.settings.image != nil %}
-          {% include 'image-element', image: block.settings.image, alt: block.settings.image.alt, stretch_width: true, additional_classes: mobile_crop %}
+      {% assign desktop_classes = mobile_crop | append: ' desktop-image' %}
+      {% assign mobile_classes = mobile_crop | append: ' mobile-image' %}
+
+        <div class="gallery-cell slide-{{ forloop.index }} {% if block.settings.image_mobile != nil %}with-mobile-image{% endif %}" {{ block.shopify_attributes }} data-block-id="{{block.id}}">
+          {%- if block.settings.image_mobile != nil -%}
+          {% include 'image-element', image: block.settings.image_mobile, alt: block.settings.image_mobile.alt, stretch_width: true, additional_classes: mobile_classes %}
+          {%- endif -%}
+          {% if block.settings.image != nil %}
+          {% include 'image-element', image: block.settings.image, alt: block.settings.image.alt, stretch_width: true, additional_classes: desktop_classes %}
         {% else %}
           {% capture i %}{% cycle "1", "2" %}{% endcapture %}
           {{ 'lifestyle-' | append: i | placeholder_svg_tag: 'placeholder-svg placeholder-svg--slideshow' }}
@@ -196,6 +202,12 @@
           "id": "image",
           "label": "Image",
           "info": "1600 x 1000px recommended"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_mobile",
+          "label": "Mobile Image",
+          "info": "Displayed in Mobile Resolutions. 1400 x 1000px recommended"
         },
         {
           "type": "richtext",
