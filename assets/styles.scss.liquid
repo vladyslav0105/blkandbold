@@ -13078,7 +13078,19 @@ a.isp_product_quick_view_button {
     }
 }
 
+.with-mobile-image {
+  img.mobile-image {
+      @media screen and (min-width: 799px) {
+          display: none;
+      }
+  }
 
+  img.desktop-image {
+      @media screen and (max-width: 798px) {
+          display: none;
+      }
+  }
+}
 .not-found__recommendations .template {
     display: none !important;
 }
