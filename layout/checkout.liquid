@@ -20,6 +20,10 @@
 <!-- End of Littledata - Fix Google Analytics Script -->
 
   {% render 'shogun-head' %}
+
+  <!-- Attentive -->
+  {% include 'attentive-header' %}
+
 </head>
   <body>
     {{ skip_to_content_link }}
@@ -41,6 +45,8 @@
           </header>
           <main class="main__content" role="main">
             {{ content_for_layout }}
+            <!-- Attentive -->
+            {% include 'attentive-opt-in' %}
           </main>
           <footer class="main__footer" role="contentinfo">
             {{ content_for_footer }}
