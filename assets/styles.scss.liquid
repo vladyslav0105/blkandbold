@@ -10986,14 +10986,17 @@ $product-media-bg-color: {{ settings.shop_bg_color }};
 .caption-content {
   display: inline-block;
   float: none;
-  max-width: 60%;
+  max-width: 50%;
   font-size: 0;
+  margin-left: 12vw;
   @include respond-to('medium-down'){
     max-width: 80%;
+    margin-left: 0;
   }
   @include respond-to('small-down') {
     width: 100%;
     max-width: 100%;
+    margin-left: 0;
   }
   .action_button {
     margin: 10px;
