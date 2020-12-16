@@ -192,7 +192,7 @@ This file can be re-written at any time.
   
   
   {{ content_for_layout }}
-  {{ 'cj-event-storage2.js' | asset_url | script_tag }}
+  
   <script id="dsq-count-scr" src="//{{ settings.disqus_shortname }}.disqus.com/count.js" async></script>
 <script src="{{ 'jquery.min.js' | asset_url }}"></script>
 <script type="text/javascript" src="/services/javascripts/currencies.js" data-no-instant></script>
@@ -238,29 +238,6 @@ try { setTimeout(function(){StampedFn.reloadUGC();},1000); } catch (e){}
 <script>
       {{ settings.custom_scripts }}
     </script>
-<script>
-document.addEventListener('rebuy.productsChange', function(event) {
-  console.log('rebuy.productsChange event', event.detail);
-  var widget = event.detail.widget;
-  var products = event.detail.products;
-  var widget_id = '1284';
-  var gift_item = null;
-  // Find GWP item...
-  for (var i = 0; i < Rebuy.Cart.cart.items.length; i++) {
-    if (Rebuy.Cart.cart.items[i].properties['_widget_id'] && Rebuy.Cart.cart.items[i].properties['_widget_id'] == widget_id) {
-      gift_item = Rebuy.Cart.cart.items[i];
-      break;
-    }
-  }
-  if (widget.id == widget_id && products.length > 0 && !gift_item) {
-    // Add gift item...
-    widget.addToCart(products[0]);
-  } else if (widget.id == '1284' && products.length == 0 && gift_item) {
-    // Remove gift item...
-    widget.removeFromCartAtIndex(Rebuy.Cart.cart.items.indexOf(gift_item));
-  }
-});
-</script>
 <script async type="text/javascript" id="stamped-script-widget" data-api-key="pubkey-hB8A8aou62168X78f8Z4AYqOQ7NZne" src="https://cdn1.stamped.io/files/widget.min.js"></script>
 <script>window.gorgiasChatParameters = {"smooch": {"givenName": "{{ customer.name }}","email": "{{ customer.email }}","properties": {"shopify__cart__total_price": "{{ cart.total_price | money | strip_html | default: null }}","shopify__cart__nb_of_items": {{ cart.items | size | default: 0 }},{% for item in cart.items %}"shopify__cart__items-{{ forloop.index }}-[]":"{\"line_price\":\"{{item.line_price|money|strip_html|default:null}}\",\"price\":\"{{item.price|money|strip_html|default:null}}\",\"product_id\":\"{{item.product_id|default:null}}\",\"quantity\":{{item.quantity|default:null}},\"sku\":\"{{item.sku|default:null}}\",\"title\":\"{{item.title}}\",\"variant_id\":{{item.variant_id|default:null}},\"vendor\":\"{{item.vendor|default:null}}\",\"id\":{{item.id|default:null}}}"{% if forloop.last != true %},{% endif %}{% endfor %}}}}</script>
 <script>window.gorgiasChatParameters = {"smooch": {"properties": {"shopify__cart__total_price": "{{ cart.total_price | money | strip_html | default: null }}","shopify__cart__nb_of_items": {{ cart.items | size | default: 0 }},{% for item in cart.items %}"shopify__cart__items-{{ forloop.index }}-[]":"{\"line_price\":\"{{item.line_price|money|strip_html|default:null}}\",\"price\":\"{{item.price|money|strip_html|default:null}}\",\"product_id\":\"{{item.product_id|default:null}}\",\"quantity\":{{item.quantity|default:null}},\"sku\":\"{{item.sku|default:null}}\",\"title\":\"{{item.title}}\",\"variant_id\":{{item.variant_id|default:null}},\"vendor\":\"{{item.vendor|default:null}}\",\"id\":{{item.id|default:null}}}"{% if forloop.last != true %},{% endif %}{% endfor %}}}}</script>

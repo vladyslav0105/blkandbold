@@ -443,5 +443,13 @@
   "purchase_limits": {
     "max_items": "You can add up to |items| items to your cart.",
     "items_in_cart": "You've already added |items| items to your cart."
+  },
+  "shopify": {
+    "checkout": {
+      "contact": {
+        "optional_phone_label": "Mobile Phone Number",
+        "phone_tooltip": " Receive optional SMS notification after your order"
+      }
+    }
   }
 }
