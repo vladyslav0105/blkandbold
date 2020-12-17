@@ -682,12 +682,46 @@ img[data-sizes="100vw"] {
 
 .banner {
   .image-element__wrap {
-    @include respond-to('small-up') {
+    @include respond-to('medium-up') {
       display: flex;
       min-height: 350px;
       img {
         object-fit: cover;
       }
+    }
+    @include respond-to('medium-down') {
+      &.mobile-image {
+        display: flex;
+        min-height: 350px;
+      }
+      &.desktop-image {
+        display: initial;
+        min-height: auto;
+      }
+    }
+    @include respond-to('medium-up') {
+      &.mobile-image {
+        display: initial;
+        min-height: auto;
+      }
+      &.desktop-image {
+        display: flex;
+        min-height: 350px;
+      }
+    }
+  }
+  &.with-mobile-image {
+    
+    img.mobile-image {
+        @media screen and (min-width: 799px) {
+            display: none;
+        }
+    }
+
+    img.desktop-image {
+        @media screen and (max-width: 798px) {
+            display: none;
+        }
     }
   }
 }
