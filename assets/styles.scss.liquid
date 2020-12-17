@@ -681,37 +681,53 @@ img[data-sizes="100vw"] {
 }
 
 .banner {
+  background-color: #fff !important;
+  .gallery-cell {
+    background-color: #fff !important;
+  }
   .image-element__wrap {
     @include respond-to('medium-up') {
-      display: flex;
-      min-height: 350px;
-      img {
-        object-fit: cover;
+      &:not(.mobile-image){
+        display: flex;
+        min-height: 350px;
+        img {
+          object-fit: cover;
+        }
       }
     }
     @include respond-to('medium-down') {
-      &.mobile-image {
-        display: flex;
-        min-height: 350px;
-      }
-      &.desktop-image {
-        display: initial;
-        min-height: auto;
+      height: 350px;
+      img {
+        object-fit: cover;
+        height: 350px;
       }
     }
-    @include respond-to('medium-up') {
-      &.mobile-image {
-        display: initial;
-        min-height: auto;
+  }
+  .with-mobile-image {
+    .image-element__wrap {
+      @include respond-to('medium-down') {
+        &.mobile-image {
+          display: flex;
+          min-height: 350px;
+        }
+        &.desktop-image {
+          display: initial;
+          min-height: auto;
+        }
       }
-      &.desktop-image {
-        display: flex;
-        min-height: 350px;
+      @include respond-to('medium-up') {
+        &.mobile-image {
+          display: initial;
+          min-height: auto;
+        }
+        &.desktop-image {
+          display: flex;
+          min-height: 350px;
+        }
       }
     }
   }
   &.with-mobile-image {
-    
     img.mobile-image {
         @media screen and (min-width: 799px) {
             display: none;
@@ -730,7 +746,7 @@ img[data-sizes="100vw"] {
   height: auto;
 
   @include respond-to('small-down') {
-      height: 35vh !important;
+      height: 350px !important;
       object-fit: cover;
   }
 }
