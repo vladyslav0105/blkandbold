@@ -86,7 +86,10 @@ max_height: <number>
   </div>
 {% else %}
 {% comment %}Build image element{% endcomment %}
-<div class="image-element__wrap {{ additional_classes }}" style="{{ background_color }}{{ crop_to_aspect_ratio }} {% unless stretch_width == true or object_fit %}max-width: {{ image.width }}px;{% endunless %}">
+{% if additional_classes contains 'desktop-image' or additional_classes contains 'mobile-image' %}
+  {% assign add_to_wrapper = additional_classes %}
+{% endif %}
+<div class="image-element__wrap {{ add_to_wrapper }}" style="{{ background_color }}{{ crop_to_aspect_ratio }} {% unless stretch_width == true or object_fit %}max-width: {{ image.width }}px;{% endunless %}">
   <img  alt="{{ alt | escape }}"
         {% if low_quality_image %}
           src="{{ low_quality_image }}"
