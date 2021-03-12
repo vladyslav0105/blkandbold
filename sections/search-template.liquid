@@ -142,11 +142,11 @@
                 <div class="info">
                   {% unless settings.display_price == false and item.available == false %}
                     <span class="price">
-                      {% if item.compare_at_price_max > item.price %}
-                        <span class="was_price">{{ item.compare_at_price_max | money }}</span>
+                      {% if item.compare_at_price > item.price %}
+                        <span class="was_price">{{ item.compare_at_price | money }}</span>
                       {% endif %}
                         {% if item.price_varies %}
-                          {% if item.compare_at_price_max > item.price %}
+                          {% if item.compare_at_price > item.price %}
                             <br />
                           {% endif %}
                           <small><em>{{ 'products.general.from' | t }}</em></small>
