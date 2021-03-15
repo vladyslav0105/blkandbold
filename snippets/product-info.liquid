@@ -16,7 +16,7 @@
           {% if collection_handles contains 'coming-soon' %}
             <span class="coming-soon">{{ 'collections.general.coming_soon' | t }}</span>
           {% else %}
-            <span class="price {% if product.compare_at_price_max > product.price %}sale{% endif %}">
+            <span class="price {% if product.compare_at_price > product.price %}sale{% endif %}">
               {% unless product.available == false and settings.display_price == false %}
                 <span class="current_price">
                   {% if product.price_varies and product.price_min > 0 %}

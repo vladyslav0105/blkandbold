@@ -19,8 +19,8 @@
       {% assign price = item.price | money | json %}
       {% assign rawPrice = item.price | json %}
       {% assign available = item.available | json %}
-      {% assign compare = item.compare_at_price_max | money | json %}
-      {% assign rawCompare = item.compare_at_price_max | json %}
+      {% assign compare = item.compare_at_price | money | json %}
+      {% assign rawCompare = item.compare_at_price | json %}
       {% assign priceVaries = item.price_varies | json %}
       {% assign priceMin = item.price_min | json %}
     {% elsif item.object_type == 'article' %}

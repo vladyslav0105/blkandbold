@@ -51,7 +51,7 @@
               <div class="feature_divider"></div>
             {% else %}
 
-              {% if settings.sale_banner_enabled and product.compare_at_price_max > product.price %}
+              {% if settings.sale_banner_enabled and product.compare_at_price > product.price %}
                 <div class="sale_banner_product">{{ 'collections.general.sale' | t }}</div>
               {% endif %}
               {% if collection_handles contains 'new' %}

@@ -9,7 +9,7 @@
     URL: "{{ shop.secure_url }}{{ product.url }}",
     Brand: {{ product.vendor|json }},
     Price: {{ product.price|money|json }},
-    CompareAtPrice: {{ product.compare_at_price_max|money|json }}
+    CompareAtPrice: {{ product.compare_at_price|money|json }}
   };
 
   _learnq.push(['track', 'Viewed Product', item]);

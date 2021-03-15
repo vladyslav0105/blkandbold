@@ -52,7 +52,7 @@
             {% assign variant = product.selected_or_first_available_variant %}
 
             {% if product.available %}
-              {% if settings.sale_banner_enabled and product.compare_at_price_max > product.price %}
+              {% if settings.sale_banner_enabled and product.compare_at_price > product.price %}
                 <div class="sale_banner_product">{{ 'collections.general.sale' | t }}</div>
               {% endif %}
             {% endif %}
