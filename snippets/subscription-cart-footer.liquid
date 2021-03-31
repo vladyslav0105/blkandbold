@@ -40,7 +40,6 @@
 				return [];
 			}
 		}
-
 		function get_ga_linker() {
 			// Build the ga_linker param for the URL generator
 			try {
@@ -99,20 +98,14 @@
 		}
 		function buildCheckoutUrl(options) {
 			// Build the Checkout URL
-
-			var tieredDiscount = '';
-			if (localStorage.getItem('tieredDiscount')){  
-				tieredDiscount = localStorage.getItem('tieredDiscount');
-			}
-
 			var checkout_url = 'https://' + options.checkout_domain + '/r/checkout?',
 				url_params = [
 					'myshopify_domain=' + options.permanent_domain,
 				];
 			url_params = url_params
 				.concat(get_cart_token())
-				 .concat(get_ga_linker());
-			return checkout_url + url_params.join('&') + '&discount=' + tieredDiscount;
+				.concat(get_ga_linker());
+			return checkout_url + url_params.join('&');
 		}
 		function filterVisible(elems) {
 			// Return visible elements
