@@ -8,6 +8,8 @@ $(document).ready(function() {
       $('.footer').addClass('footer-static');
     }    
   } else {
-    $('.footer').removeClass('footer-static');
+    if($('.footer').hasClass(footer-static)) {
+      $('.footer').removeClass('footer-static');
+    }    
   }
 });
