@@ -2,6 +2,11 @@
 ** Cart page - default view **
 - Template section
 {% endcomment %}
+{% if settings.enable_collection_discount %}
+  {%- assign recharge_collection_discount = collections[settings.collection_discount_collection] -%}
+  {%- assign recharge_collection_discount_in_cart = false -%}
+  {%- assign recharge_checkout = false -%}
+{% endif %}
 <div class="container main content">
 <a name="pagecontent" id="pagecontent"></a>
 
@@ -44,6 +49,17 @@
 
         {% assign total_saving = 0 %}
         {% for item in cart.items %}
+          {%- if settings.enable_collection_discount -%}
+            {% if item.properties['shipping_interval_unit_type'] %}
+              {%- assign recharge_checkout = true -%}
+              {%- assign verify_product = all_products[item.product.metafields.subscriptions.original_handle] -%}
+            {% else %}
+              {%- assign verify_product = item.product %}
+            {% endif %}
+            {%- if verify_product.collections contains  recharge_collection_discount -%}
+              {%- assign recharge_collection_discount_in_cart = true -%}
+            {%- endif -%}
+          {%- endif -%}
           {% if item.variant.compare_at_price > item.variant.price %}
             {% assign saving = item.variant.compare_at_price | minus: item.variant.price | times: item.quantity %}
             {% assign total_saving = saving | plus: total_saving %}
@@ -197,6 +213,12 @@
               </span>
               <span>{{ 'cart.general.subtotal' | t }}</span>
             </p>
+
+            {% if settings.enable_collection_discount and recharge_collection_discount_in_cart and recharge_checkout %}
+            <p class="recharge-discount-in-cart">
+              Products in <b>{{recharge_collection_discount.title}}</b> collection will get <b>{{settings.collection_discount_amount}}</b> discount at checkout.
+            </p>
+            {% endif %}
 
             {%- if customer -%}
                 {%- include 'points-balance' -%}

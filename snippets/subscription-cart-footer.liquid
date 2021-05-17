@@ -105,6 +105,7 @@
 			url_params = url_params
 				.concat(get_cart_token())
 				.concat(get_ga_linker());
+			if(document.querySelector('.recharge-discount-in-cart') !== null) url_params.push("discount={{settings.collection_discount_discount}}");
 			return checkout_url + url_params.join('&');
 		}
 		function filterVisible(elems) {

@@ -8,6 +8,32 @@
     "theme_support_url": "https:\/\/help.outofthesandbox.com\/hc\/en-us\/requests\/new"
   },
   {
+    "name": "Recharge - Collection Based Discount",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "enable_collection_discount",
+        "label": "Enable collection discount",
+        "default": true
+      },
+      {
+        "type": "collection",
+        "id": "collection_discount_collection",
+        "label": "Targeted collection"
+      },
+      {
+        "type": "text",
+        "id": "collection_discount_discount",
+        "label": "Recharge discount to auto-apply"
+      },
+      {
+        "type": "text",
+        "id": "collection_discount_amount",
+        "label": "Recharge discount amount"
+      }
+    ]
+  },
+  {
     "name": "Tiered Discounts",
     "settings": [
       {
