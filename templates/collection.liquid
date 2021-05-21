@@ -1,3 +1,11 @@
+{% assign all_collections_url = '/collections/all-products' %}
+
+{% if collection.url == '/collections/all' %}
+<script>
+  window.location.href = '{{ shop.url }}{{ all_collections_url }}';
+</script>
+{% endif %}
+
 {% render 'shogun-products', content: collection %}
 {{collection.metafields.shogun.above}}
 {% comment %}
