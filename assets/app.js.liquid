@@ -708,7 +708,7 @@ $(function () {
           limit = 'data-limit="' + parseInt(item.properties._limit) + '"';
         }
 
-        var isSubscription = (item.properties.shipping_interval_frequency != null); 
+        var isSubscription = (item.properties != null && item.properties.shipping_interval_frequency != null);
 
         cart_items_html += '<div class="left product-quantity-box">';
         cart_items_html += '<span class="ss-icon product-minus js-change-quantity" data-func="minus"><span class="icon-minus"></span></span>';
