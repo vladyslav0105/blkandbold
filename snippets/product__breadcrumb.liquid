@@ -42,11 +42,17 @@
   </a>
   <span class="breadcrumb-divider">/</span>
   {% if collection %}
-    <a href="{{ collection.url }}" title="{{ collection.title | escape }}" class="breadcrumb_link">
+    {% if collection.url == '/collections/all' %}
+      {% assign url = '/collections/all-products' %}
+    {% else %}
+      {% assign url = collection.url %}
+    {% endif %}
+    <a href="{{ url }}" title="{{ collection.title | escape }}" class="breadcrumb_link">
       <span>{{ collection.title }}</span>
       </a>
   {% else %}
-    <a href="{{ routes.all_products_collection_url }}" title="{{ collections.all.title }}" class="breadcrumb_link">
+    {% assign url = '/collections/all-products' %}
+    <a href="{{ url }}" title="{{ collections.all.title }}" class="breadcrumb_link">
       <span>{{ collections.all.title }}</span>
       </a>
   {% endif %}
