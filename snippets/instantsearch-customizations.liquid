@@ -75,6 +75,9 @@
                   $('.top_bar .cart_container, .header__cart .cart_container').addClass('active_link');
                 }
 
+                $('body').css('cursor', 'default');
+                $('#isp_product_quick_view_overlay').remove();
+                $('#isp_product_quick_view_model').remove();
                 $('body').trigger('cartUpdated');
             }, 'json');
         },
