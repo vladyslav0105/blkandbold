@@ -163,7 +163,8 @@
     {% else %}
       <div class="sixteen columns">
     {% endif %}
-
+      {%- comment -%}
+      
       {% if collection.description != blank %}
         <div class="section clearfix collection_description">
           {% assign collection_description = collection.description | split: '<!-- split -->' %}
@@ -178,6 +179,8 @@
         </div>
       {% endif %}
 
+      {%- endcomment -%}      
+
       {% if collection.products.size == 0 %}
         <div class="section clearfix collection-matrix">
           <p class="quote">{{ 'collections.general.no_matches' | t }}</p>
@@ -190,11 +193,19 @@
       {% if settings.pagination_type == 'basic_pagination' %}
         {% include 'pagination' with sidebar %}
       {% endif %}
-
-      {% if collection_description.size > 1 %}
-        <div class="section clearfix collection_description hide-desktop">
-          {{ collection_description_bottom }}
+      
+      {%- comment -%}
+        {% if collection_description.size > 1 %}
+          <div class="section clearfix collection_description hide-desktop">
+            {{ collection_description_bottom }}
+          </div>
+        {% endif %}
+      {%- endcomment -%}
+      {% if collection.description != blank %}
+        <div class="section clearfix collection_description">
+          {{ collection.description }}
         </div>
+        
       {% endif %}
 
     </div>
