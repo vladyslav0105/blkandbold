@@ -130,6 +130,8 @@ This file can be re-written at any time.
 
   {{ 'recharge.scss.css' | asset_url | stylesheet_tag }}
 
+  {% render 'easy-gdpr-settings' %}
+
 </head>
 
 
@@ -201,6 +203,7 @@ This file can be re-written at any time.
 <script src="{{ 'sections.js' | asset_url }}"></script>
 <script src="{{ 'utilities.js' | asset_url }}"></script>
 <script src="{{ 'app.js' | asset_url }}"></script>
+<script src="{{ 'custom.js' | asset_url }}"></script>
 <script src="{{ 'instantclick.min.js' | asset_url }}" data-no-instant></script>
 <script data-no-instant>
 
@@ -239,9 +242,8 @@ try { setTimeout(function(){StampedFn.reloadUGC();},1000); } catch (e){}
       {{ settings.custom_scripts }}
     </script>
 <script async type="text/javascript" id="stamped-script-widget" data-api-key="pubkey-hB8A8aou62168X78f8Z4AYqOQ7NZne" src="https://cdn1.stamped.io/files/widget.min.js"></script>
-<script>window.gorgiasChatParameters = {"smooch": {"givenName": "{{ customer.name }}","email": "{{ customer.email }}","properties": {"shopify__cart__total_price": "{{ cart.total_price | money | strip_html | default: null }}","shopify__cart__nb_of_items": {{ cart.items | size | default: 0 }},{% for item in cart.items %}"shopify__cart__items-{{ forloop.index }}-[]":"{\"line_price\":\"{{item.line_price|money|strip_html|default:null}}\",\"price\":\"{{item.price|money|strip_html|default:null}}\",\"product_id\":\"{{item.product_id|default:null}}\",\"quantity\":{{item.quantity|default:null}},\"sku\":\"{{item.sku|default:null}}\",\"title\":\"{{item.title}}\",\"variant_id\":{{item.variant_id|default:null}},\"vendor\":\"{{item.vendor|default:null}}\",\"id\":{{item.id|default:null}}}"{% if forloop.last != true %},{% endif %}{% endfor %}}}}</script>
-<script>window.gorgiasChatParameters = {"smooch": {"properties": {"shopify__cart__total_price": "{{ cart.total_price | money | strip_html | default: null }}","shopify__cart__nb_of_items": {{ cart.items | size | default: 0 }},{% for item in cart.items %}"shopify__cart__items-{{ forloop.index }}-[]":"{\"line_price\":\"{{item.line_price|money|strip_html|default:null}}\",\"price\":\"{{item.price|money|strip_html|default:null}}\",\"product_id\":\"{{item.product_id|default:null}}\",\"quantity\":{{item.quantity|default:null}},\"sku\":\"{{item.sku|default:null}}\",\"title\":\"{{item.title}}\",\"variant_id\":{{item.variant_id|default:null}},\"vendor\":\"{{item.vendor|default:null}}\",\"id\":{{item.id|default:null}}}"{% if forloop.last != true %},{% endif %}{% endfor %}}}}</script>
-<script src="https://config.gorgias.io/production/bgJ1Q6Q9dw6vXKOM/chat/30BVo7vZRG7rvzmQ.js" defer></script>
+<script id="gorgias-chat-widget-install">!function(_){_.GORGIAS_CHAT_APP_ID="3457",_.GORGIAS_CHAT_BASE_URL="us-east1-898b.production.gorgias.chat",_.GORGIAS_API_BASE_URL="config.gorgias.chat";var e=new XMLHttpRequest;e.open("GET","https://config.gorgias.chat/applications/3457",!0),e.onload=function(t){if(4===e.readyState)if(200===e.status){var n=JSON.parse(e.responseText);if(!n.application||!n.bundleVersion)throw new Error("Missing fields in the response body - https://config.gorgias.chat/applications/3457");if(_.GORGIAS_CHAT_APP=n.application,_.GORGIAS_CHAT_BUNDLE_VERSION=n.bundleVersion,n&&n.texts&&(_.GORGIAS_CHAT_TEXTS=n.texts),n&&n.sspTexts&&(_.GORGIAS_CHAT_SELF_SERVICE_PORTAL_TEXTS=n.sspTexts),!document.getElementById("gorgias-chat-container")){var o=document.createElement("div");o.id="gorgias-chat-container",document.body.appendChild(o);var r=document.createElement("script");r.setAttribute("defer",!0),r.src="https://client-builds.production.gorgias.chat/{bundleVersion}/static/js/main.js".replace("{bundleVersion}",n.bundleVersion),document.body.appendChild(r)}}else console.error("Failed request GET - https://config.gorgias.chat/applications/3457")},e.onerror=function(_){console.error(_)},e.send()}(window||{});</script>
+<script id="gorgias-chat-shopify-install">!function(_){_.SHOPIFY_PERMANENT_DOMAIN="{{shop.permanent_domain}}",_.SHOPIFY_CUSTOMER_ID="{{customer.id}}",_.SHOPIFY_CUSTOMER_EMAIL="{{customer.email}}"}(window||{});</script>
 <script src="https://cdn.attn.tv/bestbullysticks/dtag.js"></script>
   <style type="text/css">
     body, html {
