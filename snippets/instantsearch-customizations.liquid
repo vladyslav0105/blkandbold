@@ -3,88 +3,72 @@
     var isp_related_options = {
         LAZYLOAD: 'progressive'
     };
-    var __isp_options = {
-        isp_serp_raty_reviews_option: {
-            starType: 'i', // Font-based stars (instead of images)
-            starHalf: 'stamped-fa fa-star-half-o',
-            starOff: 'stamped-fa stamped-fa-star-o',
-            starOn: 'stamped-fa stamped-fa-star'
-        },
-        isp_serp_callback: function(data, facets_only) {
+    // var __isp_options = {
+    //     isp_serp_raty_reviews_option: {
+    //         starType: 'i', // Font-based stars (instead of images)
+    //         starHalf: 'stamped-fa fa-star-half-o',
+    //         starOff: 'stamped-fa stamped-fa-star-o',
+    //         starOn: 'stamped-fa stamped-fa-star'
+    //     },
+    //     isp_serp_callback: function(data, facets_only) {
 
-            // Updating product prices.
-            $('.isp_grid_product').each( function (index) {
-                var $product = $(this);
-                var id = $product.attr('product_id');
-                var product = ISP_PRODUCTS[ id ]; 
-                console.log(product); 
+    //         // Updating product prices.
+    //         $('.isp_grid_product').each( function (index) {
+    //             var $product = $(this);
+    //             var id = $product.attr('product_id');
+    //             var product = ISP_PRODUCTS[ id ]; 
+    //             console.log(product); 
 
-                if ( parseFloat(product.p) < parseFloat(product.p_c) ) {
-                    var $wrapper = $product.find('.isp_product_price_wrapper');
-                    /*
-                    var $min = $('<span>', {
-                        "class": "isp_product_price money",
-                        "data-currency": "USD",
-                        "data-currency-usd": product.p_min,
-                        "title": '$' + product.p_min
-                    }).text('$' + product.p_min);
-                    var $max = $('<span>', {
-                        "class": "isp_product_price money",
-                        "data-currency": "USD",
-                        "data-currency-usd": product.p_max,
-                        "title": '$' + product.p_max
-                    }).text('$' + product.p_max);
+    //             if ( parseFloat(product.p) < parseFloat(product.p_c) ) {
+    //                 var $wrapper = $product.find('.isp_product_price_wrapper');                  
+    //               	$wrapper.closest('.isp_grid_product').addClass('isp_badge isp_badge_sale ');
+    //             }
+    //         });
 
-                    $wrapper.html($min).append(' - ').append($max);*/
-                  
-                  	$wrapper.closest('.isp_grid_product').addClass('isp_badge isp_badge_sale ');
-                }
-            });
+    //         // Updating Facets behaviors.
+    //         $('.isp_facet_title').each( function () {
+    //             var values = $(this).closest('.isp_single_facet_wrapper')
+    //                 .find('[aria-checked=true]');
 
-            // Updating Facets behaviors.
-            $('.isp_facet_title').each( function () {
-                var values = $(this).closest('.isp_single_facet_wrapper')
-                    .find('[aria-checked=true]');
+    //             if ( values.length < 1 && !$(this).closest('.isp_single_facet_wrapper').hasClass('collapsed') ) {
+    //                 $(this).click();
+    //             }
+    //         });
 
-                if ( values.length < 1 && !$(this).closest('.isp_single_facet_wrapper').hasClass('collapsed') ) {
-                    $(this).click();
-                }
-            });
+    //         $('.isp_single_facet_wrapper').addClass('visible');
+    //         $('#isp_left_container_header h3').remove();
+    //         $('#isp_left_container_header').append('<h3>Filter</h3>');
 
-            $('.isp_single_facet_wrapper').addClass('visible');
-            $('#isp_left_container_header h3').remove();
-            $('#isp_left_container_header').append('<h3>Filter</h3>');
+    //         // Removing facets with only one option
+    //         $('.isp_single_facet_wrapper').each(function() {
+    //             if ($(this).find('.isp_facet_value').length === 1) {
+    //                 $(this).remove();
+    //             }
+    //         });
+    //     },
 
-            // Removing facets with only one option
-            $('.isp_single_facet_wrapper').each(function() {
-                if ($(this).find('.isp_facet_value').length === 1) {
-                    $(this).remove();
-                }
-            });
-        },
+    //     isp_add_to_cart_callback: function(product_id, form_id) {
+    //         $.get('/cart.js', function(cart) {
+    //             refreshCart( cart );
 
-        isp_add_to_cart_callback: function(product_id, form_id) {
-            $.get('/cart.js', function(cart) {
-                refreshCart( cart );
+    //             if($('#header').is(':visible')) {
+    //               $('#header .cart_container').addClass('active_link');
+    //             } else if ($('.sticky_nav--stick').length) {
+    //               $('.sticky_nav .cart_container').addClass('active_link');
+    //             } else {
+    //               $('.top_bar .cart_container, .header__cart .cart_container').addClass('active_link');
+    //             }
 
-                if($('#header').is(':visible')) {
-                  $('#header .cart_container').addClass('active_link');
-                } else if ($('.sticky_nav--stick').length) {
-                  $('.sticky_nav .cart_container').addClass('active_link');
-                } else {
-                  $('.top_bar .cart_container, .header__cart .cart_container').addClass('active_link');
-                }
+    //             $('body').trigger('cartUpdated');
+    //         }, 'json');
+    //     },
 
-                $('body').trigger('cartUpdated');
-            }, 'json');
-        },
+    //     isp_serp_quickview_callback: function () {
+    //         var text = $('.isp_quick_view_product_sellable_status').text();
 
-        isp_serp_quickview_callback: function () {
-            var text = $('.isp_quick_view_product_sellable_status').text();
-
-            if ( text == 'In Stock' ) {
-                $('.isp_quick_view_product_sellable_status').css('color', '#007bb6');
-            }
-        }
-    }
+    //         if ( text == 'In Stock' ) {
+    //             $('.isp_quick_view_product_sellable_status').css('color', '#007bb6');
+    //         }
+    //     }
+    // }
 </script>
