@@ -156,32 +156,10 @@
       <div class="twelve columns medium-down--one-whole">
     {% else %}
       <div class="sixteen columns">
-    {% endif %}
-      {%- comment -%}
-        {% if collection.description != blank %}
-          <div class="section clearfix collection_description">
-            {% assign collection_description = collection.description | split: '<!-- split -->' %}
-            {% assign collection_description_top = collection_description | first %}
-            {% assign collection_description_bottom = collection_description | last %}
-            {{ collection_description_top }}
-            {% if collection_description.size > 1 %}
-              <span class="hide-mobile">
-                {{ collection_description_bottom }}
-              </span>
-            {% endif %}
-          </div>
-        {% endif %}
-      {%- endcomment -%}
-      
-      <div id="isp_search_result_page"></div><script src="https://shopify.instantsearchplus.com/js/search_result_loading_page.js?smart_navigation=1&isp_platform=shopify&UUID=1ec31736-92e3-4421-96ee-a31be608ac44&store_id=30224384137"></script>
+    {% endif %}  
             
-      {%- comment -%}
-          {% if collection_description.size > 1 %}
-            <div class="section clearfix collection_description hide-desktop">
-              {{ collection_description_bottom }}
-            </div>
-          {% endif %}
-      {%- endcomment -%}
+      <div id="isp_search_result_page"></div><script src="https://shopify.instantsearchplus.com/js/search_result_loading_page.js?smart_navigation=1&isp_platform=shopify&UUID=1ec31736-92e3-4421-96ee-a31be608ac44&store_id=30224384137"></script>
+
       {% if collection.description != blank %}
         <div class="section clearfix collection_description">
           {{ collection.description }}
