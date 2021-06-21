@@ -11,5 +11,5 @@ $(document).ready(function() {
     if($('.footer').hasClass(footer-static)) {
       $('.footer').removeClass('footer-static');
     }    
-  }
+  }    
 });
