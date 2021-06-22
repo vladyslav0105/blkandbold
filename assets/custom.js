@@ -8,7 +8,7 @@ $(document).ready(function() {
       $('.footer').addClass('footer-static');
     }    
   } else {
-    if($('.footer').hasClass(footer-static)) {
+    if($('.footer').hasClass('footer-static')) {
       $('.footer').removeClass('footer-static');
     }    
   }
