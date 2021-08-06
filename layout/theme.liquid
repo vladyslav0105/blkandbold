@@ -310,8 +310,8 @@ try { setTimeout(function(){StampedFn.reloadUGC();},1000); } catch (e){}
 {% render 'back-in-stock-helper' %}
 <!-- End Back in Stock helper snippet -->
 
-<!-- Rebuy: Gift with Purchase -->
-<div data-rebuy-id="1284"></div>
+<!-- Rebuy: Gift with Purchase
+<div data-rebuy-id="1284"></div> -->
 
 <script async type="text/javascript" id="stamped-script-widget" data-api-key="pubkey-hB8A8aou62168X78f8Z4AYqOQ7NZne" src="https://cdn1.stamped.io/files/widget.min.js"></script>
 
@@ -321,6 +321,7 @@ try { setTimeout(function(){StampedFn.reloadUGC();},1000); } catch (e){}
   <!-- Podsights Pixel -->
   {% include 'podsights-loader' %}
   </body>
+  
 </html>
 {% endcapture %}
 {% assign content = content | replace_first: '<!DOCTYPE', '!DOCTYPE' | split: ' <' %}

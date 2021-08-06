@@ -5,7 +5,8 @@
 {% endcomment %}
 <link rel="stylesheet" href="https://gdpr-app.firebaseapp.com/style.css" type="text/css"/>
 <div class="EG-container">
-{% include 'shogun-products', content: page %}
+{% render 'shogun-products', content: page %}
+
 <a name="pagecontent" id="pagecontent"></a>
 
 <div class="sixteen columns page clearfix">
@@ -18,6 +19,7 @@
     {% include 'page-multi-column', content: page.content %}
   </div>
 </div>
+
 
 
 </div>
