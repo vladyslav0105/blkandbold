@@ -12,4 +12,12 @@ $(document).ready(function() {
       $('.footer').removeClass('footer-static');
     }    
   }
+
+  var url = new URL(window.location.href);
+
+  if (url.searchParams.get('msg')) {
+    var custom_text = decodeURIComponent(url.searchParams.get('msg'));
+    $('.promo_banner__content').html(custom_text);
+
+  }
 });
