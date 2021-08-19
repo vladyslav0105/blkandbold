@@ -12,13 +12,13 @@
             starOn: 'stamped-fa stamped-fa-star'
         },
         isp_serp_callback: function(data, facets_only) {
-
             // Updating product prices.
             $('.isp_grid_product').each( function (index) {
                 var $product = $(this);
                 var id = $product.attr('product_id');
                 var product = ISP_PRODUCTS[ id ]; 
-                console.log(product); 
+                // REplace default Add to cart 
+                AddToCart.create(product, $(this));
 
                 if ( parseFloat(product.p) < parseFloat(product.p_c) ) {
                     var $wrapper = $product.find('.isp_product_price_wrapper');
@@ -40,6 +40,12 @@
                   
                   	$wrapper.closest('.isp_grid_product').addClass('isp_badge isp_badge_sale ');
                 }
+                // Enable lazy loading
+                var prod_img = $product.find('.isp_product_image');
+                prod_img.addClass('lazyload');
+                prod_img.attr('loading', 'lazy');
+                prod_img.attr('data-src', prod_img.attr('src'));
+                prod_img.removeAttr('src');
             });
 
             // Updating Facets behaviors.
@@ -91,4 +97,91 @@
             }
         }
     }
+
+
+  function getFirstVariantID(product) {
+    return product.vra && product.vra.length > 0 ? product.vra[0][0] : product.id;
+  }
+
+  const AddToCart = {
+    create: (product, $gridItem) => {
+      console.log('product')
+      if($gridItem.find('.isp-product-add-to-cart-wrap').length === 0) {
+        const type = 'single';
+        const isFrom = AddToCart.checkFrom($gridItem);
+        AddToCart.setAddToCart(product, $gridItem, "ADD TO CART", isFrom);
+      }
+    },
+    
+    checkFrom: ($gridItem) => {
+      return $gridItem.find(".isp_product_price_wrapper").text()?.includes("from");
+    },
+    
+    removePrice: ($gridItem) => {
+      $gridItem.find(".isp_product_price_wrapper").remove();
+    },
+    
+    setSoldOut: ($gridItem) => {
+      const HTML = `<div class="isp-product-add-to-cart-wrap"><button class="isp-product-add-to-cart sold-out">SOLD OUT</button></div>`;
+      
+      if ($gridItem.find(".isp_add_to_cart_form").length === 0) {
+        $gridItem.find(".isp_product_info").after(HTML)
+      } else {
+        $gridItem.find(".isp_add_to_cart_form").replaceWith(HTML)
+      }
+
+    },
+    
+    setAddToCart: (product, $gridItem, text, useFrom) => {
+            
+      const HTML = `
+      <div class="isp-product-add-to-cart-wrap">
+        <a class="isp-product-add-to-cart button" href="#">
+        ${text}
+        </a>
+      </div>`;
+      
+      if ($gridItem.find(".isp_add_to_cart_form").length === 0) {
+       $gridItem.find(".isp_product_info").after(HTML)
+      } else {
+       $gridItem.find(".isp_add_to_cart_form").replaceWith(HTML)
+      }
+      
+      $gridItem.find(".isp-product-add-to-cart").click(function (e) {
+        e.preventDefault();
+        AddToCart.addToCartAjax(product, $gridItem.attr("position"));
+      });
+    },
+    
+    
+    addToCartAjax: (product, product_position) => {
+      const data = {
+        id: getFirstVariantID(product)
+      };
+      
+      try {
+        localStorage.setItem('isp_add_to_cart_serp_product_id', product.id);
+        ispStoreProductPosition(product.id);
+      } catch (e) {
+      }
+      $.ajax({
+          type: 'POST',
+          url: '/cart/add.js',
+          data,
+          dataType: 'json',
+          cache: false,
+          product_id: product.id,
+          form_id: `form_${product.id}`,
+          is_quick_view: false
+      }).done(function (data) {
+        __isp_options.isp_add_to_cart_callback(this.product_id, true);
+      }).fail(function (jqXHR, textStatus) {
+        console.log("error jqXHR: " + jqXHR + " | textStatus: " + textStatus);
+      }).always(function () {
+        $jquery_isp('#' + this.form_id).removeClass('isp_add_to_cart_disable');
+      });
+    
+    }
+    };
+  
 </script>
