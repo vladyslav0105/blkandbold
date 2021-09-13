@@ -16,9 +16,11 @@
         {% assign image = collection.products.first.featured_image %}
       {% endif %}
 
-      {%- if collection.metafields.layout.mobile_image -%}
-         {% include 'file-image-element', image: collection.metafields.layout.mobile_image, alt: collection.title, stretch_width: true, progressive: true, additional_classes: 'mobile-image' %}
+      {%- if collection.metafields.layout.mobile_image -%}         
+         <img src="{{ collection.metafields.layout.mobile_image }}" alt="{{ alt | escape }}" class="mobile-image">
       {%- endif -%}
+
+      
 
       {% include 'image-element', image: image, alt: collection.title, stretch_width: true, progressive: true, additional_classes: 'desktop-image' %}
 
